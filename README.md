@@ -1,2 +1,2 @@
 # celebration
-自分用
+https://submarineride.live
