@@ -1,14 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>集結計算</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="集結計算">
-<meta name="theme-color" content="#F2F2F7">
-<link rel="apple-touch-icon" href="icon-180.png">
-<link rel="icon" href="icon-192.png">
+<meta name="theme-color" id="meta-theme-color" content="#F2F2F7">
+<link rel="apple-touch-icon" href="files/icon-180.png">
+<link rel="icon" href="files/icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
+<script>
+/* 本体スクリプトより先に外観を確定させ、切り替わりのチラつきを防ぐ */
+(function(){
+  var t = 'auto';
+  try{ t = localStorage.getItem('shuketsu.theme') || 'auto'; }catch(e){}
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
 <style>
 :root{
   --tint:#007AFF;
@@ -23,7 +34,71 @@
   --label-secondary: rgba(60,60,67,0.6);
   --label-tertiary: rgba(60,60,67,0.3);
   --fill-tertiary: rgba(118,118,128,0.12);
+  --surround:#E5E5EA;
+  --banner:rgba(255,255,255,0.96);
+  --toast:rgba(28,28,30,0.92);
+  --scrim:rgba(0,0,0,0.35);
+  --shadow-strong:0 12px 30px rgba(0,0,0,0.18);
+  --shadow-row:0 8px 20px rgba(0,0,0,0.18);
+  --shadow-tint:0 2px 8px rgba(0,122,255,0.22);
+  color-scheme:light;
 }
+
+/* ===== ダークモード ===== */
+/* 「ダーク」を選択したとき */
+html[data-theme="dark"]{
+    --tint:#0A84FF;
+    --red:#FF453A;
+    --green:#30D158;
+    --orange:#FF9F0A;
+    --gray:#8E8E93;
+    --bg:#000000;
+    --card:#1C1C1E;
+    --sep: rgba(84,84,88,0.65);
+    --label:#FFFFFF;
+    --label-secondary: rgba(235,235,245,0.6);
+    --label-tertiary: rgba(235,235,245,0.3);
+    --fill-tertiary: rgba(118,118,128,0.24);
+    --surround:#000000;
+    --banner:rgba(44,44,46,0.96);
+    --toast:rgba(58,58,60,0.95);
+    --scrim:rgba(0,0,0,0.55);
+    --shadow-strong:0 12px 30px rgba(0,0,0,0.55);
+    --shadow-row:0 8px 20px rgba(0,0,0,0.6);
+    --shadow-tint:none;
+    color-scheme:dark;
+}
+html[data-theme="dark"] .app-frame{box-shadow:none;}
+html[data-theme="dark"] .hint-box{background:rgba(10,132,255,0.16);}
+
+/* 「自動」のとき（＝端末の設定に追従） */
+@media (prefers-color-scheme: dark){
+  html[data-theme="auto"]{
+    --tint:#0A84FF;
+    --red:#FF453A;
+    --green:#30D158;
+    --orange:#FF9F0A;
+    --gray:#8E8E93;
+    --bg:#000000;
+    --card:#1C1C1E;
+    --sep: rgba(84,84,88,0.65);
+    --label:#FFFFFF;
+    --label-secondary: rgba(235,235,245,0.6);
+    --label-tertiary: rgba(235,235,245,0.3);
+    --fill-tertiary: rgba(118,118,128,0.24);
+    --surround:#000000;
+    --banner:rgba(44,44,46,0.96);
+    --toast:rgba(58,58,60,0.95);
+    --scrim:rgba(0,0,0,0.55);
+    --shadow-strong:0 12px 30px rgba(0,0,0,0.55);
+    --shadow-row:0 8px 20px rgba(0,0,0,0.6);
+    --shadow-tint:none;
+    color-scheme:dark;
+  }
+  html[data-theme="auto"] .app-frame{box-shadow:none;}
+  html[data-theme="auto"] .hint-box{background:rgba(10,132,255,0.16);}
+}
+
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{margin:0;padding:0;height:100%;}
 body{
@@ -51,7 +126,7 @@ body{
   padding-top:env(safe-area-inset-top);
 }
 @media (min-width:600px){
-  body{background:#E5E5EA;}
+  body{background:var(--surround);}
   .app-frame{box-shadow:0 0 0 1px rgba(60,60,67,0.12);}
 }
 
@@ -118,6 +193,7 @@ body{
   text-wrap:balance;
 }
 .picker-push-desc{
+  white-space:pre-line;
   margin:-4px 16px 16px;
   font-size:13px;color:var(--label-secondary);line-height:1.6;
   white-space:pre-line;
@@ -165,7 +241,7 @@ body{
   background:var(--tint);color:#fff;
   border:none;border-radius:14px;
   font-size:17px;font-weight:600;letter-spacing:-0.2px;
-  box-shadow:0 2px 8px rgba(0,122,255,0.22);
+  box-shadow:var(--shadow-tint);
 }
 .btn-calc:active{opacity:0.55;}
 .btn-calc[disabled]{background:var(--label-tertiary);box-shadow:none;}
@@ -179,26 +255,26 @@ body{
 /* result card */
 .result-card{
   margin:20px 16px 0;background:var(--card);border-radius:14px;
-  padding:16px 18px;text-align:center;
+  padding:14px 16px;text-align:left;
   animation:popin .32s cubic-bezier(0.25,0.1,0.25,1);
 }
 @keyframes popin{from{opacity:0;transform:scale(0.94) translateY(6px);}to{opacity:1;transform:scale(1) translateY(0);}}
-.result-label{font-size:13px;font-weight:600;color:var(--label);letter-spacing:0.2px;margin-bottom:4px;}
+.result-label{font-size:13px;font-weight:600;color:var(--label-secondary);letter-spacing:0.2px;margin-bottom:6px;}
 .result-time{font-size:32px;font-weight:600;letter-spacing:0.5px;color:var(--tint);font-variant-numeric:tabular-nums;font-family:"SF Mono","SFMono-Regular",Menlo,Consolas,monospace;}
 .result-time-unit{font-size:13px;color:var(--label-secondary);margin-left:4px;font-weight:600;}
-.result-row{display:flex;align-items:baseline;justify-content:center;gap:6px;}
-.result-row + .result-row{margin-top:9px;padding-top:9px;border-top:0.5px solid var(--sep);}
-.result-idx{font-size:15px;font-weight:600;color:var(--label-secondary);letter-spacing:-0.2px;}
+.result-row{display:flex;align-items:baseline;justify-content:flex-start;gap:6px;}
+.result-row + .result-row{margin-top:10px;padding-top:10px;border-top:0.5px solid var(--sep);}
+.result-idx{font-size:15px;font-weight:600;color:var(--label-secondary);letter-spacing:-0.2px;flex:0 0 18px;}
 .hint-box{margin:8px 16px 0;padding:10px 12px;background:rgba(0,122,255,0.08);border-radius:10px;font-size:12px;color:var(--tint);line-height:1.6;}
 
 /* ===== ホーム画面に追加バナー ===== */
 .a2hs{
   position:absolute;left:10px;right:10px;z-index:250;
   bottom:calc(14px + env(safe-area-inset-bottom));
-  background:rgba(255,255,255,0.96);
+  background:var(--banner);
   -webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);
   border-radius:16px;padding:14px 14px 14px 14px;
-  box-shadow:0 12px 30px rgba(0,0,0,0.18);
+  box-shadow:var(--shadow-strong);
   transform:translateY(140%);opacity:0;
   transition:transform .42s cubic-bezier(0.25,0.1,0.25,1), opacity .3s;
   pointer-events:none;
@@ -242,7 +318,7 @@ body{
 
 /* overlays */
 .overlay-backdrop{
-  position:absolute;inset:0;background:rgba(0,0,0,0.35);
+  position:absolute;inset:0;background:var(--scrim);
   opacity:0;pointer-events:none;transition:opacity .3s;z-index:300;
 }
 .overlay-backdrop.show{opacity:1;pointer-events:auto;}
@@ -252,7 +328,7 @@ body{
 .toast{
   position:absolute;bottom:100px;left:50%;z-index:400;
   transform:translateX(-50%) translateY(16px);
-  background:rgba(28,28,30,0.92);color:#fff;
+  background:var(--toast);color:#fff;
   padding:10px 20px;border-radius:14px;font-size:14px;font-weight:500;
   opacity:0;transition:opacity .25s, transform .25s;pointer-events:none;
   display:flex;align-items:center;gap:6px;white-space:nowrap;
@@ -285,7 +361,11 @@ body{
 .preset-row .row-slide{
   display:flex;align-items:center;gap:8px;flex:1;min-width:0;
   transition:transform .25s cubic-bezier(0.25,0.1,0.25,1);
+  touch-action:pan-y;
 }
+/* スワイプ中：追従させるためアニメーションを切る */
+.preset-row.swiping .row-slide{transition:none;}
+.preset-row.swiping .row-delete{display:flex;}
 .preset-row.confirming .row-slide{transform:translateX(-78px);}
 .edit-minus{
   flex:0 0 22px;width:22px;height:22px;border:none;padding:0;margin-right:2px;
@@ -306,11 +386,12 @@ body{
   position:absolute;top:0;right:0;bottom:0;width:78px;
   border:none;background:var(--red);color:#fff;font-size:16px;letter-spacing:-0.3px;
   display:none;align-items:center;justify-content:center;
+  overflow:hidden;white-space:nowrap;padding:0;
 }
 .preset-row.confirming .row-delete{display:flex;}
 .preset-row.dragging{
   z-index:10;background:var(--card);
-  box-shadow:0 8px 20px rgba(0,0,0,0.18);
+  box-shadow:var(--shadow-row);
   transition:none;
 }
 .row-add .row-label{color:var(--tint);}
@@ -361,7 +442,43 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
 @media (prefers-reduced-motion: reduce){
   *{animation-duration:0.01ms !important;transition-duration:0.01ms !important;}
 }
+
+/* ===== 現在時刻（UTC） ===== */
+.now-block{margin:6px 16px 16px;}
+.now-label{
+  font-size:13px;font-weight:600;letter-spacing:0.2px;
+  color:var(--label-secondary);margin-bottom:1px;
+}
+.now-time{
+  font-size:30px;font-weight:600;letter-spacing:0.5px;color:var(--label);
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;
+  font-family:"SF Mono","SFMono-Regular",Menlo,Consolas,monospace;
+}
+.now-unit{font-size:13px;font-weight:600;color:var(--label-secondary);margin-left:4px;}
+.now-note{
+  margin-top:3px;font-size:12px;line-height:1.5;letter-spacing:-0.08px;
+  color:var(--label-tertiary);
+}
+.now-note.warn{color:var(--orange);}
+.now-note:empty{display:none;}
+
+/* ===== 結果のカウントダウン ===== */
+.result-time{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;}
+.result-cd{
+  margin-left:auto;text-align:right;
+  font-size:17px;font-weight:600;line-height:1.15;
+  color:var(--label-secondary);
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;
+}
+.result-cd .cd-cap{display:block;font-size:12px;font-weight:400;letter-spacing:0.1px;color:var(--label-tertiary);}
+.result-cd.warn{color:var(--orange);}
+.result-cd.crit{color:var(--red);}
+.result-cd.done{color:var(--label-tertiary);}
+.result-row.done .result-time,
+.result-row.done .result-time-unit{color:var(--label-tertiary);}
 </style>
+</head>
+<body>
 
 <div class="app-frame">
   <div class="app-screen">
@@ -370,10 +487,14 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
       <!-- ===== HOME (only screen) ===== -->
       <div class="screen active" data-tab="home" id="screen-home">
         <div class="nav-bar" id="nav-home">
-          <div class="nav-bar-inner"><span class="nav-title">着弾時刻</span></div>
+          <div class="nav-bar-inner"><span class="nav-title">集結計算</span></div>
         </div>
         <div class="scroll-area" id="scroll-home">
-          <h1 class="large-title">着弾時刻</h1>
+          <div class="now-block">
+            <div class="now-label">現在時刻</div>
+            <div class="now-time"><span id="utc-clock">--:--:--</span><span class="now-unit">UTC</span></div>
+            <div class="now-note" id="now-note"></div>
+          </div>
 
           <div class="grouped-list">
             <div class="list-row inset tappable" id="row-rally-min" data-action="open-rally-picker">
@@ -410,14 +531,16 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
             <div class="result-row">
               <span class="result-idx" id="home-result-idx" style="display:none">①</span>
               <span class="result-time" id="home-result-time">--:--:--</span><span class="result-time-unit">UTC</span>
+              <span class="result-cd" id="home-result-cd"></span>
             </div>
             <div class="result-row" id="home-result2-row" style="display:none">
               <span class="result-idx">②</span>
               <span class="result-time" id="home-result-time2">--:--:--</span><span class="result-time-unit">UTC</span>
+              <span class="result-cd" id="home-result-cd2"></span>
             </div>
           </div>
 
-          <div class="app-version">集結計算 v1.0</div>
+          <div class="app-version">©️1524Off.v11</div>
         </div>
       </div>
 
@@ -452,6 +575,7 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
           <div class="list-header">よく使う時間</div>
           <div class="grouped-list" id="preset-list"></div>
           <div class="list-footer" id="preset-footer" style="display:none">並べ替えは右のハンドルをドラッグ。</div>
+          <div class="list-footer" id="preset-swipe-hint">左にスワイプすると削除できます。</div>
         </div>
       </div>
 
@@ -623,7 +747,40 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
   bindScrollTitle('scroll-custom','nav-custom');
 
   /* ===================== HOME ===================== */
-  const RALLY_OPTIONS = [1,2,3,5,10,15];
+  /* ===================== 外観（自動 / ライト / ダーク） ===================== */
+  const THEME_OPTIONS = [
+    { value:'auto',  label:'自動（端末の設定に合わせる）' },
+    { value:'light', label:'ライト' },
+    { value:'dark',  label:'ダーク' }
+  ];
+  const THEME_SHORT = { auto:'自動', light:'ライト', dark:'ダーク' };
+
+  function currentTheme(){
+    return document.documentElement.getAttribute('data-theme') || 'auto';
+  }
+  function isDarkNow(){
+    const t = currentTheme();
+    if(t === 'dark') return true;
+    if(t === 'light') return false;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  function applyTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    try{ localStorage.setItem('shuketsu.theme', t); }catch(e){}
+    const meta = $('#meta-theme-color');
+    if(meta) meta.setAttribute('content', isDarkNow() ? '#000000' : '#F2F2F7');
+    const el = $('#val-theme');
+    if(el) el.textContent = THEME_SHORT[t] || '自動';
+  }
+  applyTheme(currentTheme());
+  if(window.matchMedia){
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const onChange = ()=>{ if(currentTheme()==='auto') applyTheme('auto'); };
+    if(mq.addEventListener) mq.addEventListener('change', onChange);
+    else if(mq.addListener) mq.addListener(onChange);
+  }
+
+  const RALLY_OPTIONS = [1,2,3,5,10];
 
   $('#row-rally-min').addEventListener('click', ()=>{
     const opts = RALLY_OPTIONS.map(v=>({value:v,label:v+'分'}));
@@ -637,9 +794,9 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
   const PRESET_KINDS = {
     prep: {
       title: '準備時間',
-      desc: '①最長の行軍時間＋②集結を発起するまでの時間を設定（例：40秒＋20秒＝1分）',
+      desc: '①一番遅い人の行軍時間＋②集結を発起するまでの時間を設定\n（例：50秒＋1分＝1分50秒）',
       storeKey: 'shuketsu.prepPresets.v1',
-      defaults: [30,60,90,120,150,180],
+      defaults: [60,90,110,120,150,180],
       maxMin: 30,
       valueEl: '#val-prep',
       get: ()=> state.prepSec,
@@ -714,6 +871,8 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
       const sec = parseInt(row.dataset.sec,10);
       row.addEventListener('click', (ev)=>{
         if(ev.target.closest('.row-delete') || ev.target.closest('.edit-minus') || ev.target.closest('.grip')) return;
+        if(row._swiped){ row._swiped = false; return; }
+        if(row.classList.contains('confirming')){ clearConfirming(); return; }
         if(editing){ clearConfirming(); return; }
         applyValue(sec);
         closePreset();
@@ -728,20 +887,85 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
         savePresets();
         renderPresets();
       });
+      bindSwipe(row);
       bindDrag($('.grip', row), row);
     });
+
+    const scrollPreset = $('#scroll-preset');
+    if(scrollPreset && !scrollPreset._closeBound){
+      scrollPreset._closeBound = true;
+      scrollPreset.addEventListener('click', (ev)=>{
+        if(!ev.target.closest('.preset-row')) clearConfirming();
+      });
+    }
 
     const addRow = $('#row-add-preset', list);
     if(addRow) addRow.addEventListener('click', openCustom);
 
     $('#preset-footer').style.display = (editing && cur.presets.length>1) ? 'block' : 'none';
+    $('#preset-swipe-hint').style.display = (!editing && cur.presets.length) ? 'block' : 'none';
   }
-  function clearConfirming(){
-    $all('.preset-row.confirming').forEach(r => r.classList.remove('confirming'));
+  function clearConfirming(except){
+    $all('.preset-row.confirming').forEach(r => {
+      if(r !== except) r.classList.remove('confirming');
+    });
   }
   function applyValue(sec){
     cur.set(sec);
     $(cur.valueEl).textContent = marchLabel(sec);
+  }
+
+  /* --- 左スワイプで削除を表示 --- */
+  const SWIPE_W = 78;
+  function bindSwipe(row){
+    const slide = $('.row-slide', row);
+    const del = $('.row-delete', row);
+    if(!slide || !del) return;
+    row.style.touchAction = 'pan-y';
+    let startX=0, startY=0, dx=0, active=false, decided=false, horiz=false;
+
+    row.addEventListener('pointerdown', (ev)=>{
+      if(ev.pointerType === 'mouse' && ev.button !== 0) return;
+      if(ev.target.closest('.grip') || ev.target.closest('.row-delete') || ev.target.closest('.edit-minus')) return;
+      startX = ev.clientX; startY = ev.clientY;
+      dx = 0; active = true; decided = false; horiz = false;
+      row._swiped = false;
+    });
+
+    row.addEventListener('pointermove', (ev)=>{
+      if(!active) return;
+      const mx = ev.clientX - startX, my = ev.clientY - startY;
+      if(!decided){
+        if(Math.abs(mx) < 4 && Math.abs(my) < 4) return;
+        decided = true;
+        horiz = Math.abs(mx) > Math.abs(my);
+        if(!horiz) { active = false; return; }
+        clearConfirming(row);
+        row.classList.add('swiping');
+        try{ row.setPointerCapture(ev.pointerId); }catch(e){}
+      }
+      if(!horiz) return;
+      ev.preventDefault();
+      const base = row.classList.contains('confirming') ? -SWIPE_W : 0;
+      dx = Math.max(-SWIPE_W, Math.min(0, base + mx));
+      slide.style.transform = 'translateX(' + dx + 'px)';
+      del.style.width = Math.abs(dx) + 'px';
+      row._swiped = true;
+    });
+
+    function endSwipe(){
+      if(!active && !horiz) return;
+      active = false;
+      if(!horiz) return;
+      horiz = false;
+      row.classList.remove('swiping');
+      slide.style.transform = '';
+      del.style.width = '';
+      row.classList.toggle('confirming', dx < -SWIPE_W/2);
+    }
+    row.addEventListener('pointerup', endSwipe);
+    row.addEventListener('pointercancel', endSwipe);
+    row.addEventListener('lostpointercapture', endSwipe);
   }
 
   /* --- 並べ替え（ハンドルをドラッグ） --- */
@@ -811,6 +1035,7 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
   function closePreset(){ $('#screen-preset').classList.remove('show'); }
   $('#row-prep').addEventListener('click', ()=> openPreset('prep'));
   $('[data-action="open-diff-picker"]').addEventListener('click', ()=> openPreset('diff'));
+
   $('#btn-preset-back').addEventListener('click', closePreset);
   $('#btn-preset-edit').addEventListener('click', function(){
     editing = !editing;
@@ -884,7 +1109,7 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
   });
 
   function computeLanding(afterSec){
-    const now = new Date();
+    const now = new Date(nowMs());
     let target = new Date(now.getTime() + afterSec*1000);
     const roundedSec = Math.ceil(target.getUTCSeconds()/10)*10;
     target = new Date(Date.UTC(
@@ -894,6 +1119,124 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
     return target;
   }
   function fmtUTC(d){ return `${pad2(d.getUTCHours())}:${pad2(d.getUTCMinutes())}:${pad2(d.getUTCSeconds())}`; }
+
+  /* ===================== 標準時への同期 ===================== */
+  /* 端末時計は数秒ずれていることがあるため、サーバー応答の Date ヘッダーを基準にする。
+     往復時間の半分を足して送信時刻を推定し、最も往復の速かった測定を採用する。 */
+  var clockOffset = 0;      // 標準時 - 端末時計（ミリ秒）
+  var clockSynced = false;
+  var lastSyncAt = 0;
+
+  function nowMs(){ return Date.now() + clockOffset; }
+
+  function sampleOffset(){
+    var t0 = Date.now();
+    return fetch(location.pathname + '?t=' + t0, { method:'HEAD', cache:'no-store' })
+      .then(function(res){
+        var header = res.headers.get('Date');
+        if(!header) return null;
+        var serverMs = new Date(header).getTime();
+        if(isNaN(serverMs)) return null;
+        var t1 = Date.now();
+        var rtt = t1 - t0;
+        if(rtt > 4000) return null;
+        /* Date は秒単位に切り捨てられるため、期待値として 500ms を足す */
+        return { offset: (serverMs + 500) - (t0 + rtt/2), rtt: rtt };
+      })
+      .catch(function(){ return null; });
+  }
+
+  function syncClock(){
+    if(!window.fetch) return;
+    Promise.all([sampleOffset(), sampleOffset(), sampleOffset()]).then(function(list){
+      var best = null;
+      list.forEach(function(r){
+        if(r && (!best || r.rtt < best.rtt)) best = r;
+      });
+      if(!best) { renderClockNote(); return; }
+      clockOffset = Math.round(best.offset);
+      clockSynced = true;
+      lastSyncAt = Date.now();
+      renderLive();
+    });
+  }
+
+  function renderClockNote(){
+    var el = $('#now-note');
+    if(!el) return;
+    if(!clockSynced){
+      el.className = 'now-note';
+      el.textContent = '標準時に同期できていません（端末の時計を表示中）';
+      return;
+    }
+    var gapSec = Math.round(clockOffset/1000);
+    if(Math.abs(gapSec) >= 2){
+      el.className = 'now-note warn';
+      el.textContent = '端末の時計が' + Math.abs(gapSec) + '秒'
+        + (gapSec > 0 ? '遅れています' : '進んでいます') + '（表示は標準時に補正済み）';
+    } else {
+      el.className = 'now-note';
+      el.textContent = '標準時に同期済み';
+    }
+  }
+
+  /* ===================== 現在時刻とカウントダウン ===================== */
+  var live = null;   // { hit1, start1, hit2, start2 }
+
+  function mmss(ms){
+    var t = Math.max(0, Math.ceil(ms/1000));
+    return Math.floor(t/60) + ':' + pad2(t%60);
+  }
+  function paintCd(el, row, hit, start, now){
+    var left = hit - now;
+    el.className = 'result-cd';
+    row.classList.remove('done');
+    if(left <= 0){
+      row.classList.add('done');
+      el.classList.add('done');
+      el.innerHTML = '着弾';
+    } else if(now < start){
+      el.innerHTML = mmss(start-now) + '<span class="cd-cap">集結開始まで</span>';
+    } else {
+      if(left <= 10000) el.classList.add('crit');
+      else if(left <= 30000) el.classList.add('warn');
+      el.innerHTML = mmss(left) + '<span class="cd-cap">着弾まで</span>';
+    }
+  }
+  function clearLive(){
+    live = null;
+    $('#home-result').style.display = 'none';
+    $('#home-result-cd').innerHTML = '';
+    $('#home-result-cd2').innerHTML = '';
+    $('#home-result-cd').className = 'result-cd';
+    $('#home-result-cd2').className = 'result-cd';
+    $('#home-result-time').parentNode.classList.remove('done');
+    $('#home-result2-row').classList.remove('done');
+  }
+  function renderLive(){
+    var now = nowMs();
+    $('#utc-clock').textContent = fmtUTC(new Date(now));
+    renderClockNote();
+    if(!live) return;
+    var last = live.hit2 || live.hit1;
+    if(now - last > 60000){ clearLive(); return; }
+    paintCd($('#home-result-cd'), $('#home-result-time').parentNode, live.hit1, live.start1, now);
+    if(live.hit2){
+      paintCd($('#home-result-cd2'), $('#home-result2-row'), live.hit2, live.start2, now);
+    }
+  }
+  function tickLive(){
+    renderLive();
+    setTimeout(tickLive, 1000 - (nowMs() % 1000));
+  }
+  tickLive();
+  syncClock();
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden) return;
+    renderLive();
+    if(Date.now() - lastSyncAt > 300000) syncClock();
+  });
+  window.addEventListener('online', syncClock);
 
   $('#btn-home-calc').addEventListener('click', function(){
     const btn = this;
@@ -919,6 +1262,15 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
       }
       btn.textContent = '計算開始';
       btn.disabled = false;
+
+      const rallyMs = state.rallyMin*60*1000;
+      live = {
+        hit1: target.getTime(),
+        start1: target.getTime() - rallyMs,
+        hit2: state.twoWave ? target.getTime() + state.diffTotalSec*1000 : null,
+        start2: state.twoWave ? target.getTime() + state.diffTotalSec*1000 - rallyMs : null
+      };
+      renderLive();
 
       const msg = buildCopyMessage(timeStr, timeStr2);
       copyText(msg);
@@ -979,3 +1331,6 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
 
 })();
 </script>
+
+</body>
+</html>
