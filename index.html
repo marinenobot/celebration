@@ -2132,8 +2132,32 @@ body.landing-active .page-tabs{ background:var(--card-bg); }
           <option value="200">3分20秒</option>
           <option value="220">3分40秒</option>
           <option value="240">4分</option>
+          <option value="custom">カスタム...</option>
         </select>
         <button id="l-hint-btn" type="button">ⓘ</button>
+      </div>
+      <div id="l-prep-custom-section" class="l-row" style="display:none">
+        <select id="l-prep-custom-min" class="inline-select">
+          <option value="0">0分</option>
+          <option value="1" selected>1分</option>
+          <option value="2">2分</option>
+          <option value="3">3分</option>
+          <option value="4">4分</option>
+          <option value="5">5分</option>
+          <option value="6">6分</option>
+          <option value="7">7分</option>
+          <option value="8">8分</option>
+          <option value="9">9分</option>
+          <option value="10">10分</option>
+        </select>
+        <select id="l-prep-custom-sec" class="inline-select">
+          <option value="0" selected>0秒</option>
+          <option value="10">10秒</option>
+          <option value="20">20秒</option>
+          <option value="30">30秒</option>
+          <option value="40">40秒</option>
+          <option value="50">50秒</option>
+        </select>
       </div>
       <div id="l-hint-text" style="display:none;font-size:11px;color:var(--text-muted);margin-top:2px;padding-left:2px;line-height:1.7">最長行軍＋集結開始までの時間を設定<br>例：40秒＋20秒＝60秒</div>
 
@@ -4098,6 +4122,22 @@ document.querySelectorAll('.page-tab-btn').forEach(btn => {
     hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
   });
 
+  // 準備時間：カスタム入力のトグル
+  document.getElementById('l-from-now').addEventListener('change', function(){
+    document.getElementById('l-prep-custom-section').style.display = (this.value === 'custom') ? 'flex' : 'none';
+  });
+
+  // 準備時間（プリセット or カスタム）を秒数で取得
+  function getLandingPrepSeconds(){
+    const sel = document.getElementById('l-from-now');
+    if(sel.value === 'custom'){
+      const min = parseInt(document.getElementById('l-prep-custom-min').value) || 0;
+      const sec = parseInt(document.getElementById('l-prep-custom-sec').value) || 0;
+      return min * 60 + sec;
+    }
+    return parseInt(sel.value) || 30;
+  }
+
   // 二段階集結トグル
   document.getElementById('l-two-wave').addEventListener('change', function(){
     document.getElementById('l-two-wave-section').style.display = this.checked ? 'flex' : 'none';
@@ -4142,7 +4182,7 @@ document.querySelectorAll('.page-tab-btn').forEach(btn => {
     btn.disabled = true;
 
     setTimeout(function(){
-      const fromNow  = parseInt(document.getElementById('l-from-now').value)  || 30;
+      const fromNow  = getLandingPrepSeconds();
       const rallyMin = parseInt(document.getElementById('l-rally-min').value) || 1;
       const twoWave  = document.getElementById('l-two-wave').checked;
 
