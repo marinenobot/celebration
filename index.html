@@ -476,6 +476,82 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
 .result-cd.done{color:var(--label-tertiary);}
 .result-row.done .result-time,
 .result-row.done .result-time-unit{color:var(--label-tertiary);}
+
+/* ===== 集結主登録 ===== */
+.list-row.input-row .row-input{
+  flex:1;min-width:0;text-align:right;border:none;background:transparent;
+  font-size:17px;color:var(--label);letter-spacing:-0.4px;
+  outline:none;font-family:inherit;padding:0;
+  -webkit-appearance:none;appearance:none;
+}
+.list-row.input-row .row-input::placeholder{color:var(--label-tertiary);}
+.leader-row{position:relative;}
+.leader-row .row-slide{
+  display:flex;align-items:center;gap:8px;flex:1;min-width:0;
+  transition:transform .25s cubic-bezier(0.25,0.1,0.25,1);
+}
+.leader-row.confirming .row-slide{transform:translateX(-78px);}
+.leader-row.confirming .row-delete{display:flex;}
+
+/* ===== 出発時刻モード ===== */
+.segmented{
+  display:flex;margin:6px 16px 16px;background:var(--fill-tertiary);
+  border-radius:9px;padding:2px;
+}
+.segmented-btn{
+  flex:1;border:none;background:transparent;padding:7px 0;
+  font-size:13px;font-weight:600;color:var(--label-secondary);
+  border-radius:7px;letter-spacing:-0.1px;
+}
+.segmented-btn.active{background:var(--card);color:var(--label);box-shadow:0 1px 3px rgba(0,0,0,0.12);}
+
+#scroll-home.mode-departure .mode-landing-only{display:none;}
+#scroll-home:not(.mode-departure) .mode-departure-only{display:none;}
+
+#app-root.role-member .role-director-only{display:none;}
+#app-root:not(.role-member) .role-member-only{display:none;}
+
+.pip-wrap{
+  position:relative;
+  width:300px;max-width:90vw;margin:20px auto 4px;
+  aspect-ratio:3/1;
+}
+.pip-video{
+  width:100%;height:100%;border-radius:12px;background:#000;display:block;object-fit:contain;
+}
+.pip-canvas{position:absolute;top:-99999px;left:-99999px;}
+#pip-status{text-align:center;}
+
+.dep-sentence{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+  margin:2px 16px 16px;
+  font-size:17px;color:var(--label);letter-spacing:-0.2px;
+}
+.dep-chip{
+  display:inline-flex;align-items:center;
+  border:none;background:var(--fill-tertiary);color:var(--tint);
+  font-size:16px;font-weight:600;padding:4px 10px;border-radius:8px;
+  font-variant-numeric:tabular-nums;
+}
+.dep-chip:active{opacity:0.5;}
+
+.dep-row{flex-direction:column;align-items:stretch;gap:4px;padding-top:12px;padding-bottom:12px;}
+.dep-name{font-size:17px;font-weight:600;color:var(--label);letter-spacing:-0.3px;}
+.dep-row-mid{
+  display:flex;align-items:baseline;gap:14px;
+  font-size:14px;color:var(--label-secondary);font-variant-numeric:tabular-nums;
+}
+.dep-coord{white-space:nowrap;}
+.dep-march{white-space:nowrap;}
+.dep-time{margin-left:auto;font-weight:600;color:var(--tint);font-size:15px;white-space:nowrap;}
+.dep-row-pet{text-align:right;}
+.dep-pet-btn{
+  border:none;background:none;color:var(--label-tertiary);
+  font-size:12.5px;font-weight:600;padding:2px 2px;
+}
+.dep-pet-btn.on{color:var(--green);}
+
+.btn-plain.danger{color:var(--red);}
 </style>
 </head>
 <body>
@@ -487,7 +563,10 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
       <!-- ===== HOME (only screen) ===== -->
       <div class="screen active" data-tab="home" id="screen-home">
         <div class="nav-bar" id="nav-home">
-          <div class="nav-bar-inner"><span class="nav-title">集結計算</span></div>
+          <div class="nav-bar-inner">
+            <span class="nav-title">集結計算</span>
+            <div class="nav-side right"><button class="nav-text-btn" id="btn-open-settings">設定</button></div>
+          </div>
         </div>
         <div class="scroll-area" id="scroll-home">
           <div class="now-block">
@@ -496,7 +575,13 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
             <div class="now-note" id="now-note"></div>
           </div>
 
-          <div class="grouped-list">
+          <div class="role-director-only" id="director-view">
+          <div class="segmented" id="mode-segmented">
+            <button type="button" class="segmented-btn active" data-mode="landing">着弾時刻</button>
+            <button type="button" class="segmented-btn" data-mode="departure">出発時刻</button>
+          </div>
+
+          <div class="grouped-list mode-landing-only">
             <div class="list-row inset tappable" id="row-rally-min" data-action="open-rally-picker">
               <span class="row-label">集結時間</span>
               <span class="row-value" id="val-rally-min">5分</span>
@@ -508,13 +593,13 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
               <svg class="chevron" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
           </div>
-          <div class="grouped-list" style="margin-top:14px">
+          <div class="grouped-list mode-landing-only" style="margin-top:14px">
             <div class="list-row inset">
               <span class="row-label">二段階集結</span>
               <div class="ios-switch" id="two-wave-switch"><div class="switch-knob"></div></div>
             </div>
           </div>
-          <div class="two-wave-extra" id="two-wave-extra">
+          <div class="two-wave-extra mode-landing-only" id="two-wave-extra">
             <div class="grouped-list" style="margin-top:14px">
               <div class="list-row inset tappable" data-action="open-diff-picker">
                 <span class="row-label">時差</span>
@@ -524,9 +609,9 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
             </div>
           </div>
 
-          <button class="btn-calc" id="btn-home-calc">計算開始</button>
+          <button class="btn-calc mode-landing-only" id="btn-home-calc">計算開始</button>
 
-          <div class="result-card" id="home-result" style="display:none">
+          <div class="result-card mode-landing-only" id="home-result" style="display:none">
             <div class="result-label">着弾時刻</div>
             <div class="result-row">
               <span class="result-idx" id="home-result-idx" style="display:none">①</span>
@@ -540,12 +625,46 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
             </div>
           </div>
 
+          <div class="mode-departure-only" id="departure-section">
+            <div class="dep-sentence">
+              <span>今から</span>
+              <button type="button" class="dep-chip" id="dep-chip-prep">1分</button>
+              <span>後に</span>
+              <button type="button" class="dep-chip" id="dep-chip-rally">5分</button>
+              <span>集結</span>
+            </div>
+            <button class="btn-calc" id="btn-departure-calc">計算開始</button>
+
+            <div class="grouped-list" id="departure-list" style="margin-top:20px"></div>
+            <div class="list-empty" id="departure-empty-hint" style="display:none">集結主が登録されていません。下の「＋ 集結主」から追加してください。</div>
+
+            <button class="btn-plain" id="btn-departure-add">＋ 集結主</button>
+            <button class="btn-calc" id="btn-departure-copy">コピー</button>
+          </div>
+
           <div class="app-version">©️1524Off.v11</div>
+          </div>
+
+          <div class="role-member-only" id="member-view">
+            <div class="grouped-list">
+              <div class="list-row inset">
+                <span class="row-label">自分</span>
+                <span class="row-value" id="member-my-name">未選択</span>
+              </div>
+            </div>
+            <div class="pip-wrap">
+              <video id="pip-video" class="pip-video" playsinline webkit-playsinline muted autoplay loop></video>
+              <canvas id="pip-canvas" width="600" height="200" class="pip-canvas"></canvas>
+            </div>
+            <button class="btn-calc" id="btn-pip-start">PiP開始</button>
+            <button class="btn-plain" id="btn-pip-reset" style="display:none">UTC時計に戻す</button>
+            <div class="list-footer" id="pip-status"></div>
+          </div>
         </div>
       </div>
 
       <!-- ===== picker push screen (settings-style drill-down) ===== -->
-      <div class="push-screen picker-push-screen" id="screen-picker-push">
+      <div class="push-screen picker-push-screen" id="screen-picker-push" style="z-index:700">
         <div class="nav-bar" id="nav-picker-push">
           <div class="nav-bar-inner">
             <div class="nav-side left"><button class="nav-back" id="btn-picker-back"><svg class="chev" viewBox="0 0 11 18"><path d="M9.5 1L1.5 9L9.5 17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>戻る</button></div>
@@ -596,6 +715,94 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
           </div>
           <div class="list-footer" id="custom-preview">1分00秒</div>
           <button class="btn-filled" id="btn-custom-add">よく使う時間に追加</button>
+        </div>
+      </div>
+
+      <!-- ===== 集結主登録（一覧） ===== -->
+      <div class="push-screen picker-push-screen" id="screen-leaders">
+        <div class="nav-bar" id="nav-leaders">
+          <div class="nav-bar-inner">
+            <div class="nav-side left"><button class="nav-back" id="btn-leaders-back"><svg class="chev" viewBox="0 0 11 18"><path d="M9.5 1L1.5 9L9.5 17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>戻る</button></div>
+            <span class="nav-title">集結主</span>
+            <div class="nav-side right"><button class="nav-text-btn" id="btn-leaders-edit">編集</button></div>
+          </div>
+        </div>
+        <div class="scroll-area" id="scroll-leaders">
+          <h1 class="large-title">集結主</h1>
+          <div class="list-header">登録済み</div>
+          <div class="grouped-list" id="leaders-list"></div>
+        </div>
+      </div>
+
+      <!-- ===== 集結主を追加・編集 ===== -->
+      <div class="push-screen picker-push-screen" id="screen-leader-form" style="z-index:600">
+        <div class="nav-bar" id="nav-leader-form">
+          <div class="nav-bar-inner">
+            <div class="nav-side left"><button class="nav-back" id="btn-leader-form-back"><svg class="chev" viewBox="0 0 11 18"><path d="M9.5 1L1.5 9L9.5 17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>集結主</button></div>
+            <span class="nav-title" id="leader-form-nav-title">集結主を追加</span>
+          </div>
+        </div>
+        <div class="scroll-area" id="scroll-leader-form">
+          <h1 class="large-title" id="leader-form-large-title">集結主を追加</h1>
+          <div class="grouped-list">
+            <div class="list-row inset input-row">
+              <span class="row-label">名前</span>
+              <input class="row-input" id="input-leader-name" type="text" placeholder="名前を入力" maxlength="20">
+            </div>
+          </div>
+          <div class="grouped-list" style="margin-top:14px">
+            <div class="list-row inset input-row">
+              <span class="row-label">都市座標 X</span>
+              <input class="row-input" id="input-leader-x" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="0">
+            </div>
+            <div class="list-row inset input-row">
+              <span class="row-label">都市座標 Y</span>
+              <input class="row-input" id="input-leader-y" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="0">
+            </div>
+          </div>
+          <button class="btn-filled" id="btn-leader-save">保存</button>
+          <button class="btn-plain danger" id="btn-leader-delete" style="display:none">この集結主を削除</button>
+        </div>
+      </div>
+
+      <!-- ===== 設定（役割・同期） ===== -->
+      <div class="push-screen picker-push-screen" id="screen-app-settings">
+        <div class="nav-bar" id="nav-app-settings">
+          <div class="nav-bar-inner">
+            <div class="nav-side left"><button class="nav-back" id="btn-app-settings-back"><svg class="chev" viewBox="0 0 11 18"><path d="M9.5 1L1.5 9L9.5 17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>戻る</button></div>
+            <span class="nav-title">設定</span>
+          </div>
+        </div>
+        <div class="scroll-area" id="scroll-app-settings">
+          <h1 class="large-title">設定</h1>
+
+          <div class="list-header">この端末の役割</div>
+          <div class="grouped-list">
+            <div class="list-row inset tappable" id="row-app-role">
+              <span class="row-label">役割</span>
+              <span class="row-value" id="val-app-role">指示役</span>
+              <svg class="chevron" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="list-footer">指示役：集結条件を設定し、各集結主の出発時刻を計算して送信します。集結主：自分宛ての出発時刻をPiP時計で受信します。</div>
+
+          <div class="list-header" style="margin-top:20px">同期</div>
+          <div class="grouped-list">
+            <div class="list-row inset input-row">
+              <span class="row-label">ルームID</span>
+              <input class="row-input" id="input-room-id" type="text" placeholder="例: abc123" maxlength="24" autocapitalize="off" autocorrect="off">
+            </div>
+          </div>
+          <div class="list-footer">指示役と集結主で同じルームIDを入力すると、出発時刻が個別に届きます。</div>
+
+          <div class="grouped-list role-member-only" style="margin-top:20px">
+            <div class="list-row inset tappable" id="row-my-identity">
+              <span class="row-label">自分は誰か</span>
+              <span class="row-value" id="val-my-identity">未選択</span>
+              <svg class="chevron" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="list-footer role-member-only">指示役側に登録されている名前の一覧から選びます。</div>
         </div>
       </div>
 
@@ -745,6 +952,7 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
   bindScrollTitle('scroll-picker-push','nav-picker-push');
   bindScrollTitle('scroll-preset','nav-preset');
   bindScrollTitle('scroll-custom','nav-custom');
+  bindScrollTitle('scroll-app-settings','nav-app-settings');
 
   /* ===================== HOME ===================== */
   /* ===================== 外観（自動 / ライト / ダーク） ===================== */
@@ -780,15 +988,136 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
     else if(mq.addListener) mq.addListener(onChange);
   }
 
+  /* ===================== 役割（指示役 / 集結主）と同期 ===================== */
+  function getRole(){ try{ return localStorage.getItem('app.role') || 'director'; }catch(e){ return 'director'; } }
+  function setRole(r){ try{ localStorage.setItem('app.role', r); }catch(e){} }
+  function getRoomId(){ try{ return (localStorage.getItem('app.roomId')||'').trim(); }catch(e){ return ''; } }
+  function setRoomId(v){ try{ localStorage.setItem('app.roomId', v.trim()); }catch(e){} }
+  function getMyLeaderId(){ try{ return localStorage.getItem('app.myLeaderId') || ''; }catch(e){ return ''; } }
+  function getMyLeaderName(){ try{ return localStorage.getItem('app.myLeaderName') || ''; }catch(e){ return ''; } }
+  function setMyLeader(id, name){
+    try{
+      localStorage.setItem('app.myLeaderId', id);
+      localStorage.setItem('app.myLeaderName', name || '');
+    }catch(e){}
+  }
+
+  function applyRole(role){
+    $('#app-root').classList.toggle('role-member', role === 'member');
+    const roleLabel = role === 'member' ? '集結主' : '指示役';
+    const valRole = $('#val-app-role');
+    if(valRole) valRole.textContent = roleLabel;
+    const memberName = $('#member-my-name');
+    if(memberName) memberName.textContent = getMyLeaderName() || '未選択';
+    if(role === 'member') startMemberWatch();
+    else if(window.Sync) window.Sync.stopWatch();
+  }
+
+  function openAppSettings(){
+    $('#input-room-id').value = getRoomId();
+    $('#val-app-role').textContent = getRole() === 'member' ? '集結主' : '指示役';
+    $('#val-my-identity').textContent = getMyLeaderName() || '未選択';
+    $('#scroll-app-settings').scrollTop = 0;
+    $('#screen-app-settings').classList.add('show');
+  }
+  function closeAppSettings(){ $('#screen-app-settings').classList.remove('show'); }
+  $('#btn-open-settings').addEventListener('click', openAppSettings);
+  $('#btn-app-settings-back').addEventListener('click', closeAppSettings);
+
+  $('#row-app-role').addEventListener('click', ()=>{
+    const opts = [
+      { value:'director', label:'指示役（集結条件を設定）' },
+      { value:'member',   label:'集結主（PiP時計で受信）' }
+    ];
+    openPicker('役割', opts, getRole(), (val)=>{
+      setRole(val);
+      applyRole(val);
+      $('#val-app-role').textContent = val === 'member' ? '集結主' : '指示役';
+    });
+  });
+
+  $('#input-room-id').addEventListener('change', function(){
+    setRoomId(this.value);
+    this.value = getRoomId();
+    if(getRole() === 'member') startMemberWatch();
+  });
+
+  $('#row-my-identity').addEventListener('click', async ()=>{
+    const roomId = getRoomId();
+    if(!roomId){ showToast('先にルームIDを入力してください'); return; }
+    if(!window.Sync || !window.Sync.ready()){ showToast('同期機能を読み込み中です'); return; }
+    const map = await window.Sync.readLeaders(roomId);
+    const ids = Object.keys(map || {});
+    if(!ids.length){ showToast('指示役側でまだ集結主が登録されていません'); return; }
+    const opts = ids.map(id => ({ value:id, label:(map[id] && map[id].name) || '(無名)' }));
+    openPicker('自分は誰か', opts, getMyLeaderId(), (val)=>{
+      const name = (map[val] && map[val].name) || '';
+      setMyLeader(val, name);
+      $('#val-my-identity').textContent = name || '選択済み';
+      $('#member-my-name').textContent = name || '選択済み';
+      startMemberWatch();
+    });
+  });
+
+  /* 指示役側：集結主リストの同期送信（saveLeaders() から呼ばれる） */
+  function syncPushLeaders(){
+    if(getRole() !== 'director') return;
+    const roomId = getRoomId();
+    if(!roomId || !window.Sync) return;
+    const obj = {};
+    leaders.forEach(l => { obj[l.id] = { name: l.name }; });
+    window.Sync.writeLeaders(roomId, obj);
+  }
+
+  /* 指示役側：各集結主の出発時刻の個別送信（計算開始・ペット切替後に呼ばれる） */
+  function syncPushDepartures(){
+    if(getRole() !== 'director') return;
+    if(!departureLanding) return;
+    const roomId = getRoomId();
+    if(!roomId || !window.Sync) return;
+    getDepartureRows().forEach(r=>{
+      window.Sync.writeDeparture(roomId, r.leader.id, {
+        name: r.leader.name,
+        depIso: r.depDate ? r.depDate.toISOString() : null,
+        updatedAt: Date.now()
+      });
+    });
+  }
+
+  /* 集結主側：自分宛ての出発時刻の受信 */
+  let memberOrder = null; // { name, depIso, updatedAt }
+  let pipMode = 'clock'; // 'clock' | 'order'
+  function startMemberWatch(){
+    const roomId = getRoomId();
+    const leaderId = getMyLeaderId();
+    if(!window.Sync) return;
+    if(!roomId || !leaderId){ window.Sync.stopWatch(); return; }
+    window.Sync.watchMyDeparture(roomId, leaderId, (data)=>{
+      if(!data || !data.depIso) return;
+      memberOrder = data;
+      pipMode = 'order';
+      const resetBtn = $('#btn-pip-reset');
+      if(resetBtn) resetBtn.style.display = 'block';
+    });
+  }
+  $('#btn-pip-reset').addEventListener('click', ()=>{
+    pipMode = 'clock';
+    $('#btn-pip-reset').style.display = 'none';
+  });
+
   const RALLY_OPTIONS = [1,2,3,5,10];
 
-  $('#row-rally-min').addEventListener('click', ()=>{
+  function openRallyPicker(){
     const opts = RALLY_OPTIONS.map(v=>({value:v,label:v+'分'}));
     openPicker('集結時間', opts, state.rallyMin, (val)=>{
       state.rallyMin = parseInt(val,10);
-      $('#val-rally-min').textContent = state.rallyMin+'分';
+      const txt = state.rallyMin+'分';
+      $('#val-rally-min').textContent = txt;
+      const chip = $('#dep-chip-rally');
+      if(chip) chip.textContent = txt;
     });
-  });
+  }
+  $('#row-rally-min').addEventListener('click', openRallyPicker);
 
   /* ===================== よく使う時間（準備時間 / 時差 共通） ===================== */
   const PRESET_KINDS = {
@@ -913,6 +1242,10 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
   function applyValue(sec){
     cur.set(sec);
     $(cur.valueEl).textContent = marchLabel(sec);
+    if(cur === PRESET_KINDS.prep){
+      const chip = $('#dep-chip-prep');
+      if(chip) chip.textContent = marchLabel(sec);
+    }
   }
 
   /* --- 左スワイプで削除を表示 --- */
@@ -1108,6 +1441,370 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
     $('#two-wave-extra').classList.toggle('open', state.twoWave);
   });
 
+  /* ===================== 集結主登録 ===================== */
+  const LEADERS_KEY = 'shuketsu.leaders.v1';
+  let leaders = [];
+  let editingLeaders = false;
+  let editingLeaderId = null; // null なら新規追加
+
+  function loadLeaders(){
+    try{
+      const raw = localStorage.getItem(LEADERS_KEY);
+      if(raw){
+        const arr = JSON.parse(raw);
+        if(Array.isArray(arr)){
+          return arr.filter(l => l && typeof l.id==='string' && typeof l.name==='string'
+            && Number.isFinite(l.x) && Number.isFinite(l.y));
+        }
+      }
+    }catch(e){}
+    return [];
+  }
+  function saveLeaders(){
+    try{ localStorage.setItem(LEADERS_KEY, JSON.stringify(leaders)); }catch(e){}
+    syncPushLeaders();
+  }
+  leaders = loadLeaders();
+
+  function makeLeaderId(){
+    return 'l' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+  }
+  function updateLeadersCount(){
+    const el = $('#val-leaders-count');
+    if(el) el.textContent = leaders.length + '人';
+  }
+
+  function leaderRowHtml(l){
+    return `
+      <div class="list-row inset tappable leader-row" data-id="${escapeHtml(l.id)}">
+        <button class="edit-minus" type="button" aria-label="${escapeHtml(l.name)}を削除"><span></span></button>
+        <div class="row-slide">
+          <span class="row-label">${escapeHtml(l.name)}</span>
+          <span class="row-value">X:${l.x} Y:${l.y}</span>
+        </div>
+        <button class="row-delete" type="button">削除</button>
+      </div>`;
+  }
+  const LEADER_ADD_ROW_HTML = `
+      <div class="list-row inset tappable row-add" id="row-add-leader">
+        <div class="plus-circle"><svg viewBox="0 0 14 14"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <span class="row-label">集結主を追加</span>
+      </div>`;
+
+  function clearLeaderConfirming(except){
+    $all('.leader-row.confirming').forEach(r=>{
+      if(r !== except) r.classList.remove('confirming');
+    });
+  }
+
+  function renderLeadersList(){
+    const list = $('#leaders-list');
+    let html = leaders.length
+      ? leaders.map(leaderRowHtml).join('')
+      : (editingLeaders ? '' : '<div class="list-empty">集結主が登録されていません</div>');
+    if(editingLeaders) html += LEADER_ADD_ROW_HTML;
+    list.innerHTML = html;
+    list.classList.toggle('editing', editingLeaders);
+
+    $all('.leader-row', list).forEach(row=>{
+      const id = row.dataset.id;
+      row.addEventListener('click', (ev)=>{
+        if(ev.target.closest('.row-delete') || ev.target.closest('.edit-minus')) return;
+        if(row.classList.contains('confirming')){ clearLeaderConfirming(); return; }
+        if(editingLeaders){ clearLeaderConfirming(); return; }
+        openLeaderForm(id);
+      });
+      $('.edit-minus', row).addEventListener('click', ()=>{
+        const on = row.classList.contains('confirming');
+        clearLeaderConfirming();
+        row.classList.toggle('confirming', !on);
+      });
+      $('.row-delete', row).addEventListener('click', ()=>{
+        leaders = leaders.filter(l => l.id !== id);
+        saveLeaders();
+        delete pets[id];
+        savePets();
+        updateLeadersCount();
+        renderLeadersList();
+        renderDepartureList();
+      });
+    });
+
+    const scrollLeaders = $('#scroll-leaders');
+    if(scrollLeaders && !scrollLeaders._closeBound){
+      scrollLeaders._closeBound = true;
+      scrollLeaders.addEventListener('click', (ev)=>{
+        if(!ev.target.closest('.leader-row')) clearLeaderConfirming();
+      });
+    }
+
+    const addRow = $('#row-add-leader', list);
+    if(addRow) addRow.addEventListener('click', ()=> openLeaderForm(null));
+  }
+
+  function openLeaders(){
+    editingLeaders = false;
+    $('#btn-leaders-edit').textContent = '編集';
+    $('#btn-leaders-edit').classList.remove('bold');
+    $('#scroll-leaders').scrollTop = 0;
+    renderLeadersList();
+    $('#screen-leaders').classList.add('show');
+  }
+  function closeLeaders(){ $('#screen-leaders').classList.remove('show'); }
+  $('#btn-leaders-back').addEventListener('click', closeLeaders);
+  $('#btn-leaders-edit').addEventListener('click', function(){
+    editingLeaders = !editingLeaders;
+    this.textContent = editingLeaders ? '完了' : '編集';
+    this.classList.toggle('bold', editingLeaders);
+    clearLeaderConfirming();
+    renderLeadersList();
+  });
+
+  /* --- 集結主フォーム（追加・編集） --- */
+  function digitsOnly(str){ return String(str).replace(/[^0-9]/g,''); }
+  ['#input-leader-x','#input-leader-y'].forEach(sel=>{
+    $(sel).addEventListener('input', function(){
+      const digits = digitsOnly(this.value).slice(0,5);
+      if(this.value !== digits) this.value = digits;
+    });
+  });
+
+  function openLeaderForm(id){
+    editingLeaderId = id;
+    const leader = id ? leaders.find(l => l.id===id) : null;
+    $('#leader-form-nav-title').textContent = leader ? '集結主を編集' : '集結主を追加';
+    $('#leader-form-large-title').textContent = leader ? '集結主を編集' : '集結主を追加';
+    $('#input-leader-name').value = leader ? leader.name : '';
+    $('#input-leader-x').value = leader ? String(leader.x) : '';
+    $('#input-leader-y').value = leader ? String(leader.y) : '';
+    $('#btn-leader-delete').style.display = leader ? 'flex' : 'none';
+    $('#scroll-leader-form').scrollTop = 0;
+    $('#screen-leader-form').classList.add('show');
+  }
+  function closeLeaderForm(){ $('#screen-leader-form').classList.remove('show'); }
+  $('#btn-leader-form-back').addEventListener('click', closeLeaderForm);
+
+  $('#btn-leader-save').addEventListener('click', ()=>{
+    const name = $('#input-leader-name').value.trim();
+    const xStr = $('#input-leader-x').value.trim();
+    const yStr = $('#input-leader-y').value.trim();
+    if(!name){ showToast('名前を入力してください'); return; }
+    if(xStr==='' || yStr===''){ showToast('座標を入力してください'); return; }
+    const x = parseInt(xStr,10);
+    const y = parseInt(yStr,10);
+    if(!Number.isFinite(x) || !Number.isFinite(y)){ showToast('座標を入力してください'); return; }
+
+    if(editingLeaderId){
+      const target = leaders.find(l => l.id===editingLeaderId);
+      if(target){ target.name=name; target.x=x; target.y=y; }
+    } else {
+      leaders.push({ id: makeLeaderId(), name, x, y });
+    }
+    saveLeaders();
+    updateLeadersCount();
+    renderLeadersList();
+    renderDepartureList();
+    syncPushDepartures();
+    closeLeaderForm();
+  });
+
+  $('#btn-leader-delete').addEventListener('click', ()=>{
+    if(!editingLeaderId) return;
+    leaders = leaders.filter(l => l.id !== editingLeaderId);
+    saveLeaders();
+    delete pets[editingLeaderId];
+    savePets();
+    updateLeadersCount();
+    renderLeadersList();
+    renderDepartureList();
+    syncPushDepartures();
+    closeLeaderForm();
+  });
+
+  /* ===================== 座標 → 行軍時間（実測データ） ===================== */
+  /* 形式: [X, Y, ペットOFF(25%)の行軍秒, ペットON(55%)の行軍秒] */
+  const MARCH_TABLE = {};
+  [
+    [590,592,55,45],[590,594,50,41],[590,596,47,39],[590,598,45,37],
+    [590,600,45,37],[590,602,47,39],[590,604,50,41],[590,606,55,45],
+    [592,590,55,45],[592,592,48,40],[592,594,43,36],[592,596,39,32],
+    [592,598,36,30],[592,600,36,30],[592,602,39,32],[592,604,43,36],
+    [592,606,48,40],[592,608,55,45],
+    [594,590,50,41],[594,592,43,36],[594,606,43,36],[594,608,50,41],
+    [596,590,47,39],[596,592,39,32],[596,606,39,32],[596,608,47,39],
+    [598,590,45,37],[598,592,36,30],[598,606,36,30],[598,608,45,37],
+    [600,590,45,37],[600,592,36,30],[600,606,36,30],[600,608,45,37],
+    [602,590,47,39],[602,592,39,32],[602,606,39,32],[602,608,47,39],
+    [604,590,50,41],[604,592,43,36],[604,606,43,36],[604,608,50,41],
+    [606,590,55,45],[606,592,48,40],[606,594,43,36],[606,596,39,32],
+    [606,598,36,30],[606,600,36,30],[606,602,39,32],[606,604,43,36],
+    [606,606,48,40],[606,608,55,45],
+    [608,592,55,45],[608,594,50,41],[608,596,47,39],[608,598,45,37],
+    [608,600,45,37],[608,602,47,39],[608,604,50,41],[608,606,55,45]
+  ].forEach(([x,y,off,on])=>{ MARCH_TABLE[x+','+y] = {off,on}; });
+
+  function getMarchSeconds(leader, petActive){
+    const entry = MARCH_TABLE[leader.x + ',' + leader.y];
+    if(!entry) return null; // 未登録座標では推測しない
+    return petActive ? entry.on : entry.off;
+  }
+
+  /* ===================== ペット発動状態（2時間タイマー） ===================== */
+  const PETS_KEY = 'shuketsu.pets.v1';
+  let pets = {}; // { [leaderId]: endTimeMs }
+
+  function loadPets(){
+    try{
+      const raw = localStorage.getItem(PETS_KEY);
+      if(raw){
+        const obj = JSON.parse(raw);
+        if(obj && typeof obj==='object' && !Array.isArray(obj)) return obj;
+      }
+    }catch(e){}
+    return {};
+  }
+  function savePets(){
+    try{ localStorage.setItem(PETS_KEY, JSON.stringify(pets)); }catch(e){}
+  }
+  pets = loadPets();
+
+  function isPetActive(leaderId){
+    return !!(pets[leaderId] && pets[leaderId] > Date.now());
+  }
+  function petRemainingLabel(leaderId){
+    const end = pets[leaderId];
+    if(!end) return null;
+    const left = end - Date.now();
+    if(left <= 0) return null;
+    const totalMin = Math.floor(left/60000);
+    return `残り${Math.floor(totalMin/60)}:${pad2(totalMin%60)}`;
+  }
+  function togglePet(leaderId){
+    if(isPetActive(leaderId)) delete pets[leaderId];
+    else pets[leaderId] = Date.now() + 2*60*60*1000;
+    savePets();
+    renderDepartureList();
+    syncPushDepartures();
+  }
+
+  /* ===================== 出発時刻モード ===================== */
+  let currentMode = 'landing';
+  let departureLanding = null; // 計算開始で確定した着弾時刻（固定値）
+
+  function setMode(mode){
+    currentMode = mode;
+    $all('.segmented-btn', $('#mode-segmented')).forEach(b=>{
+      b.classList.toggle('active', b.dataset.mode === mode);
+    });
+    $('#scroll-home').classList.toggle('mode-departure', mode === 'departure');
+    if(mode === 'departure') renderDepartureList();
+  }
+  $all('.segmented-btn', $('#mode-segmented')).forEach(b=>{
+    b.addEventListener('click', ()=> setMode(b.dataset.mode));
+  });
+  $('#dep-chip-prep').addEventListener('click', ()=> openPreset('prep'));
+  $('#dep-chip-rally').addEventListener('click', openRallyPicker);
+
+  function departureRowHtml(r){
+    const marchText = r.marchSec!=null ? marchLabel(r.marchSec) : 'データなし';
+    const petLabel = 'ペット ' + (r.active ? ('ON ' + (petRemainingLabel(r.leader.id) || '')) : 'OFF');
+    return `
+      <div class="list-row inset tappable dep-row" data-id="${escapeHtml(r.leader.id)}">
+        <div class="dep-name">${escapeHtml(r.leader.name)}</div>
+        <div class="dep-row-mid">
+          <span class="dep-coord">${r.leader.x},${r.leader.y}</span>
+          <span class="dep-march">${escapeHtml(marchText)}</span>
+          <span class="dep-time">${r.depStr==='--' ? '--' : r.depStr+' UTC'}</span>
+        </div>
+        <div class="dep-row-pet">
+          <button type="button" class="dep-pet-btn${r.active ? ' on' : ''}" data-id="${escapeHtml(r.leader.id)}">${escapeHtml(petLabel.trim())}</button>
+        </div>
+      </div>`;
+  }
+
+  function getDepartureRows(){
+    return leaders.map(l=>{
+      const active = isPetActive(l.id);
+      const marchSec = getMarchSeconds(l, active);
+      let depDate = null, depStr = '--';
+      if(departureLanding && marchSec!=null){
+        depDate = computeDeparture(departureLanding, state.rallyMin, marchSec);
+        depStr = fmtUTC(depDate);
+      }
+      return { leader:l, active, marchSec, depDate, depStr };
+    });
+  }
+
+  function renderDepartureList(){
+    const list = $('#departure-list');
+    if(!list) return;
+    if(!leaders.length){
+      list.innerHTML = '';
+      $('#departure-empty-hint').style.display = 'block';
+      return;
+    }
+    $('#departure-empty-hint').style.display = 'none';
+    const rows = getDepartureRows();
+    list.innerHTML = rows.map(departureRowHtml).join('');
+    $all('.dep-row', list).forEach(row=>{
+      row.addEventListener('click', (ev)=>{
+        if(ev.target.closest('.dep-pet-btn')) return;
+        openLeaderForm(row.dataset.id);
+      });
+    });
+    $all('.dep-pet-btn', list).forEach(btn=>{
+      btn.addEventListener('click', (ev)=>{
+        ev.stopPropagation();
+        togglePet(btn.dataset.id);
+      });
+    });
+  }
+
+  function buildDepartureCopyMessage(landing, rows){
+    const sorted = rows.filter(r=>r.depDate).sort((a,b)=> a.depDate - b.depDate);
+    const lines = [`${state.rallyMin}分集結お願いします！`, ''];
+    sorted.forEach(r=> lines.push(`${r.leader.name} → ${r.depStr} UTC`));
+    lines.push('______________________');
+    lines.push(`着弾時刻 : ${fmtUTC(landing)} UTC`);
+    return lines.join('\n');
+  }
+
+  $('#btn-departure-calc').addEventListener('click', function(){
+    if(!leaders.length){ showToast('集結主が登録されていません'); return; }
+    const btn = this;
+    btn.textContent = '計算中…';
+    btn.disabled = true;
+    setTimeout(()=>{
+      /* 全員が同時着弾できるよう、最も行軍時間が長い人に合わせて着弾時刻を決める */
+      let maxMarch = 0;
+      leaders.forEach(l=>{
+        const m = getMarchSeconds(l, isPetActive(l.id));
+        if(m!=null && m>maxMarch) maxMarch = m;
+      });
+      const totalSec = state.prepSec + state.rallyMin*60 + maxMarch;
+      departureLanding = computeLanding(totalSec);
+      renderDepartureList();
+      syncPushDepartures();
+      btn.textContent = '計算開始';
+      btn.disabled = false;
+    }, 450);
+  });
+
+  $('#btn-departure-add').addEventListener('click', ()=> openLeaderForm(null));
+
+  $('#btn-departure-copy').addEventListener('click', ()=>{
+    if(!departureLanding){ showToast('先に計算開始してください'); return; }
+    const rows = getDepartureRows();
+    const withTimes = rows.filter(r=>r.depDate);
+    if(!withTimes.length){ showToast('行軍時間が未登録の座標です'); return; }
+    copyText(buildDepartureCopyMessage(departureLanding, withTimes));
+  });
+
+  /* ペットタイマーの満了監視・残り時間のライブ更新 */
+  setInterval(function(){
+    if(currentMode === 'departure') renderDepartureList();
+  }, 1000);
+
   function computeLanding(afterSec){
     const now = new Date(nowMs());
     let target = new Date(now.getTime() + afterSec*1000);
@@ -1119,6 +1816,137 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
     return target;
   }
   function fmtUTC(d){ return `${pad2(d.getUTCHours())}:${pad2(d.getUTCMinutes())}:${pad2(d.getUTCSeconds())}`; }
+
+  /* 出発時刻 = 着弾時刻 - 集結時間 - 行軍時間（computeLandingとは独立） */
+  function computeDeparture(landingTime, rallyMin, marchSec){
+    return new Date(landingTime.getTime() - rallyMin*60000 - marchSec*1000);
+  }
+
+  /* ===================== 集結主側：PiP時計（Smart由来、描画ロジックは無改造） ===================== */
+  (function(){
+    var canvas = document.getElementById('pip-canvas');
+    var video  = document.getElementById('pip-video');
+    var btn    = document.getElementById('btn-pip-start');
+    var statusEl = document.getElementById('pip-status');
+    if(!canvas || !video || !btn) return;
+
+    var W = 300, H = 100;
+    var dpr = Math.max(1, window.devicePixelRatio || 1);
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    function roundRect(c,x,y,w,h,r){
+      c.beginPath();
+      c.moveTo(x+r,y);
+      c.arcTo(x+w,y,x+w,y+h,r);
+      c.arcTo(x+w,y+h,x,y+h,r);
+      c.arcTo(x,y+h,x,y,r);
+      c.arcTo(x,y,x+w,y,r);
+      c.closePath();
+    }
+    function mmssPip(ms){
+      var t = Math.max(0, Math.floor(ms/1000));
+      return Math.floor(t/60) + ':' + pad2(t%60);
+    }
+
+    function drawClock(now){
+      var hh = pad2(now.getUTCHours()), mm = pad2(now.getUTCMinutes()), ss = pad2(now.getUTCSeconds());
+      var deci = Math.floor(now.getUTCMilliseconds()/100);
+      var main = hh+':'+mm+':'+ss, frac = '.'+deci;
+
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.font = '600 12px Menlo, Consolas, monospace';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillText('UTC', 12, 10);
+
+      ctx.font = '700 34px Menlo, Consolas, "SF Mono", monospace';
+      ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+      var mainWidth = ctx.measureText(main).width;
+      var fracWidth = ctx.measureText(frac).width;
+      var startX = (W - (mainWidth+fracWidth)) / 2;
+      var y = H/2 + 6;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(main, startX, y);
+      ctx.fillStyle = '#ff3b30';
+      ctx.fillText(frac, startX+mainWidth, y);
+    }
+
+    function drawOrder(now){
+      var dep = new Date(memberOrder.depIso);
+      var leftMs = dep.getTime() - now.getTime();
+
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.font = '600 12px Menlo, Consolas, monospace';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillText(memberOrder.name || '出発', 12, 10);
+
+      var hh = pad2(dep.getUTCHours()), mm = pad2(dep.getUTCMinutes()), ss = pad2(dep.getUTCSeconds());
+      ctx.font = '700 28px Menlo, Consolas, "SF Mono", monospace';
+      ctx.textBaseline = 'middle'; ctx.textAlign = 'center';
+      ctx.fillStyle = leftMs <= 0 ? '#ff3b30' : '#ffffff';
+      ctx.fillText(hh+':'+mm+':'+ss, W/2, H/2-6);
+
+      ctx.font = '600 13px Menlo, Consolas, monospace';
+      ctx.fillStyle = leftMs <= 0 ? '#ff3b30' : 'rgba(255,255,255,0.7)';
+      var label = leftMs <= 0 ? '出発時刻です' : ('出発まで ' + mmssPip(leftMs));
+      ctx.fillText(label, W/2, H/2+20);
+    }
+
+    function draw(){
+      var now = new Date(typeof nowMs === 'function' ? nowMs() : Date.now());
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle = 'rgba(10,10,10,0.82)';
+      roundRect(ctx,0,0,W,H,14);
+      ctx.fill();
+      if(pipMode === 'order' && memberOrder && memberOrder.depIso) drawOrder(now);
+      else drawClock(now);
+    }
+    draw();
+    setInterval(draw, 100);
+
+    var stream = canvas.captureStream(15);
+    video.srcObject = stream;
+    video.muted = true;
+    video.playsInline = true;
+
+    function setStatus(msg){ statusEl.textContent = msg || ''; }
+
+    function pipSupported(){
+      return (document.pictureInPictureEnabled && typeof video.requestPictureInPicture === 'function')
+        || typeof video.webkitSetPresentationMode === 'function';
+    }
+    if(!pipSupported()){
+      setStatus('このブラウザは Picture-in-Picture に対応していません');
+      btn.disabled = true;
+    }
+
+    btn.addEventListener('click', startPiP);
+    async function startPiP(){
+      setStatus('');
+      try{
+        if(video.paused) await video.play();
+        if(document.pictureInPictureEnabled && typeof video.requestPictureInPicture === 'function'){
+          if(document.pictureInPictureElement) return;
+          await video.requestPictureInPicture();
+          return;
+        }
+        if(typeof video.webkitSetPresentationMode === 'function'){
+          video.webkitSetPresentationMode('picture-in-picture');
+          return;
+        }
+        setStatus('この環境では Picture-in-Picture を開始できません');
+      }catch(err){
+        setStatus('開始に失敗しました: ' + (err && err.message ? err.message : err));
+      }
+    }
+    video.addEventListener('enterpictureinpicture', function(){ setStatus('PiP 表示中'); });
+    video.addEventListener('leavepictureinpicture', function(){ setStatus(''); });
+    video.addEventListener('webkitpresentationmodechanged', function(){
+      setStatus(video.webkitPresentationMode === 'picture-in-picture' ? 'PiP 表示中' : '');
+    });
+  })();
 
   /* ===================== 標準時への同期 ===================== */
   /* 端末時計は数秒ずれていることがあるため、サーバー応答の Date ヘッダーを基準にする。
@@ -1328,8 +2156,65 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
 
   /* ===================== boot ===================== */
   $('#val-rally-min').textContent = state.rallyMin+'分';
+  updateLeadersCount();
+  applyRole(getRole());
 
 })();
+</script>
+
+<!-- ===== 同期レイヤー（Firebase Realtime Database） =====
+     指示役が各集結主の出発時刻を個別に書き込み、集結主本人だけが自分の行を購読する。
+     celebration本体の計算ロジック（computeLanding/computeDeparture等）には触れず、
+     window.Sync 経由でのみやり取りする。 -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getDatabase, ref, set, get, onValue, off } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDZlCZo-h0lZ-lwU7FwNULDvem0isR_fa4",
+  authDomain: "celebration-7658d.firebaseapp.com",
+  databaseURL: "https://celebration-7658d-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "celebration-7658d",
+  storageBucket: "celebration-7658d.firebasestorage.app",
+  messagingSenderId: "974478338084",
+  appId: "1:974478338084:web:2bdfb382f544de4c42d0b1"
+};
+
+let db = null;
+try{
+  const app = initializeApp(firebaseConfig);
+  db = getDatabase(app);
+}catch(e){ console.error('firebase init failed', e); }
+
+let watchRef = null;
+
+window.Sync = {
+  ready(){ return !!db; },
+  writeLeaders(roomId, leadersObj){
+    if(!db || !roomId) return Promise.resolve();
+    return set(ref(db, 'rooms/' + roomId + '/leaders'), leadersObj).catch(()=>{});
+  },
+  writeDeparture(roomId, leaderId, payload){
+    if(!db || !roomId || !leaderId) return Promise.resolve();
+    return set(ref(db, 'rooms/' + roomId + '/departures/' + leaderId), payload).catch(()=>{});
+  },
+  async readLeaders(roomId){
+    if(!db || !roomId) return {};
+    try{
+      const snap = await get(ref(db, 'rooms/' + roomId + '/leaders'));
+      return snap.val() || {};
+    }catch(e){ return {}; }
+  },
+  watchMyDeparture(roomId, leaderId, cb){
+    this.stopWatch();
+    if(!db || !roomId || !leaderId) return;
+    watchRef = ref(db, 'rooms/' + roomId + '/departures/' + leaderId);
+    onValue(watchRef, snap => cb(snap.val()));
+  },
+  stopWatch(){
+    if(watchRef){ off(watchRef); watchRef = null; }
+  }
+};
 </script>
 
 </body>
