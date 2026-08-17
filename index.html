@@ -319,14 +319,6 @@ button.secondary:hover{
   margin-right:4px;
 }
 
-.destination-select{
-  max-width:90px;
-}
-
-#frost-destination{
-  max-width:220px;
-}
-
 .hidden{
   display:none;
 }
@@ -1988,28 +1980,13 @@ body.landing-active .page-tabs{ background:var(--card-bg); }
 
   <!-- モード設定 -->
   <div class="mode-card">
-      <!-- 1行目：イベントと目的地 -->
+      <!-- 1行目：イベント -->
       <div class="single-line">
         <select id="event-select" class="inline-select">
           <option value="toride" selected>ステ/砦</option>
           <option value="castle">王城決戦</option>
           <option value="frost_dragon">霜竜覇者</option>
         </select>
-        <select id="destination" class="inline-select destination-select" style="display:none">
-          <option value="太陽城" selected>太陽城</option>
-          <option value="北砲台">北砲台</option>
-          <option value="南砲台">南砲台</option>
-          <option value="西砲台">西砲台</option>
-          <option value="東砲台">東砲台</option>
-        </select>
-        <select id="frost-destination" class="inline-select destination-select" style="display:none">
-          <option value="霜竜王城" selected>霜竜王城</option>
-          <option value="庇護の石塔">庇護の石塔(北,防御バフ)</option>
-          <option value="生命の石塔">生命の石塔(南,HPバフ)</option>
-          <option value="鋭刃の石塔">鋭刃の石塔(西,攻撃バフ)</option>
-          <option value="竜息の石塔">竜息の石塔(東,殺傷バフ)</option>
-        </select>
-        <span class="inline-text" id="destination-to" style="display:none">へ</span>
       </div>
 
       <!-- 2行目：種類、時刻、準備時間 -->
@@ -2231,7 +2208,7 @@ body.landing-active .page-tabs{ background:var(--card-bg); }
     <div class="history-modal-body">
       <h3 class="history-modal-title">行軍時間履歴</h3>
       <div class="history-search">
-        <input type="text" id="history-search-input" placeholder="🔍 名前または目的地で検索...">
+        <input type="text" id="history-search-input" placeholder="🔍 名前またはイベント名で検索...">
       </div>
       <div id="history-list" class="history-list"></div>
       <div class="history-modal-footer">
@@ -2349,7 +2326,7 @@ function generateMarchOptions(selectElement, defaultValue, minSec = 10, maxSec =
 }
 function updateAllMarchOptions(minSec = 10, maxSec = 120){
   document.querySelectorAll('.march-select').forEach(sel=>{
-    // 現在値を必ず保存してから再生成（目的地変更で値が消えないように）
+    // 現在値を必ず保存してから再生成（イベント変更で値が消えないように）
     const savedVal = parseInt(sel.value) || minSec;
     generateMarchOptions(sel, savedVal, minSec, maxSec);
   });
@@ -2531,9 +2508,6 @@ document.getElementById('rally-min').addEventListener('change', updateLandingTim
 /* ======= モード切替 ======= */
 const rallyTypeSel=document.getElementById('rally-type');
 const eventSel=document.getElementById('event-select');
-const destinationSel=document.getElementById('destination');
-const frostDestinationSel=document.getElementById('frost-destination');
-const destinationTo=document.getElementById('destination-to');
 const rallyMinSel=document.getElementById('rally-min');
 const actionBtn=document.getElementById('action-btn');
 const impactDisplay=document.getElementById('impact-display');
@@ -2578,7 +2552,7 @@ const rallyInlineNow = document.getElementById('rally-inline-now');
 const rallyLine3 = document.getElementById('rally-line-3');
 const rallyMinTimeSel = document.getElementById('rally-min-time');
 
-/* 目的地変更時に各メンバーの行軍時間をその目的地の履歴から復元 */
+/* イベント変更時に各メンバーの行軍時間をその履歴から復元 */
 function restoreMarchTimesFromHistory(){
   const key = getHistoryKey();
   const history = loadHistory();
@@ -2605,29 +2579,14 @@ function updateMode(){
   const event = eventSel.value;
   const rallyType = rallyTypeSel.value;
 
-  // 目的地と「へ」の表示/非表示
   if(event === 'castle'){
-    destinationSel.style.display='inline-block';
-    frostDestinationSel.style.display='none';
-    destinationTo.style.display='inline';
-    const destination = destinationSel.value;
-    if(destination === '太陽城'){
-      updateAllMarchOptions(30, 60);
-    }else{
-      updateAllMarchOptions(10, 120);
-    }
+    updateAllMarchOptions(30, 60);
   }else if(event === 'frost_dragon'){
-    destinationSel.style.display='none';
-    frostDestinationSel.style.display='inline-block';
-    destinationTo.style.display='inline';
     updateAllMarchOptions(10, 300);
   }else{
-    destinationSel.style.display='none';
-    frostDestinationSel.style.display='none';
-    destinationTo.style.display='none';
     updateAllMarchOptions(13, 60);
   }
-  // 目的地変更後、各メンバーの行軍時間をその目的地の履歴で上書き復元
+  // イベント変更後、各メンバーの行軍時間をその履歴で上書き復元
   restoreMarchTimesFromHistory();
 
   // 時刻入力と準備時間の表示/非表示
@@ -2654,8 +2613,6 @@ function updateMode(){
 
 rallyTypeSel.addEventListener('change', ()=>{ updateMode(); saveSettings(); });
 eventSel.addEventListener('change', ()=>{ updateMode(); saveSettings(); });
-destinationSel.addEventListener('change', ()=>{ updateMode(); saveSettings(); });
-frostDestinationSel.addEventListener('change', ()=>{ updateMode(); saveSettings(); });
 
 /* ======= 行削除（グローバル関数） ======= */
 function deleteThisRow(el){
@@ -2851,14 +2808,8 @@ function addMemberRow(name = '', marchSec = null){
     minSec = 13;
     maxSec = 60;
   }else if(event === 'castle'){
-    const destination = destinationSel.value;
-    if(destination === '太陽城'){
-      minSec = 30;
-      maxSec = 60;
-    }else{
-      minSec = 10;
-      maxSec = 120;
-    }
+    minSec = 30;
+    maxSec = 60;
   }else if(event === 'frost_dragon'){
     minSec = 10;
     maxSec = 300;
@@ -2883,14 +2834,7 @@ document.getElementById('add-member').addEventListener('click',()=>{
 function generateCopyMessage(sortedRowData){
   const event = eventSel.value;
   const rallyMin = rallyMinSel.value;
-  let destination = '';
-  if(event === 'toride'){
-    destination = '砦・ステ';
-  }else if(event === 'frost_dragon'){
-    destination = frostDestinationSel.value;
-  }else{
-    destination = destinationSel.value;
-  }
+  const destination = getDestinationLabel(event);
   const commonImpactTime = document.getElementById('common-impact-time').textContent;
 
   const lines=[];
@@ -3052,18 +2996,11 @@ actionBtn.addEventListener('click',()=>{
   }, 500);
 });
 
-/* ======= 履歴管理（イベント・目的地ごとに名前・行軍時間を記録） ======= */
+/* ======= 履歴管理（イベントごとに名前・行軍時間を記録） ======= */
 const MAX_HISTORY_PER_KEY = 50;
 
 function getHistoryKey(){
-  const event = eventSel.value;
-  let destination = 'default';
-  if(event === 'castle'){
-    destination = destinationSel.value;
-  }else if(event === 'frost_dragon'){
-    destination = frostDestinationSel.value;
-  }
-  return `${event}|${destination}`;
+  return eventSel.value;
 }
 
 function loadHistory(){
@@ -3274,11 +3211,15 @@ function selectSuggestion(inputElement, item){
   saveSettings();
 }
 
-function getDestinationLabel(event, destination){
+function getDestinationLabel(event){
   if(event === 'toride'){
     return '砦・ステ';
+  }else if(event === 'castle'){
+    return '王城決戦';
+  }else if(event === 'frost_dragon'){
+    return '霜竜覇者';
   }else{
-    return destination;
+    return event;
   }
 }
 
@@ -3292,10 +3233,7 @@ function renderHistoryList(searchText = ''){
   const keys = Object.keys(history);
 
   // 現在選択中のイベントのみフィルタリング
-  const filteredKeys = keys.filter(key => {
-    const [event] = key.split('|');
-    return event === currentEvent;
-  });
+  const filteredKeys = keys.filter(key => key === currentEvent);
 
   if(filteredKeys.length === 0){
     historyListEl.innerHTML = '<div class="history-empty">履歴が登録されていません</div>';
@@ -3304,31 +3242,22 @@ function renderHistoryList(searchText = ''){
 
   const currentKey = getHistoryKey();
 
-  // 一致する目的地を先頭に、その後は五十音順
-  filteredKeys.sort((a, b) => {
-    if(a === currentKey) return -1;
-    if(b === currentKey) return 1;
-    const [eventA, destA] = a.split('|');
-    const [eventB, destB] = b.split('|');
-    return getDestinationLabel(eventA, destA).localeCompare(getDestinationLabel(eventB, destB), 'ja');
-  });
-
   let hasResults = false;
 
   filteredKeys.forEach(key => {
-    const [event, destination] = key.split('|');
+    const event = key;
     const items = history[key];
 
     const filteredItems = items.filter(item => {
       const searchLower = searchText.toLowerCase();
       const nameLower = item.name.toLowerCase();
-      const destLabel = getDestinationLabel(event, destination).toLowerCase();
+      const destLabel = getDestinationLabel(event).toLowerCase();
       return nameLower.includes(searchLower) || destLabel.includes(searchLower);
     });
 
     if(filteredItems.length === 0) return;
 
-    // 目的地内で行軍時間順にソート
+    // 行軍時間順にソート
     filteredItems.sort((a, b) => {
       return a.marchSec - b.marchSec;
     });
@@ -3343,7 +3272,7 @@ function renderHistoryList(searchText = ''){
 
     const titleDiv = document.createElement('div');
     titleDiv.className = 'history-group-title';
-    titleDiv.textContent = getDestinationLabel(event, destination);
+    titleDiv.textContent = getDestinationLabel(event);
     groupDiv.appendChild(titleDiv);
 
     filteredItems.forEach(item => {
@@ -3381,8 +3310,7 @@ function renderHistoryList(searchText = ''){
 
       function applyHistoryItem(){
         const currentKey = getHistoryKey();
-        const itemKey = `${event}|${destination}`;
-        if(currentKey !== itemKey) return;
+        if(currentKey !== event) return;
         const existingRow = findMemberRowByName(item.name);
         if(existingRow){
           const sel = existingRow.querySelector('.march-select');
@@ -3414,18 +3342,18 @@ function renderHistoryList(searchText = ''){
         wrapperDiv.style.height = '0';
         wrapperDiv.style.overflow = 'hidden';
         setTimeout(() => {
-          deleteHistoryItemFromModal(event, destination, item);
+          deleteHistoryItemFromModal(event, item);
         }, 300);
       });
 
       itemDiv.appendChild(infoDiv);
       itemDiv.appendChild(deleteBtn);
-      
+
       wrapperDiv.appendChild(deleteBg);
       wrapperDiv.appendChild(itemDiv);
-      
+
       // スワイプ削除イベント
-      initHistorySwipe(wrapperDiv, itemDiv, deleteBg, event, destination, item);
+      initHistorySwipe(wrapperDiv, itemDiv, deleteBg, event, item);
 
       groupDiv.appendChild(wrapperDiv);
     });
@@ -3438,7 +3366,7 @@ function renderHistoryList(searchText = ''){
   }
 }
 
-function initHistorySwipe(wrapper, itemDiv, deleteBg, event, destination, item){
+function initHistorySwipe(wrapper, itemDiv, deleteBg, event, item){
   let startX = 0;
   let currentX = 0;
   let isDragging = false;
@@ -3453,10 +3381,10 @@ function initHistorySwipe(wrapper, itemDiv, deleteBg, event, destination, item){
     wrapper.style.marginBottom = '0';
     wrapper.style.overflow = 'hidden';
     setTimeout(() => {
-      deleteHistoryItemFromModal(event, destination, item);
+      deleteHistoryItemFromModal(event, item);
     }, 300);
   }
-  
+
   itemDiv.addEventListener('touchstart', (e) => {
     startX = e.touches[0].clientX;
     currentX = startX;
@@ -3506,8 +3434,8 @@ function initHistorySwipe(wrapper, itemDiv, deleteBg, event, destination, item){
   deleteBg.addEventListener('click', () => doDelete());
 }
 
-function deleteHistoryItemFromModal(event, destination, item){
-  const key = `${event}|${destination}`;
+function deleteHistoryItemFromModal(event, item){
+  const key = event;
   const history = loadHistory();
 
   if(!history[key]) return;
@@ -3564,8 +3492,6 @@ function saveSettings(){
   const data={
     event:eventSel.value,
     rallyType:rallyTypeSel.value,
-    dest:destinationSel.value,
-    frostDest:frostDestinationSel.value,
     rallyMin:rallyMinSel.value,
     members: members
   };
@@ -3595,9 +3521,6 @@ function loadSettings(){
       if(d.rallyType) rallyTypeSel.value=d.rallyType;
     }
 
-    if(d.dest) destinationSel.value=d.dest;
-    if(d.frostDest) frostDestinationSel.value=d.frostDest;
-    
     // イベントに応じた選択肢を更新してから値を設定
     updateRallyMinOptions();
     if(d.rallyMin){
@@ -3608,14 +3531,12 @@ function loadSettings(){
     if(d.members && d.members.length>0){
       const container=document.querySelector('#players');
       container.innerHTML='';
-      // 現在のイベント・目的地に応じた範囲を取得
+      // 現在のイベントに応じた範囲を取得
       let minSec = 10, maxSec = 120;
       const ev = eventSel.value;
       if(ev === 'toride'){ minSec = 13; maxSec = 60; }
-      else if(ev === 'castle'){
-        minSec = (destinationSel.value === '太陽城') ? 30 : 10;
-        maxSec = (destinationSel.value === '太陽城') ? 60 : 120;
-      }else if(ev === 'frost_dragon'){ minSec = 10; maxSec = 300; }
+      else if(ev === 'castle'){ minSec = 30; maxSec = 60; }
+      else if(ev === 'frost_dragon'){ minSec = 10; maxSec = 300; }
       d.members.forEach(m=>{
         const wrapper=document.createElement('div');
         wrapper.classList.add('member-row-wrapper');
@@ -3637,7 +3558,7 @@ function loadSettings(){
     updateMode();
   }catch(e){}
 }
-['rally-min','destination','frost-destination','rally-type','event-select']
+['rally-min','rally-type','event-select']
 .forEach(id=>{
   const el=document.getElementById(id);
   if(el) ['change','input'].forEach(ev=>el.addEventListener(ev,saveSettings));
@@ -3666,15 +3587,39 @@ document.getElementById('hh').addEventListener('click', updateLandingTimeOptions
 document.getElementById('mm').addEventListener('click', updateLandingTimeOptions);
 document.getElementById('ss').addEventListener('click', updateLandingTimeOptions);
 
-// 履歴データのマイグレーション（王城→霜竜王城）
+// 履歴データのマイグレーション（目的地設定廃止：旧「イベント|目的地」キーをイベント単体キーへ統合）
 function migrateHistoryData(){
   const history = loadHistory();
-  const oldKey = 'frost_dragon|王城';
-  const newKey = 'frost_dragon|霜竜王城';
+  const knownEvents = ['toride', 'castle', 'frost_dragon'];
+  let changed = false;
 
-  if(history[oldKey]){
-    history[newKey] = history[oldKey];
-    delete history[oldKey];
+  Object.keys(history).forEach(key => {
+    if(!key.includes('|')) return;
+    const event = key.split('|')[0];
+    if(!knownEvents.includes(event)) return;
+
+    if(!history[event]) history[event] = [];
+    history[key].forEach(item => {
+      const existingIndex = history[event].findIndex(h => h.name.toLowerCase() === item.name.toLowerCase());
+      if(existingIndex >= 0){
+        if(item.lastUsed > history[event][existingIndex].lastUsed){
+          history[event][existingIndex] = item;
+        }
+      }else{
+        history[event].push(item);
+      }
+    });
+    delete history[key];
+    changed = true;
+  });
+
+  if(changed){
+    Object.keys(history).forEach(event => {
+      history[event].sort((a, b) => b.lastUsed - a.lastUsed);
+      if(history[event].length > MAX_HISTORY_PER_KEY){
+        history[event] = history[event].slice(0, MAX_HISTORY_PER_KEY);
+      }
+    });
     saveHistory(history);
   }
 }
