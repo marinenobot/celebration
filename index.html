@@ -1100,6 +1100,13 @@ button:focus-visible, .list-row.tappable:focus-visible{outline:2px solid var(--t
       if(resetBtn) resetBtn.style.display = 'block';
     });
   }
+  /* 同期モジュール（type="module"）はページ末尾で非同期に読み込まれるため、
+     起動直後の applyRole() 実行時点では window.Sync がまだ存在しないことがある。
+     読み込み完了を待って、集結主ロールなら受信を張り直す。 */
+  window.addEventListener('sync-ready', ()=>{
+    if(getRole() === 'member') startMemberWatch();
+  });
+
   $('#btn-pip-reset').addEventListener('click', ()=>{
     pipMode = 'clock';
     $('#btn-pip-reset').style.display = 'none';
@@ -2215,6 +2222,7 @@ window.Sync = {
     if(watchRef){ off(watchRef); watchRef = null; }
   }
 };
+window.dispatchEvent(new Event('sync-ready'));
 </script>
 
 </body>
