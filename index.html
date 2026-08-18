@@ -19,6 +19,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <title>集結計算機</title>
 <meta property="og:title" content="集結計算機">
 <meta property="og:site_name" content="集結計算機">
@@ -1928,6 +1930,22 @@ body.landing-active{ background:var(--bg); }
   color:var(--text-secondary);
 }
 
+/* PiP: canvasは描画バッファのみ(画面外に置くが非表示にはしない) */
+.pip-preview{
+  width:100%;
+  max-width:300px;
+  aspect-ratio:3/1;
+  border-radius:12px;
+  background:#000;
+  display:block;
+  object-fit:contain;
+}
+.pip-source{
+  position:absolute;
+  top:-99999px;
+  left:-99999px;
+}
+
 /* トグルスイッチ */
 .toggle-switch{
   width:52px;
@@ -1976,6 +1994,7 @@ body.landing-active{ background:var(--bg); }
   <div class="page-tabs">
     <button type="button" class="page-tab-btn active" data-page="page-landing">着弾時刻発行</button>
     <button type="button" class="page-tab-btn" data-page="page-calc">集結計算機</button>
+    <button type="button" class="page-tab-btn" data-page="page-settings">設定</button>
   </div>
 
   <!-- ページ1: 集結計算機 -->
@@ -2222,6 +2241,49 @@ body.landing-active{ background:var(--bg); }
     <div class="footer">© 1524_Off</div>
   </div><!-- /page-landing -->
 
+  <!-- ページ3: 設定 -->
+  <div id="page-settings" class="page-content">
+    <div class="mode-card">
+      <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:10px">
+        <span style="font-weight:600">端末登録</span>
+
+        <div id="device-reg-unregistered">
+          <div class="l-row">
+            <select id="device-reg-select" class="inline-select" style="width:100%"></select>
+          </div>
+          <div class="l-row" id="device-reg-new-name-row" style="display:none">
+            <input type="text" id="device-reg-new-name" class="inline-select" style="width:100%" placeholder="新しい名前" autocapitalize="off" autocorrect="off">
+          </div>
+          <button type="button" id="device-reg-confirm-btn" class="btn-primary full-width margin-top">この端末を登録</button>
+        </div>
+
+        <div id="device-reg-registered" style="display:none">
+          <div class="impact-display" style="margin-top:0">
+            <div class="impact-display-inner">
+              <span class="impact-label">登録中</span>
+              <span id="device-reg-current-name" class="impact-time">-</span>
+            </div>
+          </div>
+          <button type="button" id="device-reg-change-btn" class="btn-primary full-width margin-top">登録を変更</button>
+        </div>
+
+        <p id="device-reg-status" style="font-size:12px;color:var(--text-muted);margin:0">-</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:10px">
+        <span style="font-weight:600">Picture in Picture</span>
+        <video id="pip-preview" class="pip-preview" playsinline webkit-playsinline muted autoplay loop></video>
+        <canvas id="pip-source" class="pip-source" width="600" height="200"></canvas>
+        <button type="button" id="pip-start-btn" class="btn-primary full-width margin-top">PiP開始</button>
+        <p id="pip-status" style="font-size:12px;color:var(--text-muted);margin:0">-</p>
+      </div>
+    </div>
+
+    <div class="footer">© 1524_Off</div>
+  </div><!-- /page-settings -->
+
 </div><!-- /container -->
 
 
@@ -2268,6 +2330,107 @@ body.landing-active{ background:var(--bg); }
 <script>
 /* ======= ヘルパ ======= */
 function pad2(n){return String(n).padStart(2,'0')}
+
+/* ======= Firebase 連携(集結送信・PiP受信で共通利用) ======= */
+var firebaseConfig = {
+  apiKey: "AIzaSyDZlCZo-h0lZ-lwU7FwNULDvem0isR_fa4",
+  authDomain: "celebration-7658d.firebaseapp.com",
+  databaseURL: "https://celebration-7658d-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "celebration-7658d",
+  storageBucket: "celebration-7658d.firebasestorage.app",
+  messagingSenderId: "974478338084",
+  appId: "1:974478338084:web:2bdfb382f544de4c42d0b1"
+};
+
+var firebaseReady = false;
+var serverTimeOffsetMs = 0;
+function serverNow(){ return Date.now() + serverTimeOffsetMs; }
+
+try{
+  firebase.initializeApp(firebaseConfig);
+  firebaseReady = true;
+  firebase.database().ref('.info/serverTimeOffset').on('value', function(snap){
+    var v = snap.val();
+    if(typeof v === 'number') serverTimeOffsetMs = v;
+  });
+}catch(e){
+  console.error('Firebase初期化に失敗しました', e);
+}
+
+/* ======= メンバー名簿(memberId): 集結計算画面と端末登録で共通利用 =======
+   /roster は「計算開始」では消えない常設の名前⇔memberId対応表。
+   名前が既にrosterにあれば既存memberIdを再利用し、無ければ新規発行する。 */
+var rosterData = {}; // { memberId: { name } } . Firebaseの /roster をミラーする
+
+function generateMemberId(){
+  if(window.crypto && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+  return 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+function findMemberIdByName(name){
+  for(var id in rosterData){
+    if(rosterData[id] && rosterData[id].name === name) return id;
+  }
+  return null;
+}
+
+function registerRosterName(memberId, name){
+  rosterData[memberId] = { name: name };
+  if(!firebaseReady) return;
+  firebase.database().ref('roster/' + memberId).set({ name: name }).catch(function(err){
+    console.error('roster送信に失敗しました', err);
+  });
+}
+
+function ensureMemberId(name, existingId){
+  name = (name || '').trim();
+  if(existingId) return existingId;
+  var found = name ? findMemberIdByName(name) : null;
+  if(found) return found;
+  var id = generateMemberId();
+  if(name) registerRosterName(id, name);
+  return id;
+}
+
+// 名前が変更されてもmemberIdは維持したまま、roster側の表示名だけ更新する
+function syncMemberRosterName(row){
+  var id = row.dataset.memberId;
+  var name = (row.querySelector('.name-text').textContent || '').trim();
+  if(!id || !name) return;
+  if(rosterData[id] && rosterData[id].name === name) return;
+  registerRosterName(id, name);
+}
+
+if(firebaseReady){
+  firebase.database().ref('roster').on('value', function(snap){
+    rosterData = snap.val() || {};
+    if(typeof renderDeviceRegistrationOptions === 'function') renderDeviceRegistrationOptions();
+  });
+}
+
+/* ======= 集結計算結果をFirebaseへ送信 =======
+   「計算開始」のたびに /activeRally を丸ごと上書き(履歴として積み上げない)。
+   既存の計算ロジック・UI・戻り値には一切影響しない副作用のみの処理。 */
+function sendActiveRallyToFirebase(arriveUtc, rowData){
+  if(!firebaseReady) return;
+  var members = {};
+  rowData.forEach(function(item){
+    var id = item.row.dataset.memberId;
+    var name = (item.row.querySelector('.name-text').textContent || '').trim();
+    if(!id || !name) return; // 名前未入力の行は送らない
+    members[id] = {
+      name: name,
+      launchTime: new Date(item.depTime).toISOString()
+    };
+  });
+  firebase.database().ref('activeRally').set({
+    landingTime: arriveUtc.toISOString(),
+    updatedAt: serverNow(),
+    members: members
+  }).catch(function(err){
+    console.error('activeRally送信に失敗しました', err);
+  });
+}
 
 /* ======= UTC時計 ======= */
 function tickUTC(){
@@ -2806,6 +2969,7 @@ function attachRowEvents(row){
 
   nameInput.addEventListener('blur', function(){
     saveSettings();
+    syncMemberRosterName(row); // 名前変更時もmemberIdは維持したままrosterの表示名だけ更新
   });
 
   row.querySelector('.march-select').addEventListener('change', function(){
@@ -2816,7 +2980,7 @@ function attachRowEvents(row){
 document.querySelectorAll('#players .member-row').forEach(attachRowEvents);
 
 /* ======= メンバー追加 ======= */
-function addMemberRow(name = '', marchSec = null){
+function addMemberRow(name = '', marchSec = null, memberId = null){
   const container=document.querySelector('#players');
   const wrapper=document.createElement('div');
   wrapper.classList.add('member-row-wrapper');
@@ -2828,6 +2992,7 @@ function addMemberRow(name = '', marchSec = null){
       <span class="time-text dep">-</span>
     </div>`;
   const row = wrapper.querySelector('.member-row');
+  row.dataset.memberId = ensureMemberId(name, memberId);
   container.appendChild(wrapper);
   const event = eventSel.value;
   let minSec, maxSec;
@@ -2991,6 +3156,9 @@ actionBtn.addEventListener('click',()=>{
   });
 
   generateCopyMessage(rowData);
+
+  // Firebaseへ着弾時刻・各メンバーの出発UTC時刻を送信(既存の計算結果には影響しない)
+  sendActiveRallyToFirebase(arriveUtc, rowData);
 
   // 履歴に記録
   document.querySelectorAll('#players .member-row').forEach(row=>{
@@ -3512,7 +3680,8 @@ function saveSettings(){
   document.querySelectorAll('#players .member-row').forEach(row=>{
     members.push({
       name: row.querySelector('.name-text').textContent||'',
-      march: row.querySelector('.march-select').value
+      march: row.querySelector('.march-select').value,
+      memberId: row.dataset.memberId || null
     });
   });
 
@@ -3558,28 +3727,9 @@ function loadSettings(){
     if(d.members && d.members.length>0){
       const container=document.querySelector('#players');
       container.innerHTML='';
-      // 現在のイベントに応じた範囲を取得
-      let minSec = 10, maxSec = 120;
-      const ev = eventSel.value;
-      if(ev === 'toride'){ minSec = 13; maxSec = 60; }
-      else if(ev === 'castle'){ minSec = 30; maxSec = 60; }
-      else if(ev === 'frost_dragon'){ minSec = 10; maxSec = 300; }
       d.members.forEach(m=>{
-        const wrapper=document.createElement('div');
-        wrapper.classList.add('member-row-wrapper');
-        wrapper.innerHTML=`
-          <div class="delete-bg" onclick="deleteThisRow(this)">削除</div>
-          <div class="member-row">
-            <span class="name-text" contenteditable="true" data-placeholder="名前">${m.name||''}</span>
-            <select class="march-select"></select>
-            <span class="time-text dep">-</span>
-          </div>`;
-        container.appendChild(wrapper);
-        const row = wrapper.querySelector('.member-row');
-        // 保存値を優先渡し（範囲外でも generateMarchOptions が保持する）
-        generateMarchOptions(row.querySelector('.march-select'), m.march, minSec, maxSec);
-        attachRowEvents(row);
-        attachSwipeToRow(row);
+        // addMemberRowを再利用: march範囲の決定・行DOM構築・memberId引き継ぎを一本化
+        addMemberRow(m.name||'', m.march, m.memberId||null);
       });
     }
     updateMode();
@@ -3655,7 +3805,14 @@ loadSettings();
 migrateHistoryData();
 updateMode(); // 初期表示（loadSettingsでデータがない場合のため）
 // 初期行にもイベントを再設定（loadSettingsで行が作成されなかった場合用）
-document.querySelectorAll('#players .member-row').forEach(attachRowEvents);
+document.querySelectorAll('#players .member-row').forEach(function(row){
+  attachRowEvents(row);
+  if(!row.dataset.memberId){
+    // 静的HTMLに元々ある行(loadSettingsで再構築されなかった行)にmemberIdを付与
+    const name = (row.querySelector('.name-text').textContent||'').trim();
+    row.dataset.memberId = ensureMemberId(name, null);
+  }
+});
 updateMemberRowHighlights(); // ペット発動中の行ハイライト初期化
 
 // スワイプ状態をリセット（他の場所をタップした時）
@@ -4354,6 +4511,370 @@ resetPetForMember = function(name) {
 window.addEventListener('load', function() {
   restoreNotificationsOnLoad();
 });
+
+/* ======= 端末登録(設定タブ) ======= */
+var DEVICE_MEMBER_ID_KEY = 'deviceMemberId';
+var DEVICE_MEMBER_NAME_KEY = 'deviceMemberName';
+
+function loadDeviceRegistration(){
+  try{
+    var id = localStorage.getItem(DEVICE_MEMBER_ID_KEY);
+    var name = localStorage.getItem(DEVICE_MEMBER_NAME_KEY);
+    return id ? { id: id, name: name || '' } : null;
+  }catch(e){
+    return null;
+  }
+}
+
+function saveDeviceRegistration(id, name){
+  try{
+    localStorage.setItem(DEVICE_MEMBER_ID_KEY, id);
+    localStorage.setItem(DEVICE_MEMBER_NAME_KEY, name);
+  }catch(e){}
+}
+
+function clearDeviceRegistration(){
+  try{
+    localStorage.removeItem(DEVICE_MEMBER_ID_KEY);
+    localStorage.removeItem(DEVICE_MEMBER_NAME_KEY);
+  }catch(e){}
+}
+
+function setDeviceRegStatus(msg){
+  var el = document.getElementById('device-reg-status');
+  if(el) el.textContent = msg || '';
+}
+
+function renderDeviceRegistrationOptions(){
+  var select = document.getElementById('device-reg-select');
+  if(!select) return;
+  select.innerHTML = '';
+  var names = Object.keys(rosterData)
+    .map(function(id){ return { id: id, name: rosterData[id] ? rosterData[id].name : '' }; })
+    .filter(function(m){ return m.name; });
+  names.sort(function(a, b){ return a.name.localeCompare(b.name, 'ja'); });
+  names.forEach(function(m){
+    var opt = document.createElement('option');
+    opt.value = m.id;
+    opt.textContent = m.name;
+    select.appendChild(opt);
+  });
+  var newOpt = document.createElement('option');
+  newOpt.value = '__new__';
+  newOpt.textContent = '＋ 新しい名前を追加';
+  select.appendChild(newOpt);
+}
+
+function applyDeviceRegistrationUI(){
+  var reg = loadDeviceRegistration();
+  var unregisteredEl = document.getElementById('device-reg-unregistered');
+  var registeredEl = document.getElementById('device-reg-registered');
+  if(!unregisteredEl || !registeredEl) return;
+  if(reg){
+    unregisteredEl.style.display = 'none';
+    registeredEl.style.display = '';
+    document.getElementById('device-reg-current-name').textContent = reg.name || '(名称未設定)';
+  }else{
+    unregisteredEl.style.display = '';
+    registeredEl.style.display = 'none';
+    renderDeviceRegistrationOptions();
+    document.getElementById('device-reg-new-name-row').style.display = 'none';
+  }
+  setDeviceRegStatus('');
+}
+
+(function(){
+  var select = document.getElementById('device-reg-select');
+  var newNameRow = document.getElementById('device-reg-new-name-row');
+  var newNameInput = document.getElementById('device-reg-new-name');
+  var confirmBtn = document.getElementById('device-reg-confirm-btn');
+  var changeBtn = document.getElementById('device-reg-change-btn');
+
+  if(select){
+    select.addEventListener('change', function(){
+      newNameRow.style.display = (select.value === '__new__') ? '' : 'none';
+    });
+  }
+
+  if(confirmBtn){
+    confirmBtn.addEventListener('click', function(){
+      var id, name;
+      if(select.value === '__new__'){
+        name = (newNameInput.value || '').trim();
+        if(!name){
+          setDeviceRegStatus('名前を入力してください');
+          return;
+        }
+        id = ensureMemberId(name, null);
+      }else{
+        id = select.value;
+        name = rosterData[id] ? rosterData[id].name : '';
+        if(!id || !name){
+          setDeviceRegStatus('名前を選択してください');
+          return;
+        }
+      }
+      saveDeviceRegistration(id, name);
+      applyDeviceRegistrationUI();
+      if(typeof startMemberListening === 'function') startMemberListening(id);
+    });
+  }
+
+  if(changeBtn){
+    changeBtn.addEventListener('click', function(){
+      clearDeviceRegistration();
+      if(typeof stopMemberListening === 'function') stopMemberListening();
+      applyDeviceRegistrationUI();
+    });
+  }
+
+  applyDeviceRegistrationUI();
+})();
+
+/* ======= Picture in Picture(集結時刻カウントダウン表示) =======
+   canvas -> captureStream() -> video -> requestPictureInPicture()。
+   Firebaseから自分のmemberId宛てのlaunchTimeを受信したら targetTime だけ書き換え、
+   video/streamは作り直さずPiPを開いたまま表示だけ切り替える。 */
+(function(){
+  var canvas = document.getElementById('pip-source');
+  var video = document.getElementById('pip-preview');
+  var pipBtn = document.getElementById('pip-start-btn');
+  var pipStatusEl = document.getElementById('pip-status');
+  if(!canvas || !video) return;
+
+  var targetTime = null;
+  var goStartedAt = null;
+  var GO_HOLD_MS = 3000;
+
+  var W = 300, H = 100;
+  var dpr = Math.max(1, window.devicePixelRatio || 1);
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  function roundRect(c, x, y, w, h, r){
+    c.beginPath();
+    c.moveTo(x + r, y);
+    c.arcTo(x + w, y, x + w, y + h, r);
+    c.arcTo(x + w, y + h, x, y + h, r);
+    c.arcTo(x, y + h, x, y, r);
+    c.arcTo(x, y, x + w, y, r);
+    c.closePath();
+  }
+
+  function fillBackground(){
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(10, 10, 10, 0.82)';
+    roundRect(ctx, 0, 0, W, H, 14);
+    ctx.fill();
+  }
+
+  function drawClock(){
+    var now = new Date(serverNow());
+    var hh = pad2(now.getUTCHours());
+    var mm = pad2(now.getUTCMinutes());
+    var ss = pad2(now.getUTCSeconds());
+    var deci = Math.floor(now.getUTCMilliseconds() / 100);
+
+    var main = hh + ':' + mm + ':' + ss;
+    var frac = '.' + deci;
+
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.font = '600 12px Menlo, Consolas, monospace';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText('UTC', 12, 10);
+
+    ctx.font = "700 34px Menlo, Consolas, 'SF Mono', monospace";
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left';
+
+    var mainWidth = ctx.measureText(main).width;
+    var fracWidth = ctx.measureText(frac).width;
+    var totalWidth = mainWidth + fracWidth;
+    var startX = (W - totalWidth) / 2;
+    var y = H / 2 + 6;
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(main, startX, y);
+
+    ctx.fillStyle = '#ff3b30';
+    ctx.fillText(frac, startX + mainWidth, y);
+  }
+
+  function drawCountdown(){
+    // 残り時間は毎フレーム targetTime - serverNow() で再計算する(累積カウントダウンにしない)
+    var remainingMs = targetTime - serverNow();
+
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.font = '600 12px Menlo, Consolas, monospace';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText('出発まで', 12, 10);
+
+    if(remainingMs <= 0){
+      if(goStartedAt === null){
+        goStartedAt = Date.now();
+      }
+      if(Date.now() - goStartedAt >= GO_HOLD_MS){
+        targetTime = null;
+        goStartedAt = null;
+        return true;
+      }
+      ctx.font = "700 40px Menlo, Consolas, 'SF Mono', monospace";
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#ff3b30';
+      ctx.fillText('GO', W / 2, H / 2 + 6);
+      return false;
+    }
+    goStartedAt = null;
+
+    var totalDeci = Math.ceil(remainingMs / 100);
+    var mm = pad2(Math.floor(totalDeci / 600));
+    var ss = pad2(Math.floor(totalDeci / 10) % 60);
+    var deci = totalDeci % 10;
+
+    var main = mm + ':' + ss;
+    var frac = '.' + deci;
+
+    ctx.font = "700 34px Menlo, Consolas, 'SF Mono', monospace";
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left';
+
+    var mainWidth = ctx.measureText(main).width;
+    var fracWidth = ctx.measureText(frac).width;
+    var totalWidth = mainWidth + fracWidth;
+    var startX = (W - totalWidth) / 2;
+    var y = H / 2 + 6;
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(main, startX, y);
+
+    ctx.fillStyle = '#ff3b30';
+    ctx.fillText(frac, startX + mainWidth, y);
+    return false;
+  }
+
+  function draw(){
+    fillBackground();
+    if(targetTime !== null){
+      var revertedToClock = drawCountdown();
+      if(revertedToClock){
+        fillBackground();
+        drawClock();
+      }
+    }else{
+      drawClock();
+    }
+  }
+
+  draw();
+  setInterval(draw, 100);
+
+  var stream = canvas.captureStream(15);
+  video.srcObject = stream;
+  video.muted = true;
+  video.playsInline = true;
+
+  function setPipStatus(msg){
+    if(pipStatusEl) pipStatusEl.textContent = msg || '';
+  }
+
+  function pipSupported(){
+    return (
+      (document.pictureInPictureEnabled && typeof video.requestPictureInPicture === 'function') ||
+      typeof video.webkitSetPresentationMode === 'function'
+    );
+  }
+
+  if(!pipSupported()){
+    setPipStatus('このブラウザは Picture-in-Picture に対応していません');
+    if(pipBtn) pipBtn.disabled = true;
+  }
+
+  async function startPiP(){
+    setPipStatus('');
+    try{
+      if(video.paused){
+        await video.play();
+      }
+      if(document.pictureInPictureEnabled && typeof video.requestPictureInPicture === 'function'){
+        if(document.pictureInPictureElement) return;
+        await video.requestPictureInPicture();
+        return;
+      }
+      if(typeof video.webkitSetPresentationMode === 'function'){
+        video.webkitSetPresentationMode('picture-in-picture');
+        return;
+      }
+      setPipStatus('この環境では Picture-in-Picture を開始できません');
+    }catch(err){
+      setPipStatus('開始に失敗しました: ' + (err && err.message ? err.message : err));
+    }
+  }
+
+  if(pipBtn){
+    pipBtn.addEventListener('click', function(){ startPiP(); });
+  }
+
+  video.addEventListener('enterpictureinpicture', function(){ setPipStatus('PiP 表示中'); });
+  video.addEventListener('leavepictureinpicture', function(){ setPipStatus(''); });
+  video.addEventListener('webkitpresentationmodechanged', function(){
+    if(video.webkitPresentationMode === 'picture-in-picture'){
+      setPipStatus('PiP 表示中');
+    }else{
+      setPipStatus('');
+    }
+  });
+
+  /* ---- Firebase購読: 登録済みmemberId宛てのlaunchTimeだけを反映 ---- */
+  var memberRef = null;
+  var lastLaunchTimeRaw = null;
+
+  function onMemberValue(snapshot){
+    var data = snapshot.val();
+    if(!data || !data.launchTime) return;
+    if(data.launchTime === lastLaunchTimeRaw) return; // 同じlaunchTimeの再受信では何もしない(PiPは再起動しない)
+    var ms = Date.parse(data.launchTime);
+    if(isNaN(ms)) return;
+    lastLaunchTimeRaw = data.launchTime;
+    targetTime = ms;
+  }
+
+  function onMemberError(err){
+    // 通信エラーでも既存のPiP描画(targetTime/時計)には触れない
+    setPipStatus('Firebase接続エラー(表示は継続中): ' + (err && err.message ? err.message : err));
+  }
+
+  window.startMemberListening = function(memberId){
+    if(memberRef){
+      memberRef.off('value', onMemberValue);
+    }
+    lastLaunchTimeRaw = null;
+    if(!firebaseReady || !memberId) return;
+    setPipStatus('連携中');
+    memberRef = firebase.database().ref('activeRally/members/' + memberId);
+    memberRef.on('value', onMemberValue, onMemberError);
+  };
+
+  window.stopMemberListening = function(){
+    if(memberRef){
+      memberRef.off('value', onMemberValue);
+      memberRef = null;
+    }
+    targetTime = null;
+    goStartedAt = null;
+    lastLaunchTimeRaw = null;
+    setPipStatus('');
+  };
+
+  var initialReg = loadDeviceRegistration();
+  if(initialReg){
+    window.startMemberListening(initialReg.id);
+  }
+})();
 </script>
 </body>
 </html>
