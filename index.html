@@ -19,12 +19,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
-<script>
-window.addEventListener('error', function(e){
-  document.documentElement.setAttribute('data-diag-error',
-    JSON.stringify({message: e.message, line: e.lineno, col: e.colno}));
-});
-</script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <title>集結計算機</title>
@@ -4382,13 +4376,16 @@ document.querySelectorAll('.page-tab-btn').forEach(btn => {
   });
 
   // コピーボタン（再コピー用）
-  document.getElementById('l-copy-btn').addEventListener('click', function(){
-    const timeStr  = document.getElementById('l-result-time').textContent;
-    const timeStr2 = document.getElementById('l-result2-row').style.display !== 'none'
-      ? document.getElementById('l-result-time2').textContent
-      : null;
-    doCopy(timeStr, timeStr2);
-  });
+  const lCopyBtn = document.getElementById('l-copy-btn');
+  if(lCopyBtn){
+    lCopyBtn.addEventListener('click', function(){
+      const timeStr  = document.getElementById('l-result-time').textContent;
+      const timeStr2 = document.getElementById('l-result2-row').style.display !== 'none'
+        ? document.getElementById('l-result-time2').textContent
+        : null;
+      doCopy(timeStr, timeStr2);
+    });
+  }
 })();
 
 /* ======= PWA: Service Worker登録 ======= */
