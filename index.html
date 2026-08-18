@@ -1958,6 +1958,11 @@ body.landing-active{ background:var(--bg); }
   padding:0;
   overflow:hidden;
   line-height:0;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.pip-clock-box:active{
+  opacity:0.7;
 }
 .pip-preview{
   width:100%;
@@ -2012,7 +2017,7 @@ body.landing-active{ background:var(--bg); }
   <!-- ヘッダー（UTC時計。canvas描画をvideo化したものをそのままPiPソースにする） -->
   <div class="header">
     <div class="header-clock-label">現在時刻</div>
-    <div class="clock aligned-box pip-clock-box">
+    <div id="pip-clock-tap" class="clock aligned-box pip-clock-box">
       <video id="pip-preview" class="pip-preview" playsinline webkit-playsinline muted autoplay loop></video>
     </div>
     <div class="header-clock-caption">標準時に同期済み</div>
@@ -4853,6 +4858,11 @@ function applyDeviceRegistrationUI(){
     }catch(err){
       setPipStatus('開始に失敗しました: ' + (err && err.message ? err.message : err));
     }
+  }
+
+  var pipClockTap = document.getElementById('pip-clock-tap');
+  if(pipClockTap){
+    pipClockTap.addEventListener('click', function(){ startPiP(); });
   }
 
   if(pipBtn){
