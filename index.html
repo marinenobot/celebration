@@ -1932,16 +1932,20 @@ body.landing-active{ background:var(--bg); }
 
 /* PiP: videoは画面外に置く(position:absoluteでtop:-99999px等)と
    自動再生が始まらずPiP起動もできないブラウザがあるため、実際に画面内へ
-   小さく表示する。タブ切り替えでdisplay:noneにならないよう常時表示の
-   ヘッダー内に置いている。canvasは描画バッファのみなので画面外でよい。 */
+   表示する。タブ切り替えでdisplay:noneにならないよう常時表示のヘッダー内、
+   かつ元の大きなUTC時計と同じ見た目の枠(.aligned-box)の中に置いている。
+   canvasは描画バッファのみなので画面外でよい。 */
+.pip-clock-box{
+  padding:0;
+  overflow:hidden;
+  line-height:0;
+}
 .pip-preview{
-  width:96px;
-  height:32px;
-  margin:8px auto 0;
-  border-radius:8px;
-  background:#000;
+  width:100%;
+  aspect-ratio:3/1;
   display:block;
   object-fit:contain;
+  background:var(--card-bg);
 }
 .pip-source{
   position:absolute;
@@ -1986,14 +1990,13 @@ body.landing-active{ background:var(--bg); }
 
 <div class="container">
 
-  <!-- ヘッダー（UTC時計） -->
+  <!-- ヘッダー（UTC時計。canvas描画をvideo化したものをそのままPiPソースにする） -->
   <div class="header">
-    <div class="clock aligned-box">
-      <span id="utc-now">--:--:--</span><span class="utc-label">UTC</span>
+    <div class="clock aligned-box pip-clock-box">
+      <video id="pip-preview" class="pip-preview" playsinline webkit-playsinline muted autoplay loop></video>
     </div>
-    <!-- PiP用video: 常に画面内に実レンダリングされている必要がある(自動再生・PiP起動の条件のため)。
-         タブ切り替えで隠れないよう、どのタブでも表示されるヘッダー内に小さく置く。 -->
-    <video id="pip-preview" class="pip-preview" playsinline webkit-playsinline muted autoplay loop></video>
+    <!-- tickUTC()が参照する既存要素。表示上は上のvideoに置き換わるため隠す(ロジックは維持) -->
+    <span id="utc-now" style="display:none">--:--:--</span><span class="utc-label" style="display:none">UTC</span>
   </div>
 
   <!-- ページタブ -->
