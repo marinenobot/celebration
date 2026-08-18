@@ -1930,15 +1930,16 @@ body.landing-active{ background:var(--bg); }
   color:var(--text-secondary);
 }
 
-/* PiP: canvasは描画バッファのみ(画面外に置くが非表示にはしない) */
+/* PiP: video/canvasは常時レンダリングされる描画バッファ。
+   display:noneにするとiOS SafariがPiP起動を拒否するため、
+   画面外への絶対配置(position:absolute)で「非表示だがレンダリングはされている」状態を保つ。
+   タブのdisplay:none切り替えの影響を受けないよう .page-content の外に置いている。 */
 .pip-preview{
-  width:100%;
-  max-width:300px;
-  aspect-ratio:3/1;
-  border-radius:12px;
-  background:#000;
-  display:block;
-  object-fit:contain;
+  position:absolute;
+  top:-99999px;
+  left:-99999px;
+  width:300px;
+  height:100px;
 }
 .pip-source{
   position:absolute;
@@ -2274,8 +2275,6 @@ body.landing-active{ background:var(--bg); }
 
       <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:10px">
         <span style="font-weight:600">Picture in Picture</span>
-        <video id="pip-preview" class="pip-preview" playsinline webkit-playsinline muted autoplay loop></video>
-        <canvas id="pip-source" class="pip-source" width="600" height="200"></canvas>
         <button type="button" id="pip-start-btn" class="btn-primary full-width margin-top">PiP開始</button>
         <p id="pip-status" style="font-size:12px;color:var(--text-muted);margin:0">-</p>
       </div>
@@ -2285,6 +2284,11 @@ body.landing-active{ background:var(--bg); }
   </div><!-- /page-settings -->
 
 </div><!-- /container -->
+
+<!-- PiP用video/canvas: どのタブがactiveでも常にレンダリングされる必要があるため
+     タブ切り替えでdisplay:noneになる .page-content の外に置く -->
+<video id="pip-preview" class="pip-preview" playsinline webkit-playsinline muted autoplay loop></video>
+<canvas id="pip-source" class="pip-source" width="600" height="200"></canvas>
 
 
 <!-- 非表示のコピー用メッセージ -->
