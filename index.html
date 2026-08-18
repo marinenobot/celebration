@@ -4584,6 +4584,7 @@ function applyDeviceRegistrationUI(){
 }
 
 (function(){
+ try{
   var select = document.getElementById('device-reg-select');
   var newNameRow = document.getElementById('device-reg-new-name-row');
   var newNameInput = document.getElementById('device-reg-new-name');
@@ -4629,6 +4630,10 @@ function applyDeviceRegistrationUI(){
   }
 
   applyDeviceRegistrationUI();
+ }catch(e){
+  console.error('端末登録UI初期化エラー', e);
+  setDeviceRegStatus('端末登録の初期化に失敗しました: ' + (e && e.message ? e.message : e));
+ }
 })();
 
 /* ======= Picture in Picture(集結時刻カウントダウン表示) =======
@@ -4636,11 +4641,13 @@ function applyDeviceRegistrationUI(){
    Firebaseから自分のmemberId宛てのlaunchTimeを受信したら targetTime だけ書き換え、
    video/streamは作り直さずPiPを開いたまま表示だけ切り替える。 */
 (function(){
+ var pipStatusElOuter = document.getElementById('pip-status');
+ try{
   var canvas = document.getElementById('pip-source');
   var video = document.getElementById('pip-preview');
   var pipBtn = document.getElementById('pip-start-btn');
   var pipStatusEl = document.getElementById('pip-status');
-  if(!canvas || !video) return;
+  if(!canvas || !video) throw new Error('canvas/video要素が見つかりません');
 
   var targetTime = null;
   var goStartedAt = null;
@@ -4874,6 +4881,10 @@ function applyDeviceRegistrationUI(){
   if(initialReg){
     window.startMemberListening(initialReg.id);
   }
+ }catch(e){
+  console.error('PiP初期化エラー', e);
+  if(pipStatusElOuter) pipStatusElOuter.textContent = 'PiP初期化エラー: ' + (e && e.message ? e.message : e);
+ }
 })();
 </script>
 </body>
