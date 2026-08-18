@@ -1930,16 +1930,18 @@ body.landing-active{ background:var(--bg); }
   color:var(--text-secondary);
 }
 
-/* PiP: video/canvasは常時レンダリングされる描画バッファ。
-   display:noneにするとiOS SafariがPiP起動を拒否するため、
-   画面外への絶対配置(position:absolute)で「非表示だがレンダリングはされている」状態を保つ。
-   タブのdisplay:none切り替えの影響を受けないよう .page-content の外に置いている。 */
+/* PiP: videoは画面外に置く(position:absoluteでtop:-99999px等)と
+   自動再生が始まらずPiP起動もできないブラウザがあるため、実際に画面内へ
+   小さく表示する。タブ切り替えでdisplay:noneにならないよう常時表示の
+   ヘッダー内に置いている。canvasは描画バッファのみなので画面外でよい。 */
 .pip-preview{
-  position:absolute;
-  top:-99999px;
-  left:-99999px;
-  width:300px;
-  height:100px;
+  width:96px;
+  height:32px;
+  margin:8px auto 0;
+  border-radius:8px;
+  background:#000;
+  display:block;
+  object-fit:contain;
 }
 .pip-source{
   position:absolute;
@@ -1989,6 +1991,9 @@ body.landing-active{ background:var(--bg); }
     <div class="clock aligned-box">
       <span id="utc-now">--:--:--</span><span class="utc-label">UTC</span>
     </div>
+    <!-- PiP用video: 常に画面内に実レンダリングされている必要がある(自動再生・PiP起動の条件のため)。
+         タブ切り替えで隠れないよう、どのタブでも表示されるヘッダー内に小さく置く。 -->
+    <video id="pip-preview" class="pip-preview" playsinline webkit-playsinline muted autoplay loop></video>
   </div>
 
   <!-- ページタブ -->
@@ -2285,9 +2290,7 @@ body.landing-active{ background:var(--bg); }
 
 </div><!-- /container -->
 
-<!-- PiP用video/canvas: どのタブがactiveでも常にレンダリングされる必要があるため
-     タブ切り替えでdisplay:noneになる .page-content の外に置く -->
-<video id="pip-preview" class="pip-preview" playsinline webkit-playsinline muted autoplay loop></video>
+<!-- PiP用canvas: 描画バッファのみなので画面外でよい。videoはヘッダー内に配置済み -->
 <canvas id="pip-source" class="pip-source" width="600" height="200"></canvas>
 
 
