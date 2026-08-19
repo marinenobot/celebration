@@ -618,6 +618,112 @@ body.modal-open .member-row-wrapper {
   justify-content:space-between;
 }
 
+/* ===== 出発時刻: 集結主リスト(新) ===== */
+.rally-member-list-header{
+  display:grid;
+  grid-template-columns:1fr 70px 60px;
+  padding:8px 2px;
+  font-size:12px;
+  color:var(--text-muted);
+}
+.rally-member-list-header span:nth-child(2){ text-align:right; }
+.rally-member-list-header span:nth-child(3){ text-align:right; }
+
+.rally-member-row{
+  display:grid;
+  grid-template-columns:1fr 70px 60px;
+  align-items:center;
+  padding:12px 2px;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.rally-member-row:last-child{ border-bottom:none; }
+.rally-member-row:active{ background:rgba(118,118,128,0.06); }
+.rally-member-name{
+  font-size:16px;
+  font-weight:600;
+  color:var(--text-primary);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.rally-member-march{
+  font-size:15px;
+  color:var(--text-muted);
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+  padding-right:10px;
+}
+.rally-member-pet{
+  display:flex;
+  justify-content:flex-end;
+}
+
+/* iOS風ミニトグル(集結主一覧のペットON/OFF直接切替用) */
+.rally-pet-checkbox{
+  -webkit-appearance:none !important;
+  appearance:none !important;
+  width:40px !important;
+  height:24px !important;
+  min-width:40px !important;
+  min-height:24px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:none !important;
+  border-radius:999px !important;
+  background:#E5E5EA !important;
+  position:relative;
+  cursor:pointer;
+  transition:background 0.2s;
+}
+.rally-pet-checkbox::after{
+  content:'';
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 1px 2px rgba(0,0,0,0.2);
+  transition:left 0.2s;
+}
+.rally-pet-checkbox:checked{
+  background:var(--blue-primary) !important;
+}
+.rally-pet-checkbox:checked::after{
+  left:18px;
+}
+
+/* 追加/編集シート内: 2択セグメント */
+.segmented-toggle{
+  display:flex;
+  border-radius:8px;
+  overflow:hidden;
+  border:1px solid var(--border);
+}
+.segmented-toggle-btn{
+  width:auto !important;
+  min-height:32px !important;
+  margin:0 !important;
+  padding:6px 14px !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  background:var(--card-bg) !important;
+  color:var(--text-muted) !important;
+  border:none !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+.segmented-toggle-btn + .segmented-toggle-btn{
+  border-left:1px solid var(--border);
+}
+.segmented-toggle-btn.active{
+  background:var(--blue-primary) !important;
+  color:#fff !important;
+}
+
 /* コントロールボタン */
 .control-btn{
   flex:1;
@@ -1936,33 +2042,35 @@ body.landing-active{ background:var(--bg); }
   font-weight:500;
   color:var(--text-secondary);
 }
+.settings-section-title{
+  font-size:13px;
+  color:var(--text-muted);
+  margin:16px 2px 6px;
+  text-transform:uppercase;
+  letter-spacing:0.02em;
+}
 
 /* PiP: videoは画面外に置く(position:absoluteでtop:-99999px等)と
    自動再生が始まらずPiP起動もできないブラウザがあるため、実際に画面内へ
    表示する。タブ切り替えでdisplay:noneにならないよう常時表示のヘッダー内、
    かつ元の大きなUTC時計と同じ見た目の枠(.aligned-box)の中に置いている。
    canvasは描画バッファのみなので画面外でよい。 */
-.header-clock-label{
-  text-align:left;
-  font-size:13px;
-  color:var(--text-muted);
-  margin:0 0 4px 2px;
-}
-.header-clock-caption{
-  text-align:left;
-  font-size:12px;
-  color:var(--text-tertiary);
-  margin:4px 0 0 2px;
-}
-.pip-clock-box{
-  padding:0;
-  overflow:hidden;
-  line-height:0;
+.clock-card{
+  background:var(--card-bg);
+  border-radius:var(--radius);
+  box-shadow:0 1px 2px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.05);
+  padding:14px 16px 10px;
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
 }
-.pip-clock-box:active{
+.clock-card:active{
   opacity:0.7;
+}
+.clock-card-hint{
+  font-size:12px;
+  color:var(--text-tertiary);
+  text-align:center;
+  margin-top:2px;
 }
 .pip-preview{
   width:100%;
@@ -2016,163 +2124,147 @@ body.landing-active{ background:var(--bg); }
 
   <!-- ヘッダー（UTC時計。canvas描画をvideo化したものをそのままPiPソースにする） -->
   <div class="header">
-    <div class="header-clock-label">現在時刻</div>
-    <div id="pip-clock-tap" class="clock aligned-box pip-clock-box">
+    <div id="pip-clock-tap" class="clock-card">
       <video id="pip-preview" class="pip-preview" playsinline webkit-playsinline muted autoplay loop></video>
+      <div class="clock-card-hint">タップでフローティング表示</div>
     </div>
-    <div class="header-clock-caption">標準時に同期済み</div>
     <!-- tickUTC()が参照する既存要素。表示上は上のvideoに置き換わるため隠す(ロジックは維持) -->
     <span id="utc-now" style="display:none">--:--:--</span><span class="utc-label" style="display:none">UTC</span>
   </div>
 
   <!-- ページタブ -->
   <div class="page-tabs">
-    <button type="button" class="page-tab-btn active" data-page="page-landing">着弾時刻発行</button>
-    <button type="button" class="page-tab-btn" data-page="page-calc">集結計算機</button>
+    <button type="button" class="page-tab-btn active" data-page="page-landing">着弾時刻</button>
+    <button type="button" class="page-tab-btn" data-page="page-departure">出発時刻</button>
     <button type="button" class="page-tab-btn" data-page="page-settings">設定</button>
   </div>
 
-  <!-- ページ1: 集結計算機 -->
-  <div id="page-calc" class="page-content">
-
-  <!-- モード設定 -->
-  <div class="mode-card">
-      <!-- 1行目：イベント -->
-      <div class="single-line">
-        <select id="event-select" class="inline-select">
-          <option value="toride" selected>ステ/砦</option>
-          <option value="castle">王城決戦</option>
-          <option value="frost_dragon">霜竜覇者</option>
+  <!-- ページ2: 出発時刻 -->
+  <div id="page-departure" class="page-content">
+    <div class="mode-card">
+      <div class="l-row" style="margin-top:0">
+        <span class="l-label">開始</span>
+        <select id="dep-start-select" class="inline-select">
+          <option value="10">今から10秒後</option>
+          <option value="20">今から20秒後</option>
+          <option value="30" selected>今から30秒後</option>
+          <option value="45">今から45秒後</option>
+          <option value="60">今から1分後</option>
+          <option value="90">今から1分30秒後</option>
+          <option value="120">今から2分後</option>
+          <option value="custom">カスタム...</option>
         </select>
       </div>
-
-      <!-- 2行目：種類、時刻、準備時間 -->
-      <div class="single-line" style="margin-top:8px">
-        <select id="rally-type" class="inline-select">
-          <option value="now" selected>今から</option>
-          <option value="time">時刻指定</option>
+      <div id="dep-start-custom-section" class="l-row" style="display:none">
+        <select id="dep-start-custom-min" class="inline-select">
+          <option value="0" selected>0分</option>
+          <option value="1">1分</option>
+          <option value="2">2分</option>
+          <option value="3">3分</option>
+          <option value="4">4分</option>
+          <option value="5">5分</option>
         </select>
-        <span id="time-input-group" style="display:none;white-space:nowrap;">
-          <select id="hh" class="time-select-sm"></select><span class="time-sep">:</span><select id="mm" class="time-select-sm"></select><span class="time-sep">:</span><select id="ss" class="time-select-sm"></select>
-          <span class="inline-text" style="margin-left:4px">着弾</span>
-        </span>
-        <select id="prep-time" class="inline-select">
+        <select id="dep-start-custom-sec" class="inline-select">
+          <option value="0">0秒</option>
+          <option value="10">10秒</option>
           <option value="20">20秒</option>
           <option value="30" selected>30秒</option>
           <option value="40">40秒</option>
           <option value="50">50秒</option>
-          <option value="60">1分</option>
-          <option value="90">1分30秒</option>
-          <option value="120">2分</option>
         </select>
-        <span id="after-prep" class="inline-text">後に</span>
-        <span id="rally-inline-now">
-          <select id="rally-min" class="inline-select">
-            <option value="1">1分</option>
-            <option value="5">5分</option>
-            <option value="10">10分</option>
-            <option value="15">15分</option>
-          </select>
-          <span class="inline-text">集結</span>
-        </span>
       </div>
 
-      <!-- 3行目：集結時間（時刻指定モードのみ） -->
-      <div id="rally-line-3" class="single-line" style="margin-top:8px;display:none">
-        <select id="rally-min-time" class="inline-select">
+      <div class="l-row">
+        <span class="l-label">集結時間</span>
+        <select id="dep-rally-select" class="inline-select">
           <option value="1">1分</option>
-          <option value="5">5分</option>
+          <option value="3">3分</option>
+          <option value="5" selected>5分</option>
           <option value="10">10分</option>
           <option value="15">15分</option>
+          <option value="20">20分</option>
+          <option value="30">30分</option>
+          <option value="custom">カスタム...</option>
         </select>
-        <span class="inline-text">集結</span>
+      </div>
+      <div id="dep-rally-custom-section" class="l-row" style="display:none">
+        <select id="dep-rally-custom-min" class="inline-select">
+          <option value="1">1分</option>
+          <option value="2">2分</option>
+          <option value="3">3分</option>
+          <option value="4">4分</option>
+          <option value="5">5分</option>
+          <option value="6">6分</option>
+          <option value="7">7分</option>
+          <option value="8">8分</option>
+          <option value="9">9分</option>
+          <option value="10">10分</option>
+          <option value="20">20分</option>
+          <option value="30">30分</option>
+          <option value="45">45分</option>
+          <option value="60">60分</option>
+        </select>
       </div>
 
-      <button id="action-btn" class="btn-primary full-width margin-top">計算開始</button>
-      <div id="calculating-msg" class="calculating-msg" style="display:none">計算中...</div>
+      <button type="button" id="dep-action-btn" class="btn-primary full-width margin-top">計算開始</button>
 
       <div class="divider"></div>
 
-      <div id="impact-display" class="impact-display">
+      <div id="dep-impact-display" class="impact-display" style="display:block">
         <div class="impact-display-inner">
           <span class="impact-label">着弾時刻</span>
-          <span id="common-impact-time" class="impact-time">--:--:--</span>
+          <span id="dep-impact-time" class="impact-time">--:--:--</span>
           <span class="impact-label">UTC</span>
         </div>
       </div>
     </div>
 
-  <!-- 集結主 -->
-  <div class="collapsible-card">
-    <button type="button" id="members-header" class="collapsible-header">
-      <span class="collapsible-header-title">集結主・行軍・出発時刻</span>
-      <span id="members-arrow" class="collapsible-arrow">▼</span>
-    </button>
-    <div id="members-content" class="collapsible-content">
-      <div class="collapsible-content-inner">
-        <div id="sec-members">
-          <div id="players" class="members-list members-table">
-            <div class="member-row-wrapper">
-              <div class="delete-bg" onclick="deleteThisRow(this)">削除</div>
-              <div class="member-row">
-                <span class="name-text" contenteditable="true" data-placeholder="マリン"></span>
-                <select class="march-select"></select>
-                <span class="time-text dep">-</span>
-              </div>
-            </div>
-            <div class="member-row-wrapper">
-              <div class="delete-bg" onclick="deleteThisRow(this)">削除</div>
-              <div class="member-row">
-                <span class="name-text" contenteditable="true" data-placeholder=""></span>
-                <select class="march-select"></select>
-                <span class="time-text dep">-</span>
-              </div>
-            </div>
-          </div>
-          <div class="button-controls">
-            <button class="control-btn" id="add-member">＋ 集結主</button>
-          </div>
-        </div>
+    <div class="mode-card" style="margin-top:var(--spacing)">
+      <div class="rally-member-list-header">
+        <span>集結主</span><span>行軍</span><span>ペット</span>
       </div>
+      <div id="rally-member-list"></div>
+      <button type="button" id="rally-add-member-btn" class="control-btn full-width" style="margin-top:10px">＋ 集結主</button>
     </div>
-  </div>
-
-  <!-- プレビュー -->
-  <div class="collapsible-card">
-    <button type="button" id="preview-toggle" class="collapsible-header">
-      <span class="collapsible-header-title">チャット貼り付け用プレビュー</span>
-      <span id="preview-arrow" class="collapsible-arrow">▼</span>
-    </button>
-    <div id="preview-content" class="collapsible-content" style="height:0;">
-      <div class="collapsible-content-inner">
-        <pre id="preview-text" class="preview-text-box"></pre>
-      </div>
-    </div>
-  </div>
 
     <div class="footer">© 1524_Off</div>
-  </div><!-- /page-calc -->
+  </div><!-- /page-departure -->
 
   <!-- ページ2: 着弾時刻発行 -->
   <div id="page-landing" class="page-content active">
     <div class="mode-card">
 
-      <!-- 1行目：イベント(表示は不要だがロジックが参照するため非表示で維持) -->
-      <div class="l-row" style="margin-top:0; display:none">
-        <select id="l-event" class="inline-select">
-          <option value="castle" selected>王城決戦</option>
-          <option value="frost_dragon">霜竜覇者</option>
-          <option value="other">その他</option>
-        </select>
-      </div>
-
-      <!-- 2行目：集結時間 -->
-      <div class="l-row">
+      <!-- 集結時間 -->
+      <div class="l-row" style="margin-top:0">
+        <span class="l-label">集結時間</span>
         <select id="l-rally-min" class="inline-select">
+          <option value="1">1分</option>
+          <option value="3">3分</option>
           <option value="5" selected>5分</option>
           <option value="10">10分</option>
+          <option value="15">15分</option>
+          <option value="20">20分</option>
+          <option value="30">30分</option>
+          <option value="custom">カスタム...</option>
         </select>
-        <span class="l-label">集結</span>
+      </div>
+      <div id="l-rally-custom-section" class="l-row" style="display:none">
+        <select id="l-rally-custom-min" class="inline-select">
+          <option value="1">1分</option>
+          <option value="2">2分</option>
+          <option value="3">3分</option>
+          <option value="4">4分</option>
+          <option value="5">5分</option>
+          <option value="6">6分</option>
+          <option value="7">7分</option>
+          <option value="8">8分</option>
+          <option value="9">9分</option>
+          <option value="10">10分</option>
+          <option value="20">20分</option>
+          <option value="30">30分</option>
+          <option value="45">45分</option>
+          <option value="60">60分</option>
+        </select>
       </div>
 
       <!-- 3行目：準備時間 -->
@@ -2278,41 +2370,15 @@ body.landing-active{ background:var(--bg); }
 
   <!-- ページ3: 設定 -->
   <div id="page-settings" class="page-content">
+    <div class="settings-section-title">オーバーレイ</div>
     <div class="mode-card">
-      <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:10px">
-        <span style="font-weight:600">端末登録</span>
-
-        <div id="device-reg-unregistered">
-          <div class="l-row">
-            <select id="device-reg-select" class="inline-select" style="width:100%"></select>
-          </div>
-          <div class="l-row" id="device-reg-new-name-row" style="display:none">
-            <input type="text" id="device-reg-new-name" class="inline-select" style="width:100%" placeholder="新しい名前" autocapitalize="off" autocorrect="off">
-          </div>
-          <button type="button" id="device-reg-confirm-btn" class="btn-primary full-width margin-top">この端末を登録</button>
-        </div>
-
-        <div id="device-reg-registered" style="display:none">
-          <div class="impact-display" style="margin-top:0">
-            <div class="impact-display-inner">
-              <span class="impact-label">登録中</span>
-              <span id="device-reg-current-name" class="impact-time">-</span>
-            </div>
-          </div>
-          <button type="button" id="device-reg-change-btn" class="btn-primary full-width margin-top">登録を変更</button>
-        </div>
-
-        <p id="device-reg-status" style="font-size:12px;color:var(--text-muted);margin:0">-</p>
+      <div class="l-row" id="sync-name-row" style="margin-top:0;cursor:pointer">
+        <span class="l-label">同期する名前</span>
+        <span id="sync-name-value" class="inline-text" style="color:var(--text-muted)">未選択</span>
       </div>
-
-      <div class="divider"></div>
-
-      <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:10px">
-        <span style="font-weight:600">Picture in Picture</span>
-        <button type="button" id="pip-start-btn" class="btn-primary full-width margin-top">PiP開始</button>
-        <p id="pip-status" style="font-size:12px;color:var(--text-muted);margin:0">-</p>
-      </div>
+      <p id="device-reg-status" style="font-size:12px;color:var(--text-muted);margin:6px 0 0">-</p>
     </div>
+    <p id="pip-status" style="display:none">-</p>
 
     <div class="footer">© 1524_Off</div>
   </div><!-- /page-settings -->
@@ -2326,35 +2392,61 @@ body.landing-active{ background:var(--bg); }
 <!-- 非表示のコピー用メッセージ -->
 <div id="copy" class="copy" style="display:none;"></div>
 
-<!-- 履歴管理モーダル -->
-<div id="history-modal" class="history-modal" onclick="if(event.target===this)closeHistoryModal()">
+<!-- 集結主 追加/編集シート -->
+<div id="member-sheet" class="history-modal" onclick="if(event.target===this)closeMemberSheet()">
   <div class="history-modal-content">
     <div class="modal-drag-handle"></div>
     <div class="history-modal-body">
-      <h3 class="history-modal-title">行軍時間履歴</h3>
-      <div class="history-search">
-        <input type="text" id="history-search-input" placeholder="🔍 名前またはイベント名で検索...">
+      <h3 class="history-modal-title" id="member-sheet-title">集結主を追加</h3>
+
+      <div class="l-row" style="margin-top:0">
+        <span class="l-label">名前</span>
+        <input type="text" id="member-sheet-name" class="inline-select" style="text-align:right;flex:1;min-width:0" placeholder="名前を入力" autocapitalize="off" autocorrect="off">
       </div>
-      <div id="history-list" class="history-list"></div>
-      <div class="history-modal-footer">
-        <button class="history-btn danger" id="clear-all-history-modal">全ての履歴をリセット</button>
+      <div class="l-row">
+        <span class="l-label">座標</span>
+        <span style="display:flex;align-items:center;gap:4px">
+          <input type="number" id="member-sheet-x" class="inline-select" style="width:64px;text-align:right" placeholder="X">
+          <span class="inline-text">,</span>
+          <input type="number" id="member-sheet-y" class="inline-select" style="width:64px;text-align:right" placeholder="Y">
+        </span>
       </div>
+      <div class="l-row">
+        <span class="l-label">ステ強化</span>
+        <div class="segmented-toggle" id="member-sheet-buff-toggle">
+          <button type="button" class="segmented-toggle-btn active" data-value="0">なし</button>
+          <button type="button" class="segmented-toggle-btn" data-value="1">あり</button>
+        </div>
+      </div>
+      <div class="l-row">
+        <span class="l-label">ペット</span>
+        <div class="segmented-toggle" id="member-sheet-pet-toggle">
+          <button type="button" class="segmented-toggle-btn active" data-value="0">OFF</button>
+          <button type="button" class="segmented-toggle-btn" data-value="1">ON</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="l-row">
+        <span class="l-label">行軍時間</span>
+        <span id="member-sheet-march-preview" class="inline-text" style="font-weight:700;color:var(--blue-text);font-size:18px">-秒</span>
+      </div>
+      <div style="text-align:right;font-size:11px;color:var(--text-tertiary);margin-top:-6px">自動算出</div>
+
+      <button type="button" id="member-sheet-save-btn" class="btn-primary full-width margin-top">追加</button>
+      <button type="button" id="member-sheet-delete-btn" class="history-btn danger full-width" style="margin-top:8px;display:none">この集結主を削除</button>
     </div>
   </div>
 </div>
 
-
-<!-- ペット管理モーダル -->
-<div id="pet-modal" class="history-modal" onclick="if(event.target===this)closePetModal()">
+<!-- 同期する名前 選択シート -->
+<div id="sync-name-sheet" class="history-modal" onclick="if(event.target===this)closeSyncNameSheet()">
   <div class="history-modal-content">
     <div class="modal-drag-handle"></div>
     <div class="history-modal-body">
-      <h3 class="history-modal-title">ペットスキル</h3>
-      
-      <div id="pet-list" class="pet-list"></div>
-      <div class="history-modal-footer">
-        <button class="history-btn danger" id="reset-all-pets">すべてリセット</button>
-      </div>
+      <h3 class="history-modal-title">同期する名前</h3>
+      <div id="sync-name-list"></div>
     </div>
   </div>
 </div>
@@ -2440,7 +2532,6 @@ function syncMemberRosterName(row){
 if(firebaseReady){
   firebase.database().ref('roster').on('value', function(snap){
     rosterData = snap.val() || {};
-    if(typeof renderDeviceRegistrationOptions === 'function') renderDeviceRegistrationOptions();
   });
 }
 
@@ -2476,1788 +2567,16 @@ function tickUTC(){
 }
 setInterval(tickUTC,1000); tickUTC();
 
-/* ======= ペット終了チェック ======= */
-function checkPetExpiry(){
-  const pets = loadPets();
-  const now = Date.now();
-  let needsUpdate = false;
-  let anyEndingSoon = false;
-  
-  for(const name in pets){
-    const pet = pets[name];
-    if(pet.status !== 'active' || !pet.endTime) continue;
-    
-    const remaining = pet.endTime - now;
-    const remainingMin = remaining / 60000;
-    
-    if(remaining <= 0){
-      needsUpdate = true;
-    } else if(remainingMin <= 3){
-      anyEndingSoon = true;
-    }
-  }
-  
-  
-  if(needsUpdate) renderPetList();
-}
-
-function isPetActiveForMember(memberName){
-  const pets = loadPets();
-  const now = Date.now();
-  const pet = pets[memberName];
-  return pet && pet.status === 'active' && pet.endTime && now < pet.endTime;
-}
-
-function updateMemberRowHighlights(){
-  document.querySelectorAll('#players .member-row-wrapper').forEach(wrapper => {
-    const row = wrapper.querySelector('.member-row');
-    if(!row) return;
-    
-    const nameEl = row.querySelector('.name-text');
-    const name = (nameEl.textContent || '').trim();
-    if(name && isPetActiveForMember(name)){
-      row.classList.add('pet-active');
-    } else {
-      row.classList.remove('pet-active');
-    }
-  });
-}
-
-setInterval(checkPetExpiry, 1000);
-setInterval(updateMemberRowHighlights, 1000);
-
-/* ======= 行軍時間オプション生成 ======= */
-function marchLabel(i){
-  const min = Math.floor(i / 60);
-  const sec = i % 60;
-  if(min === 0) return `${sec}秒`;
-  if(sec === 0) return `${min}分`;
-  return `${min}分${sec}秒`;
-}
-function generateMarchOptions(selectElement, defaultValue, minSec = 10, maxSec = 120){
-  const useDefault = parseInt(defaultValue) || minSec;
-  let html = '';
-  // 範囲外の現在値も先頭に追加して保持する
-  if(useDefault < minSec){
-    html += `<option value="${useDefault}" selected>${marchLabel(useDefault)}</option>`;
-  }
-  for(let i=minSec; i<=maxSec; i++){
-    const selected = (i === useDefault) ? ' selected' : '';
-    html += `<option value="${i}"${selected}>${marchLabel(i)}</option>`;
-  }
-  if(useDefault > maxSec){
-    html += `<option value="${useDefault}" selected>${marchLabel(useDefault)}</option>`;
-  }
-  selectElement.innerHTML = html;
-}
-function updateAllMarchOptions(minSec = 10, maxSec = 120){
-  document.querySelectorAll('.march-select').forEach(sel=>{
-    // 現在値を必ず保存してから再生成（イベント変更で値が消えないように）
-    const savedVal = parseInt(sel.value) || minSec;
-    generateMarchOptions(sel, savedVal, minSec, maxSec);
-  });
-}
-updateAllMarchOptions();
-
-/* ======= 着弾時刻の自動セット（切り替え時に一発計算） ======= */
-function autoSetLandingTime(){
-  const now = new Date();
-  const rallyMin = parseInt(document.getElementById('rally-min-time').value || document.getElementById('rally-min').value) || 1;
-
-  let maxMarch = 0;
-  document.querySelectorAll('.march-select').forEach(sel => {
-    const v = parseInt(sel.value) || 0;
-    if(v > maxMarch) maxMarch = v;
-  });
-
-  // 着弾時刻 = 現在UTC + 集結時間 + 最遅行軍 + 60秒（バッファ）
-  const target = new Date(now.getTime() + rallyMin * 60 * 1000 + maxMarch * 1000 + 60 * 1000);
-
-  // 10秒単位に切り上げ
-  let H = target.getUTCHours();
-  let M = target.getUTCMinutes();
-  let S = Math.ceil(target.getUTCSeconds() / 10) * 10;
-  if(S >= 60){ S = 0; M += 1; }
-  if(M >= 60){ M = 0; H += 1; }
-  if(H >= 24){ H = 0; }
-
-  // hh/mm/ss セレクトに強制セット（選択肢は updateLandingTimeOptions が後から作るので value だけ記憶させる）
-  const hhSel = document.getElementById('hh');
-  const mmSel = document.getElementById('mm');
-  const ssSel = document.getElementById('ss');
-  hhSel.dataset.autoH = H;
-  mmSel.dataset.autoM = M;
-  ssSel.dataset.autoS = S;
-}
-
-/* ======= 着弾指定のデフォルト時刻 ======= */
-function updateLandingTimeOptions(){
-  const now = new Date();
-  const hhSel = document.getElementById('hh');
-  const mmSel = document.getElementById('mm');
-  const ssSel = document.getElementById('ss');
-  const rallyMinSel = document.getElementById('rally-min');
-
-  const rallyMin = parseInt(rallyMinSel.value) || 5;
-
-  let maxMarch = 0;
-  document.querySelectorAll('.march-select').forEach(sel => {
-    const march = parseInt(sel.value) || 0;
-    if(march > maxMarch) maxMarch = march;
-  });
-
-  const minTime = new Date(now.getTime() + rallyMin * 60 * 1000 + maxMarch * 1000);
-
-  // デフォルト着弾時刻 = 現在時刻 + 集結時間（ただしminTime未満にはならない）
-  const defaultTime = new Date(now.getTime() + rallyMin * 60 * 1000);
-  const targetTime = defaultTime < minTime ? minTime : defaultTime;
-
-  // 2分刻み、10秒刻みに丸める
-  let targetH = targetTime.getUTCHours();
-  let targetM = Math.ceil(targetTime.getUTCMinutes() / 2) * 2;
-  let targetS = Math.ceil(targetTime.getUTCSeconds() / 10) * 10;
-
-  // 繰り上がり処理
-  if(targetS >= 60){
-    targetS = 0;
-    targetM += 2;
-  }
-  if(targetM >= 60){
-    targetM = 0;
-    targetH += 1;
-  }
-  if(targetH >= 24){
-    targetH = 0;
-  }
-
-  // autoSetLandingTime() が記憶した値を優先、なければ targetH/M/S
-  const autoH = hhSel.dataset.autoH !== undefined ? parseInt(hhSel.dataset.autoH) : null;
-  const autoM = mmSel.dataset.autoM !== undefined ? parseInt(mmSel.dataset.autoM) : null;
-  const autoS = ssSel.dataset.autoS !== undefined ? parseInt(ssSel.dataset.autoS) : null;
-  const currentH = autoH !== null ? autoH : (parseInt(hhSel.value) >= 0 ? parseInt(hhSel.value) : targetH);
-  const currentM = autoM !== null ? autoM : (parseInt(mmSel.value) >= 0 ? parseInt(mmSel.value) : targetM);
-  const currentS = autoS !== null ? autoS : (parseInt(ssSel.value) >= 0 ? parseInt(ssSel.value) : targetS);
-  // 一度使ったら消す（ユーザーが手動変更したら上書きしない）
-  delete hhSel.dataset.autoH; delete mmSel.dataset.autoM; delete ssSel.dataset.autoS;
-
-  // 時（0-23）- minTime以降の時間のみ表示
-  let hhHTML='';
-  let validHours = [];
-  for(let i=0;i<24;i++){ 
-    let hasValidTime = false;
-    for(let m=0; m<60; m+=2){
-      for(let s=0; s<60; s+=10){
-        const testTime = new Date(now);
-        testTime.setUTCHours(i, m, s, 0);
-        if(testTime < now) testTime.setUTCDate(testTime.getUTCDate() + 1);
-        if(testTime >= minTime){
-          hasValidTime = true;
-          break;
-        }
-      }
-      if(hasValidTime) break;
-    }
-    if(hasValidTime){
-      validHours.push(i);
-      const v=String(i).padStart(2,'0'); 
-      hhHTML+=`<option value="${v}">${v}</option>`;
-    }
-  }
-  hhSel.innerHTML=hhHTML;
-
-  let selectedH = validHours.includes(currentH) ? currentH : validHours[0];
-  hhSel.value=String(selectedH).padStart(2,'0');
-
-  // 分（2分刻み）- 選択された時に応じてフィルタ
-  let mmHTML='';
-  let validMinutes = [];
-  for(let i=0;i<60;i+=2){ 
-    let hasValidTime = false;
-    for(let s=0; s<60; s+=10){
-      const testTime = new Date(now);
-      testTime.setUTCHours(selectedH, i, s, 0);
-      if(testTime < now) testTime.setUTCDate(testTime.getUTCDate() + 1);
-      if(testTime >= minTime){
-        hasValidTime = true;
-        break;
-      }
-    }
-    if(hasValidTime){
-      validMinutes.push(i);
-      const v=String(i).padStart(2,'0');
-      mmHTML+=`<option value="${v}">${v}</option>`;
-    }
-  }
-  mmSel.innerHTML=mmHTML;
-
-  let selectedM = validMinutes.includes(currentM) ? currentM : validMinutes[0];
-  if(selectedM !== undefined){
-    mmSel.value=String(selectedM).padStart(2,'0');
-  }
-
-  // 秒（10秒刻み）- 選択された時と分に応じてフィルタ
-  let ssHTML='';
-  let validSeconds = [];
-  selectedM = parseInt(mmSel.value) || 0;
-  for(let i=0;i<60;i+=10){ 
-    const v=String(i).padStart(2,'0');
-    const testTime = new Date(now);
-    testTime.setUTCHours(selectedH, selectedM, i, 0);
-    if(testTime < now) testTime.setUTCDate(testTime.getUTCDate() + 1);
-
-    if(testTime >= minTime){
-      validSeconds.push(i);
-      ssHTML+=`<option value="${v}">${v}</option>`;
-    }
-  }
-  ssSel.innerHTML=ssHTML;
-
-  let selectedS = validSeconds.includes(currentS) ? currentS : validSeconds[0];
-  if(selectedS !== undefined){
-    ssSel.value=String(selectedS).padStart(2,'0');
-  }
-}
-updateLandingTimeOptions();
-
-// 時刻ドロップダウンのイベントリスナー
-document.getElementById('hh').addEventListener('focus', updateLandingTimeOptions);
-document.getElementById('mm').addEventListener('focus', updateLandingTimeOptions);
-document.getElementById('ss').addEventListener('focus', updateLandingTimeOptions);
-document.getElementById('hh').addEventListener('click', updateLandingTimeOptions);
-document.getElementById('mm').addEventListener('click', updateLandingTimeOptions);
-document.getElementById('ss').addEventListener('click', updateLandingTimeOptions);
-document.getElementById('hh').addEventListener('change', updateLandingTimeOptions);
-document.getElementById('mm').addEventListener('change', updateLandingTimeOptions);
-document.getElementById('ss').addEventListener('change', updateLandingTimeOptions);
-document.getElementById('rally-min').addEventListener('change', updateLandingTimeOptions);
-
-/* ======= モード切替 ======= */
-const rallyTypeSel=document.getElementById('rally-type');
-const eventSel=document.getElementById('event-select');
-const rallyMinSel=document.getElementById('rally-min');
-const actionBtn=document.getElementById('action-btn');
-const impactDisplay=document.getElementById('impact-display');
-
-function updateRallyMinOptions(){
-  const event = eventSel.value;
-  let options;
-  
-  if(event === 'frost_dragon'){
-    options = [{v:1,l:'1分'}, {v:3,l:'3分'}, {v:5,l:'5分'}, {v:10,l:'10分'}, {v:15,l:'15分'}];
-  }else if(event === 'toride'){
-    options = [{v:1,l:'1分'}, {v:3,l:'3分'}];
-  }else if(event === 'castle'){
-    options = [{v:5,l:'5分'}, {v:10,l:'10分'}];
-  }else{
-    options = [{v:5,l:'5分'}, {v:10,l:'10分'}, {v:15,l:'15分'}];
-  }
-
-  const currentVal = rallyMinSel.value;
-  const html = options.map(o => `<option value="${o.v}">${o.l}</option>`).join('');
-  rallyMinSel.innerHTML = html;
-  rallyMinTimeSel.innerHTML = html;
-
-  if(options.some(o => o.v == currentVal)){
-    rallyMinSel.value = currentVal;
-    rallyMinTimeSel.value = currentVal;
-  }else{
-    rallyMinSel.value = options[0].v;
-    rallyMinTimeSel.value = options[0].v;
-  }
-}
-
-function syncRallyMinValues(){
-  const val = rallyMinSel.value;
-  rallyMinTimeSel.value = val;
-}
-
-const timeInputGroup = document.getElementById('time-input-group');
-const prepTimeSel = document.getElementById('prep-time');
-const afterPrep = document.getElementById('after-prep');
-const rallyInlineNow = document.getElementById('rally-inline-now');
-const rallyLine3 = document.getElementById('rally-line-3');
-const rallyMinTimeSel = document.getElementById('rally-min-time');
-
-/* イベント変更時に各メンバーの行軍時間をその履歴から復元 */
-function restoreMarchTimesFromHistory(){
-  const key = getHistoryKey();
-  const history = loadHistory();
-  if(!history[key]) return;
-
-  document.querySelectorAll('#players .member-row').forEach(row => {
-    const nameEl = row.querySelector('.name-text');
-    const sel = row.querySelector('.march-select');
-    if(!nameEl || !sel) return;
-    const name = nameEl.textContent.trim();
-    if(!name) return;
-    const normalizedName = name.toLowerCase();
-    const entry = history[key].find(item => item.name.toLowerCase() === normalizedName);
-    if(entry){
-      // 履歴にあればその値をセット（範囲外でも generateMarchOptions が保持）
-      const currentMin = parseInt(sel.options[0]?.value) || 10;
-      const currentMax = parseInt(sel.options[sel.options.length - 1]?.value) || 120;
-      generateMarchOptions(sel, entry.marchSec, currentMin, currentMax);
-    }
-  });
-}
-
-function updateMode(){
-  const event = eventSel.value;
-  const rallyType = rallyTypeSel.value;
-
-  if(event === 'castle'){
-    updateAllMarchOptions(30, 60);
-  }else if(event === 'frost_dragon'){
-    updateAllMarchOptions(10, 300);
-  }else{
-    updateAllMarchOptions(13, 60);
-  }
-  // イベント変更後、各メンバーの行軍時間をその履歴で上書き復元
-  restoreMarchTimesFromHistory();
-
-  // 時刻入力と準備時間の表示/非表示
-  if(rallyType === 'time'){
-    timeInputGroup.style.display='inline';
-    prepTimeSel.style.display='none';
-    afterPrep.style.display='none';
-    rallyInlineNow.style.display='none';
-    rallyLine3.style.display='block';
-    // 切り替え時に自動計算してセット
-    autoSetLandingTime();
-    updateLandingTimeOptions();
-  }else{
-    timeInputGroup.style.display='none';
-    prepTimeSel.style.display='inline-block';
-    afterPrep.style.display='inline';
-    rallyInlineNow.style.display='inline';
-    rallyLine3.style.display='none';
-  }
-
-  updateRallyMinOptions();
-  syncRallyMinValues();
-}
-
-rallyTypeSel.addEventListener('change', ()=>{ updateMode(); saveSettings(); });
-eventSel.addEventListener('change', ()=>{ updateMode(); saveSettings(); });
-
-/* ======= 行削除（グローバル関数） ======= */
-function deleteThisRow(el){
-  const wrapper = el.closest('.member-row-wrapper');
-  if(wrapper){
-    wrapper.style.transition = 'all 0.3s ease';
-    wrapper.style.transform = 'translateX(-100%)';
-    wrapper.style.opacity = '0';
-    wrapper.style.height = '0';
-    wrapper.style.marginBottom = '0';
-    wrapper.style.overflow = 'hidden';
-    setTimeout(() => {
-      wrapper.remove();
-      generateCopyMessage();
-      saveSettings();
-      updateLandingTimeOptions();
-    }, 300);
-  }
-}
-
-/* ======= スワイプ削除（rowを移動して削除背景を見せる） ======= */
-function resetAllSwipeStates(){
-  document.querySelectorAll('.member-row-wrapper').forEach(wrapper => {
-    wrapper.classList.remove('swiping');
-    const row = wrapper.querySelector('.member-row');
-    if(row){
-      row.style.transition = 'transform 0.2s ease';
-      row.style.transform = 'translateX(0)';
-    }
-  });
-}
-
-function isAnyModalOpen(){
-  return document.body.classList.contains('modal-open');
-}
-
-const swipeBoundRows = new WeakSet();
-function attachSwipeToRow(row){
-  const wrapper = row.closest('.member-row-wrapper');
-  if(!wrapper) return;
-
-  if(swipeBoundRows.has(wrapper)) return;
-  swipeBoundRows.add(wrapper);
-
-  let startX = 0;
-  let startY = 0;
-  let currentX = 0;
-  let isDragging = false;
-  let swipeActivated = false; // スワイプが有効になったか（閾値超え）
-
-  wrapper.addEventListener('touchstart', e => {
-    // モーダル表示中はスワイプ無効
-    if(isAnyModalOpen()) return;
-    
-    // ツールバーからのタッチは無視
-    if(e.target.closest('.app-toolbar')) return;
-    
-    // 他の行をリセット
-    document.querySelectorAll('.member-row-wrapper .member-row').forEach(r => {
-      if(r !== row){
-        r.style.transition = 'transform 0.2s ease';
-        r.style.transform = 'translateX(0)';
-      }
-    });
-
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    currentX = startX;
-    isDragging = true;
-    swipeActivated = false;
-  }, { passive: true });
-
-  wrapper.addEventListener('touchmove', e => {
-    if(!isDragging || isAnyModalOpen()) {
-      isDragging = false;
-      swipeActivated = false;
-      row.style.transition = 'transform 0.2s ease';
-      row.style.transform = 'translateX(0)';
-      return;
-    }
-
-    currentX = e.touches[0].clientX;
-    const currentY = e.touches[0].clientY;
-    const dx = currentX - startX;
-    const dy = currentY - startY;
-
-    // スワイプ閾値：水平方向30px以上かつ水平移動が垂直移動より大きい
-    if(!swipeActivated){
-      if(Math.abs(dx) >= 30 && Math.abs(dx) > Math.abs(dy)){
-        swipeActivated = true;
-        wrapper.classList.add('swiping');
-        row.style.transition = 'none';
-      } else {
-        return; // まだスワイプとして認識しない
-      }
-    }
-
-    e.preventDefault();
-
-    let diff = dx;
-    if(diff > 0) diff = 0;
-    if(diff < -80) diff = -80;
-
-    row.style.transform = `translateX(${diff}px)`;
-  }, { passive: false });
-
-  wrapper.addEventListener('touchend', () => {
-    if(!isDragging || isAnyModalOpen() || !swipeActivated) {
-      isDragging = false;
-      swipeActivated = false;
-      wrapper.classList.remove('swiping');
-      row.style.transition = 'transform 0.2s ease';
-      row.style.transform = 'translateX(0)';
-      return;
-    }
-
-    const diff = currentX - startX;
-
-    if(diff < -50){
-      wrapper.style.transition = 'all 0.3s ease';
-      wrapper.style.opacity = '0';
-      wrapper.style.height = '0';
-      wrapper.style.marginBottom = '0';
-      wrapper.style.overflow = 'hidden';
-
-      setTimeout(() => {
-        wrapper.remove();
-        generateCopyMessage();
-        saveSettings();
-        updateLandingTimeOptions();
-      }, 300);
-    } else {
-      wrapper.classList.remove('swiping');
-      row.style.transition = 'transform 0.2s ease';
-      row.style.transform = 'translateX(0)';
-    }
-
-    isDragging = false;
-    swipeActivated = false;
-  });
-
-  wrapper.addEventListener('touchcancel', () => {
-    wrapper.classList.remove('swiping');
-    row.style.transition = 'transform 0.2s ease';
-    row.style.transform = 'translateX(0)';
-    isDragging = false;
-    swipeActivated = false;
-  });
-}
-
-// 既存の行にスワイプを付与
-document.querySelectorAll('#players .member-row').forEach(attachSwipeToRow);
-
-/* ======= 行イベント（入力・選択用） ======= */
-function attachRowEvents(row){
-  if(row.dataset.eventsAttached) return;
-  row.dataset.eventsAttached = 'true';
-
-  const nameInput = row.querySelector('.name-text');
-
-  nameInput.addEventListener('input', function(){
-    saveSettings();
-  });
-
-  nameInput.addEventListener('blur', function(){
-    saveSettings();
-    syncMemberRosterName(row); // 名前変更時もmemberIdは維持したままrosterの表示名だけ更新
-  });
-
-  row.querySelector('.march-select').addEventListener('change', function(){
-    saveSettings();
-    updateLandingTimeOptions();
-  });
-}
-document.querySelectorAll('#players .member-row').forEach(attachRowEvents);
-
-/* ======= メンバー追加 ======= */
-function addMemberRow(name = '', marchSec = null, memberId = null){
-  const container=document.querySelector('#players');
-  const wrapper=document.createElement('div');
-  wrapper.classList.add('member-row-wrapper');
-  wrapper.innerHTML=`
-    <div class="delete-bg" onclick="deleteThisRow(this)">削除</div>
-    <div class="member-row">
-      <span class="name-text" contenteditable="true" data-placeholder="名前">${name}</span>
-      <select class="march-select"></select>
-      <span class="time-text dep">-</span>
-    </div>`;
-  const row = wrapper.querySelector('.member-row');
-  row.dataset.memberId = ensureMemberId(name, memberId);
-  container.appendChild(wrapper);
-  const event = eventSel.value;
-  let minSec, maxSec;
-  if(event === 'toride'){
-    minSec = 13;
-    maxSec = 60;
-  }else if(event === 'castle'){
-    minSec = 30;
-    maxSec = 60;
-  }else if(event === 'frost_dragon'){
-    minSec = 10;
-    maxSec = 300;
-  }else{
-    minSec = 13;
-    maxSec = 60;
-  }
-  const defaultMarch = marchSec !== null ? marchSec : minSec;
-  generateMarchOptions(row.querySelector('.march-select'), defaultMarch, minSec, maxSec);
-  attachRowEvents(row);
-  attachSwipeToRow(row);
-  saveSettings();
-  updateLandingTimeOptions();
-  return row;
-}
-
-document.getElementById('add-member').addEventListener('click',()=>{
-  addMemberRow();
-});
-
-/* ======= コピー用メッセージ生成 ======= */
-function generateCopyMessage(sortedRowData){
-  const event = eventSel.value;
-  const rallyMin = rallyMinSel.value;
-  const destination = getDestinationLabel(event);
-  const commonImpactTime = document.getElementById('common-impact-time').textContent;
-
-  const lines=[];
-  lines.push(`${destination}へ${rallyMin}分集結お願いします！🙇‍♂️🙇‍♂️✨`);
-  lines.push('');
-
-  if(sortedRowData){
-    // ソート済みのデータを使用
-    sortedRowData.forEach(item=>{
-      const name=(item.row.querySelector('.name-text').textContent||'').trim()||'集結主';
-      const dep=item.row.querySelector('.dep').textContent.trim()||'-';
-      lines.push(`${name} → ${dep} UTC`);
-    });
-  }else{
-    // ソート前（通常の呼び出し）
-    document.querySelectorAll('#players .member-row').forEach(row=>{
-      const name=(row.querySelector('.name-text').textContent||'').trim()||'集結主';
-      const dep=row.querySelector('.dep').textContent.trim()||'-';
-      lines.push(`${name} → ${dep} UTC`);
-    });
-  }
-
-  lines.push('━━━━━━━━━━━');
-  lines.push(`着弾時刻：${commonImpactTime} UTC`);
-  const msg = lines.join('\n');
-  document.getElementById('copy').textContent = msg;
-  
-  // プレビュー更新
-  const previewText = document.getElementById('preview-text');
-  if(previewText){
-    previewText.textContent = msg;
-  }
-}
-
-/* ======= コピーボタン（トースト通知） ======= */
-const toast = document.getElementById('toast');
+/* ======= トースト通知(共通) ======= */
+const toastEl = document.getElementById('toast');
+let toastTimer = null;
 function showToast(text='✓ コピーしました'){
-  toast.textContent = text;
-  toast.classList.add('show');
-  setTimeout(()=>toast.classList.remove('show'),1500);
+  if(!toastEl) return;
+  toastEl.textContent = text;
+  toastEl.classList.add('show');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toastEl.classList.remove('show'), 1800);
 }
-
-/* ======= 出発時刻計算 ======= */
-const impactTime= document.getElementById('common-impact-time');
-
-actionBtn.addEventListener('click',()=>{
-  actionBtn.classList.add('calculating');
-  actionBtn.disabled = true;
-  document.getElementById('calculating-msg').style.display = 'block';
-
-  const now=new Date();
-  const rallyType = rallyTypeSel.value;
-
-  // 最長行軍（メンバー行から自動スキャン）
-  let maxMarch = 0;
-  document.querySelectorAll('#players .member-row').forEach(row=>{
-    const march = parseInt(row.querySelector('.march-select').value,10) || 0;
-    if(march > maxMarch) maxMarch = march;
-  });
-
-  let arriveUtc;
-  const prepSec = parseInt(prepTimeSel.value,10);
-
-  // 集結時間をモードに応じて取得
-  let rallyMin;
-  if(rallyType === 'now'){
-    rallyMin = parseInt(rallyMinSel.value,10);
-  }else{
-    rallyMin = parseInt(document.getElementById('rally-min-time').value,10);
-  }
-
-  if(rallyType === 'now'){
-    // 今から：現在時刻 + 準備時間 + 集結時間 + 最長行軍
-    arriveUtc=new Date(now.getTime() + prepSec*1000 + rallyMin*60*1000 + maxMarch*1000);
-  }else{
-    // 時刻指定：選択した時刻を使用
-    const hh = parseInt(document.getElementById('hh').value, 10);
-    const mm = parseInt(document.getElementById('mm').value, 10);
-    const ss = parseInt(document.getElementById('ss').value, 10);
-    arriveUtc = new Date();
-    arriveUtc.setUTCHours(hh, mm, ss, 0);
-
-    // 過去の時刻なら翌日にする
-    if(arriveUtc <= now){
-      arriveUtc.setUTCDate(arriveUtc.getUTCDate() + 1);
-    }
-  }
-
-  const arriveStr=`${pad2(arriveUtc.getUTCHours())}:${pad2(arriveUtc.getUTCMinutes())}:${pad2(arriveUtc.getUTCSeconds())}`;
-  impactTime.textContent=arriveStr;
-
-  // 着弾時刻表示：今からモードの時だけ表示
-  if(rallyType === 'now'){
-    impactDisplay.style.display='block';
-  }else{
-    impactDisplay.style.display='none';
-  }
-
-  // 各人の出発時刻
-  const rowData=[];
-  document.querySelectorAll('#players .member-row-wrapper').forEach(wrapper=>{
-    const row = wrapper.querySelector('.member-row');
-    const march=parseInt(row.querySelector('.march-select').value,10)||0;
-    let dep;
-
-    if(rallyType === 'now'){
-      // 今から：現在時刻 + 準備時間 + (最長行軍 - 個人行軍)
-      dep = new Date(now.getTime() + prepSec*1000 + (maxMarch - march)*1000);
-    }else{
-      // 時刻指定：着弾時刻 - 集結時間 - 個人行軍
-      dep = new Date(arriveUtc.getTime() - rallyMin*60*1000 - march*1000);
-    }
-
-    const depTime = dep.getTime();
-    row.querySelector('.dep').textContent =
-      `${pad2(dep.getUTCHours())}:${pad2(dep.getUTCMinutes())}:${pad2(dep.getUTCSeconds())}`;
-    rowData.push({wrapper, row, depTime});
-  });
-
-  // 出発時刻が早い順にソート
-  rowData.sort((a, b) => a.depTime - b.depTime);
-
-  // ソートされた順序でテーブルを並び替え（wrapperごと移動）
-  const tbody = document.querySelector('#players');
-  rowData.forEach(item => {
-    tbody.appendChild(item.wrapper);
-  });
-
-  generateCopyMessage(rowData);
-
-  // Firebaseへ着弾時刻・各メンバーの出発UTC時刻を送信(既存の計算結果には影響しない)
-  sendActiveRallyToFirebase(arriveUtc, rowData);
-
-  // 履歴に記録
-  document.querySelectorAll('#players .member-row').forEach(row=>{
-    const name = (row.querySelector('.name-text').textContent||'').trim();
-    const march = parseInt(row.querySelector('.march-select').value, 10);
-    if(name && march){
-      recordHistory(name, march);
-    }
-  });
-
-  // 最後に解除してコピー実行
-  setTimeout(async ()=>{
-    document.getElementById('calculating-msg').style.display='none';
-    actionBtn.classList.remove('calculating');
-    actionBtn.disabled=false;
-    
-    // 自動コピー
-    const txt = document.getElementById('copy').textContent;
-    const membersTable = document.querySelector('.members-table');
-    membersTable.classList.add('flash');
-    setTimeout(()=>membersTable.classList.remove('flash'),800);
-    
-    try{ await navigator.clipboard.writeText(txt); }
-    catch(e){
-      const ta=document.createElement('textarea');
-      ta.value=txt; document.body.appendChild(ta); ta.select();
-      document.execCommand('copy'); document.body.removeChild(ta);
-    }
-    showToast();
-  }, 500);
-});
-
-/* ======= 履歴管理（イベントごとに名前・行軍時間を記録） ======= */
-const MAX_HISTORY_PER_KEY = 50;
-
-function getHistoryKey(){
-  return eventSel.value;
-}
-
-function loadHistory(){
-  try{
-    const raw = localStorage.getItem('memberHistory');
-    if(!raw) return {};
-    return JSON.parse(raw);
-  }catch(e){
-    return {};
-  }
-}
-
-function saveHistory(historyData){
-  try{
-    localStorage.setItem('memberHistory', JSON.stringify(historyData));
-  }catch(e){
-    console.error('履歴の保存に失敗しました', e);
-  }
-}
-
-function recordHistory(name, marchSec){
-  if(!name || !name.trim()) return;
-
-  const key = getHistoryKey();
-  const history = loadHistory();
-
-  if(!history[key]){
-    history[key] = [];
-  }
-
-  const normalizedName = name.trim().replace(/\s+/g, ' ');
-  const currentHasPet = isPetActiveForMember(normalizedName);
-
-  // 同じ名前・同じ秒数の重複チェック（ペット状態は無視）
-  const existingIndex = history[key].findIndex(item => 
-    item.name.toLowerCase() === normalizedName.toLowerCase() && 
-    item.marchSec === marchSec
-  );
-
-  const entry = {
-    name: normalizedName,
-    marchSec: marchSec,
-    lastUsed: Date.now(),
-    hasPet: currentHasPet
-  };
-
-  if(existingIndex >= 0){
-    // 既存エントリを更新
-    history[key][existingIndex] = entry;
-  }else{
-    history[key].push(entry);
-  }
-
-  history[key].sort((a, b) => b.lastUsed - a.lastUsed);
-
-  if(history[key].length > MAX_HISTORY_PER_KEY){
-    history[key] = history[key].slice(0, MAX_HISTORY_PER_KEY);
-  }
-
-  saveHistory(history);
-}
-
-function getSuggestions(inputText){
-  if(!inputText || !inputText.trim()) return [];
-
-  const key = getHistoryKey();
-  const history = loadHistory();
-
-  if(!history[key]) return [];
-
-  const normalizedInput = inputText.trim().toLowerCase();
-
-  return history[key]
-    .filter(item => item.name.toLowerCase().startsWith(normalizedInput))
-    .slice(0, 10);
-}
-
-function findMemberRowByName(name){
-  if(!name || !name.trim()) return null;
-  const normalizedName = name.trim().toLowerCase();
-  const existingRows = document.querySelectorAll('#players .member-row');
-  for(const row of existingRows){
-    const existingName = (row.querySelector('.name-text').textContent || '').trim().toLowerCase();
-    if(existingName === normalizedName) return row;
-  }
-  return null;
-}
-
-/* ======= オートコンプリートドロップダウン ======= */
-let currentDropdown = null;
-let currentInput = null;
-let selectedIndex = -1;
-
-function formatMarchTime(seconds){
-  if(seconds < 60){
-    return `${seconds}秒`;
-  }else if(seconds === 60){
-    return '1分';
-  }else if(seconds === 120){
-    return '2分';
-  }else{
-    const min = Math.floor(seconds / 60);
-    const sec = seconds % 60;
-    if(sec === 0){
-      return `${min}分`;
-    }else{
-      return `${min}分${sec}秒`;
-    }
-  }
-}
-
-function showAutocomplete(inputElement, suggestions){
-  hideAutocomplete();
-
-  if(!suggestions || suggestions.length === 0) return;
-
-  const dropdown = document.createElement('div');
-  dropdown.className = 'autocomplete-dropdown show';
-
-  suggestions.forEach((item, index) => {
-    const div = document.createElement('div');
-    div.className = 'autocomplete-item';
-
-    const nameSpan = document.createElement('span');
-    nameSpan.className = 'autocomplete-name';
-    nameSpan.textContent = item.name;
-
-    const marchSpan = document.createElement('span');
-    marchSpan.className = 'autocomplete-march';
-    marchSpan.textContent = formatMarchTime(item.marchSec);
-
-    div.appendChild(nameSpan);
-    div.appendChild(marchSpan);
-
-    div.addEventListener('mousedown', (e) => {
-      e.preventDefault();
-      selectSuggestion(inputElement, item);
-    });
-
-    div.addEventListener('mouseenter', () => {
-      selectedIndex = index;
-      updateSelectedItem(dropdown);
-    });
-
-    dropdown.appendChild(div);
-  });
-
-  const rect = inputElement.getBoundingClientRect();
-  dropdown.style.top = (rect.bottom + window.scrollY) + 'px';
-  dropdown.style.left = rect.left + 'px';
-  dropdown.style.width = rect.width + 'px';
-
-  document.body.appendChild(dropdown);
-  currentDropdown = dropdown;
-  currentInput = inputElement;
-  selectedIndex = -1;
-}
-
-function hideAutocomplete(){
-  if(currentDropdown){
-    currentDropdown.remove();
-    currentDropdown = null;
-    currentInput = null;
-    selectedIndex = -1;
-  }
-}
-
-function updateSelectedItem(dropdown){
-  const items = dropdown.querySelectorAll('.autocomplete-item');
-  items.forEach((item, index) => {
-    if(index === selectedIndex){
-      item.classList.add('selected');
-    }else{
-      item.classList.remove('selected');
-    }
-  });
-}
-
-function selectSuggestion(inputElement, item){
-  const row = inputElement.closest('.member-row');
-  if(!row) return;
-
-  // 重複チェック（自分自身は除く）
-  const currentName = (inputElement.textContent || '').trim().toLowerCase();
-  const newName = item.name.trim().toLowerCase();
-  
-  if(currentName !== newName){
-    const existingRows = document.querySelectorAll('#players .member-row');
-    for(const r of existingRows){
-      if(r === row) continue;
-      const existingName = (r.querySelector('.name-text').textContent || '').trim().toLowerCase();
-      if(existingName === newName){
-        showToast('同じ名前が既に存在します');
-        hideAutocomplete();
-        return;
-      }
-    }
-  }
-
-  inputElement.textContent = item.name;
-
-  const marchSelect = row.querySelector('.march-select');
-  if(marchSelect){
-    marchSelect.value = item.marchSec;
-  }
-
-  hideAutocomplete();
-  saveSettings();
-}
-
-function getDestinationLabel(event){
-  if(event === 'toride'){
-    return '砦・ステ';
-  }else if(event === 'castle'){
-    return '王城決戦';
-  }else if(event === 'frost_dragon'){
-    return '霜竜覇者';
-  }else{
-    return event;
-  }
-}
-
-function renderHistoryList(searchText = ''){
-  const historyListEl = document.getElementById('history-list');
-  const history = loadHistory();
-
-  historyListEl.innerHTML = '';
-
-  const currentEvent = eventSel.value;
-  const keys = Object.keys(history);
-
-  // 現在選択中のイベントのみフィルタリング
-  const filteredKeys = keys.filter(key => key === currentEvent);
-
-  if(filteredKeys.length === 0){
-    historyListEl.innerHTML = '<div class="history-empty">履歴が登録されていません</div>';
-    return;
-  }
-
-  const currentKey = getHistoryKey();
-
-  let hasResults = false;
-
-  filteredKeys.forEach(key => {
-    const event = key;
-    const items = history[key];
-
-    const filteredItems = items.filter(item => {
-      const searchLower = searchText.toLowerCase();
-      const nameLower = item.name.toLowerCase();
-      const destLabel = getDestinationLabel(event).toLowerCase();
-      return nameLower.includes(searchLower) || destLabel.includes(searchLower);
-    });
-
-    if(filteredItems.length === 0) return;
-
-    // 行軍時間順にソート
-    filteredItems.sort((a, b) => {
-      return a.marchSec - b.marchSec;
-    });
-
-    hasResults = true;
-
-    const isActive = (key === currentKey);
-
-    const groupDiv = document.createElement('div');
-    groupDiv.className = 'history-group ' + (isActive ? 'history-group--active' : 'history-group--inactive');
-    groupDiv.dataset.active = isActive ? 'true' : 'false';
-
-    const titleDiv = document.createElement('div');
-    titleDiv.className = 'history-group-title';
-    titleDiv.textContent = getDestinationLabel(event);
-    groupDiv.appendChild(titleDiv);
-
-    filteredItems.forEach(item => {
-      const wrapperDiv = document.createElement('div');
-      wrapperDiv.className = 'history-item-wrapper';
-      
-      const deleteBg = document.createElement('div');
-      deleteBg.className = 'history-delete-bg';
-      deleteBg.textContent = '削除';
-      
-      const itemDiv = document.createElement('div');
-      itemDiv.className = 'history-item';
-
-      const infoDiv = document.createElement('div');
-      infoDiv.className = 'history-item-info';
-      infoDiv.style.cursor = 'pointer';
-
-      const nameSpan = document.createElement('span');
-      nameSpan.className = 'history-item-name';
-      nameSpan.textContent = item.name;
-
-      const marchSpan = document.createElement('span');
-      marchSpan.className = 'history-item-march';
-      marchSpan.textContent = formatMarchTime(item.marchSec);
-
-      infoDiv.appendChild(nameSpan);
-      infoDiv.appendChild(marchSpan);
-
-      if(item.hasPet === true){
-        const petLabel = document.createElement('span');
-        petLabel.className = 'history-pet-label';
-        petLabel.textContent = 'ペットあり';
-        infoDiv.appendChild(petLabel);
-      }
-
-      function applyHistoryItem(){
-        const currentKey = getHistoryKey();
-        if(currentKey !== event) return;
-        const existingRow = findMemberRowByName(item.name);
-        if(existingRow){
-          const sel = existingRow.querySelector('.march-select');
-          if(sel){
-            sel.value = item.marchSec;
-            sel.dispatchEvent(new Event('change'));
-          }
-          closeHistoryModal();
-          showToast(`${item.name} の行軍時間を更新しました`);
-          return;
-        }
-        addMemberRow(item.name, item.marchSec);
-        closeHistoryModal();
-        showToast(`${item.name} を追加しました`);
-      }
-
-      itemDiv._applyHistoryItem = applyHistoryItem;
-
-      // 削除ボタン
-      const deleteBtn = document.createElement('button');
-      deleteBtn.type = 'button';
-      deleteBtn.className = 'history-item-delete';
-      deleteBtn.textContent = '×';
-      deleteBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        wrapperDiv.style.transition = 'all 0.3s ease';
-        wrapperDiv.style.transform = 'translateX(-100%)';
-        wrapperDiv.style.opacity = '0';
-        wrapperDiv.style.height = '0';
-        wrapperDiv.style.overflow = 'hidden';
-        setTimeout(() => {
-          deleteHistoryItemFromModal(event, item);
-        }, 300);
-      });
-
-      itemDiv.appendChild(infoDiv);
-      itemDiv.appendChild(deleteBtn);
-
-      wrapperDiv.appendChild(deleteBg);
-      wrapperDiv.appendChild(itemDiv);
-
-      // スワイプ削除イベント
-      initHistorySwipe(wrapperDiv, itemDiv, deleteBg, event, item);
-
-      groupDiv.appendChild(wrapperDiv);
-    });
-
-    historyListEl.appendChild(groupDiv);
-  });
-
-  if(!hasResults){
-    historyListEl.innerHTML = '<div class="history-empty">検索結果がありません</div>';
-  }
-}
-
-function initHistorySwipe(wrapper, itemDiv, deleteBg, event, item){
-  let startX = 0;
-  let currentX = 0;
-  let isDragging = false;
-  let didSwipe = false;
-  let touchFired = false;
-  
-  function doDelete(){
-    wrapper.style.transition = 'all 0.3s ease';
-    wrapper.style.transform = 'translateX(-100%)';
-    wrapper.style.opacity = '0';
-    wrapper.style.height = '0';
-    wrapper.style.marginBottom = '0';
-    wrapper.style.overflow = 'hidden';
-    setTimeout(() => {
-      deleteHistoryItemFromModal(event, item);
-    }, 300);
-  }
-
-  itemDiv.addEventListener('touchstart', (e) => {
-    startX = e.touches[0].clientX;
-    currentX = startX;
-    isDragging = true;
-    didSwipe = false;
-    touchFired = false;
-    itemDiv.style.transition = 'none';
-  }, { passive: true });
-  
-  itemDiv.addEventListener('touchmove', (e) => {
-    if(!isDragging) return;
-    currentX = e.touches[0].clientX;
-    const diff = currentX - startX;
-    if(Math.abs(diff) > 15){
-      didSwipe = true;
-      const clamped = Math.min(diff, 0);
-      itemDiv.style.transform = `translateX(${clamped}px)`;
-    }
-  }, { passive: true });
-  
-  function isGroupActive(){
-    return itemDiv.closest('.history-group')?.dataset.active === 'true';
-  }
-
-  itemDiv.addEventListener('touchend', () => {
-    isDragging = false;
-    const diff = currentX - startX;
-    if(didSwipe && diff < -100){
-      doDelete();
-    } else if(didSwipe){
-      itemDiv.style.transition = 'transform 0.2s ease';
-      itemDiv.style.transform = 'translateX(0)';
-      didSwipe = false;
-    } else {
-      if(!isGroupActive()) return;
-      touchFired = true;
-      if(itemDiv._applyHistoryItem) itemDiv._applyHistoryItem();
-    }
-  }, { passive: true });
-
-  itemDiv.addEventListener('click', () => {
-    if(touchFired){ touchFired = false; return; }
-    if(!isGroupActive()) return;
-    if(itemDiv._applyHistoryItem) itemDiv._applyHistoryItem();
-  });
-  
-  deleteBg.addEventListener('click', () => doDelete());
-}
-
-function deleteHistoryItemFromModal(event, item){
-  const key = event;
-  const history = loadHistory();
-
-  if(!history[key]) return;
-
-  history[key] = history[key].filter(h => 
-    !(h.name.toLowerCase() === item.name.toLowerCase() && h.marchSec === item.marchSec)
-  );
-
-  if(history[key].length === 0){
-    delete history[key];
-  }
-
-  saveHistory(history);
-  showToast(`${item.name} を削除`);
-
-  renderHistoryList(document.getElementById('history-search-input').value);
-}
-
-function openHistoryModal(){
-  resetAllSwipeStates();
-  document.body.classList.add('modal-open');
-  const modal = document.getElementById('history-modal');
-  modal.classList.add('show');
-  renderHistoryList();
-  document.getElementById('history-search-input').value = '';
-}
-
-function closeHistoryModal(){
-  const modal = document.getElementById('history-modal');
-  modal.classList.remove('show');
-  document.body.classList.remove('modal-open');
-  document.body.style.pointerEvents = 'none';
-  setTimeout(() => { document.body.style.pointerEvents = ''; }, 350);
-}
-
-function clearAllHistory(){
-  if(confirm('全ての履歴をリセットをしますか？')){
-    localStorage.removeItem('memberHistory');
-    showToast('すべて履歴をリセットしました');
-    renderHistoryList();
-  }
-}
-
-/* ======= 設定の保存/復元 ======= */
-function saveSettings(){
-  const members=[];
-  document.querySelectorAll('#players .member-row').forEach(row=>{
-    members.push({
-      name: row.querySelector('.name-text').textContent||'',
-      march: row.querySelector('.march-select').value,
-      memberId: row.dataset.memberId || null
-    });
-  });
-
-  const data={
-    event:eventSel.value,
-    rallyType:rallyTypeSel.value,
-    rallyMin:rallyMinSel.value,
-    members: members
-  };
-  localStorage.setItem('arrivalMarineSettings', JSON.stringify(data));
-}
-function loadSettings(){
-  const raw=localStorage.getItem('arrivalMarineSettings'); if(!raw) return;
-  try{
-    const d=JSON.parse(raw);
-
-    // 後方互換性：旧UI形式をマッピング
-    if(d.mode){
-      // mode: 'toride', 'kabuse', 'chakudan'
-      if(d.mode === 'toride'){
-        eventSel.value = 'toride';
-        rallyTypeSel.value = 'now';
-      }else if(d.mode === 'kabuse'){
-        eventSel.value = 'castle';
-        rallyTypeSel.value = 'now';
-      }else{ // chakudan
-        eventSel.value = 'castle';
-        rallyTypeSel.value = 'time';
-      }
-    }else{
-      // 新UI形式
-      if(d.event) eventSel.value=d.event;
-      if(d.rallyType) rallyTypeSel.value=d.rallyType;
-    }
-
-    // イベントに応じた選択肢を更新してから値を設定
-    updateRallyMinOptions();
-    if(d.rallyMin){
-      rallyMinSel.value=d.rallyMin;
-      rallyMinTimeSel.value=d.rallyMin;
-    }
-
-    if(d.members && d.members.length>0){
-      const container=document.querySelector('#players');
-      container.innerHTML='';
-      d.members.forEach(m=>{
-        // addMemberRowを再利用: march範囲の決定・行DOM構築・memberId引き継ぎを一本化
-        addMemberRow(m.name||'', m.march, m.memberId||null);
-      });
-    }
-    updateMode();
-  }catch(e){}
-}
-['rally-min','rally-type','event-select']
-.forEach(id=>{
-  const el=document.getElementById(id);
-  if(el) ['change','input'].forEach(ev=>el.addEventListener(ev,saveSettings));
-});
-
-// rally-min と rally-min-time を同期
-document.getElementById('rally-min').addEventListener('change', function(){
-  rallyMinTimeSel.value = this.value;
-  updateLandingTimeOptions();
-});
-document.getElementById('rally-min-time').addEventListener('change', function(){
-  rallyMinSel.value = this.value;
-  updateLandingTimeOptions();
-  saveSettings();
-});
-
-// 時刻選択が変わったら選択肢を更新
-document.getElementById('hh').addEventListener('change', updateLandingTimeOptions);
-document.getElementById('mm').addEventListener('change', updateLandingTimeOptions);
-
-// ドロップダウンを開く前に選択肢を更新（過去の時刻を防ぐ）
-document.getElementById('hh').addEventListener('focus', updateLandingTimeOptions);
-document.getElementById('mm').addEventListener('focus', updateLandingTimeOptions);
-document.getElementById('ss').addEventListener('focus', updateLandingTimeOptions);
-document.getElementById('hh').addEventListener('click', updateLandingTimeOptions);
-document.getElementById('mm').addEventListener('click', updateLandingTimeOptions);
-document.getElementById('ss').addEventListener('click', updateLandingTimeOptions);
-
-// 履歴データのマイグレーション（目的地設定廃止：旧「イベント|目的地」キーをイベント単体キーへ統合）
-function migrateHistoryData(){
-  const history = loadHistory();
-  const knownEvents = ['toride', 'castle', 'frost_dragon'];
-  let changed = false;
-
-  Object.keys(history).forEach(key => {
-    if(!key.includes('|')) return;
-    const event = key.split('|')[0];
-    if(!knownEvents.includes(event)) return;
-
-    if(!history[event]) history[event] = [];
-    history[key].forEach(item => {
-      const existingIndex = history[event].findIndex(h => h.name.toLowerCase() === item.name.toLowerCase());
-      if(existingIndex >= 0){
-        if(item.lastUsed > history[event][existingIndex].lastUsed){
-          history[event][existingIndex] = item;
-        }
-      }else{
-        history[event].push(item);
-      }
-    });
-    delete history[key];
-    changed = true;
-  });
-
-  if(changed){
-    Object.keys(history).forEach(event => {
-      history[event].sort((a, b) => b.lastUsed - a.lastUsed);
-      if(history[event].length > MAX_HISTORY_PER_KEY){
-        history[event] = history[event].slice(0, MAX_HISTORY_PER_KEY);
-      }
-    });
-    saveHistory(history);
-  }
-}
-
-loadSettings();
-migrateHistoryData();
-updateMode(); // 初期表示（loadSettingsでデータがない場合のため）
-// 初期行にもイベントを再設定（loadSettingsで行が作成されなかった場合用）
-document.querySelectorAll('#players .member-row').forEach(function(row){
-  attachRowEvents(row);
-  if(!row.dataset.memberId){
-    // 静的HTMLに元々ある行(loadSettingsで再構築されなかった行)にmemberIdを付与
-    const name = (row.querySelector('.name-text').textContent||'').trim();
-    row.dataset.memberId = ensureMemberId(name, null);
-  }
-});
-updateMemberRowHighlights(); // ペット発動中の行ハイライト初期化
-
-// スワイプ状態をリセット（他の場所をタップした時）
-document.addEventListener('click', (e) => {
-  if(!e.target.closest('.member-row-wrapper') && !e.target.closest('.delete-bg')){
-    document.querySelectorAll('#players .member-row').forEach(r => {
-      if(r.style.transform && r.style.transform !== 'translateX(0px)'){
-        r.style.transition = 'transform 0.2s ease';
-        r.style.transform = 'translateX(0)';
-      }
-    });
-  }
-});
-
-// 履歴モーダル
-document.getElementById('clear-all-history-modal').addEventListener('click', clearAllHistory);
-
-// モーダル背景クリックで閉じる
-document.getElementById('history-modal').addEventListener('click', function(e){
-  if(e.target === this){
-    closeHistoryModal();
-  }
-});
-
-// 履歴検索
-document.getElementById('history-search-input').addEventListener('input', function(){
-  renderHistoryList(this.value);
-});
-
-/* ======= プレビュー折りたたみ ======= */
-const previewToggle = document.getElementById('preview-toggle');
-const previewContent = document.getElementById('preview-content');
-const previewArrow = document.getElementById('preview-arrow');
-let previewExpanded = false;
-
-previewContent.addEventListener('transitionend', function(){
-  if(previewExpanded){
-    previewContent.style.height = 'auto';
-  }
-});
-
-previewToggle.addEventListener('click', function(){
-  if(previewExpanded){
-    // 閉じる
-    const currentHeight = previewContent.scrollHeight;
-    previewContent.style.height = currentHeight + 'px';
-    previewContent.offsetHeight; // 強制リフロー
-    previewContent.style.height = '0';
-    previewArrow.style.transform = 'rotate(0deg)';
-    previewToggle.style.background = 'var(--bg-light)';
-  }else{
-    // 開く
-    generateCopyMessage();
-    const targetHeight = previewContent.scrollHeight;
-    previewContent.style.height = targetHeight + 'px';
-    previewArrow.style.transform = 'rotate(-180deg)';
-    previewToggle.style.background = 'linear-gradient(135deg, #e8eef4 0%, #dde5ed 100%)';
-  }
-  previewExpanded = !previewExpanded;
-});
-
-/* ======= 集結主セクションの折りたたみ ======= */
-const membersHeader = document.getElementById('members-header');
-const membersContent = document.getElementById('members-content');
-const membersArrow = document.getElementById('members-arrow');
-let membersExpanded = true;
-
-// 初期状態で開いておく（Safari対策: 最初はautoで設定）
-membersContent.style.height = 'auto';
-membersArrow.style.transform = 'rotate(-180deg)';
-membersHeader.style.background = 'linear-gradient(135deg, #e8eef4 0%, #dde5ed 100%)';
-
-// トランジション終了後にheightをautoに戻す（Safari対策）
-membersContent.addEventListener('transitionend', function(){
-  if(membersExpanded){
-    membersContent.style.height = 'auto';
-  }
-});
-
-membersHeader.addEventListener('click', function(){
-  membersExpanded = !membersExpanded;
-
-  if(membersExpanded){
-    const currentHeight = membersContent.scrollHeight;
-    membersContent.style.height = '0';
-    setTimeout(()=>{
-      membersContent.style.height = currentHeight + 'px';
-    }, 10);
-    membersArrow.style.transform = 'rotate(-180deg)';
-    membersHeader.style.background = 'linear-gradient(135deg, #e8eef4 0%, #dde5ed 100%)';
-  }else{
-    membersContent.style.height = membersContent.scrollHeight + 'px';
-    setTimeout(()=>{
-      membersContent.style.height = '0';
-    }, 10);
-    membersArrow.style.transform = 'rotate(0deg)';
-    membersHeader.style.background = 'linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%)';
-  }
-});
-
-// メンバー追加時にheightを更新（Safari対策）
-document.getElementById('add-member').addEventListener('click', function(){
-  setTimeout(()=>{
-    if(membersExpanded){
-      membersContent.style.height = membersContent.scrollHeight + 'px';
-      setTimeout(()=>{ membersContent.style.height = 'auto'; }, 350);
-    }
-  }, 10);
-});
-
-/* ======= ペット管理 ======= */
-// ペットデータの構造: { name: string, status: 'waiting'|'active'|'ended', endTime?: timestamp }
-function loadPets(){
-  const data = localStorage.getItem('pets');
-  return data ? JSON.parse(data) : {};
-}
-
-function savePets(pets){
-  localStorage.setItem('pets', JSON.stringify(pets));
-}
-
-function openPetModal(){
-  resetAllSwipeStates();
-  document.body.classList.add('modal-open');
-  renderPetList();
-  document.getElementById('pet-modal').classList.add('show');
-}
-
-function closePetModal(){
-  document.getElementById('pet-modal').classList.remove('show');
-  document.body.classList.remove('modal-open');
-}
-
-function getPetIconForName(name){
-  // スペースを無視して正規化
-  const normalizedName = name.replace(/\s/g, '');
-  
-  // マリー系の判定（さん、ちゃん等の敬称付きも対応）
-  const marieBases = ['マリー', 'まりー', 'マリィ', 'まりぃ', 'marie', 'Marie'];
-  for(const base of marieBases){
-    if(normalizedName.startsWith(base) || normalizedName.toLowerCase().startsWith(base.toLowerCase())){
-      return 'marie-icon.png';
-    }
-  }
-  if(marieBases.some(b => normalizedName.includes(b))){
-    return 'marie-icon.png';
-  }
-  
-  // ごったん、ゴツオ、ごったんさん、ごっちゃん の判定
-  const gottanNames = ['ごったん', 'ごったんさん', 'ごっちゃん', 'ゴツオ', 'ごつお'];
-  if(gottanNames.includes(normalizedName)){
-    return 'gottan-icon.png';
-  }
-  
-  // デフォルトはブルドック
-  return 'dog-icon.png';
-}
-
-function renderPetList(){
-  const pets = loadPets();
-  const petListEl = document.getElementById('pet-list');
-
-  // 現在のメンバーリストを取得
-  const currentMembers = [];
-  document.querySelectorAll('.name-text').forEach(input => {
-    const name = (input.textContent||'').trim();
-    if(name) currentMembers.push(name);
-  });
-
-  // 発動中のペット（ホームで削除されても表示）
-  const now = Date.now();
-  const activePetNames = [];
-  for(const name in pets){
-    const pet = pets[name];
-    if(pet.status === 'active' && pet.endTime && pet.endTime > now){
-      if(!currentMembers.includes(name)){
-        activePetNames.push(name);
-      }
-    }
-  }
-
-  // 表示するメンバー = 現在のメンバー + 発動中の削除済みメンバー
-  const displayMembers = [...currentMembers, ...activePetNames];
-
-  if(displayMembers.length === 0){
-    petListEl.innerHTML = '<div class="pet-empty">集結主が登録されていません</div>';
-    return;
-  }
-
-  let html = '';
-
-  displayMembers.forEach(name => {
-    const isDeleted = !currentMembers.includes(name);
-    const pet = pets[name] || { status: 'waiting' };
-    let statusText = '';
-    let statusClass = '';
-    let showActivateBtn = false;
-
-    if(pet.status === 'active' && pet.endTime){
-      if(now < pet.endTime){
-        const endDate = new Date(pet.endTime);
-        const remaining = pet.endTime - now;
-        const remainMin = Math.floor(remaining / 60000);
-        const remainHour = Math.floor(remainMin / 60);
-        const remainMinOnly = remainMin % 60;
-        const remainText = remainHour > 0 ? `${remainHour}:${pad2(remainMinOnly)}` : `0:${pad2(remainMinOnly)}`;
-        statusText = `残り${remainText}<br><span class="pet-end-time">${pad2(endDate.getUTCHours())}:${pad2(endDate.getUTCMinutes())} UTC</span>`;
-        statusClass = 'active';
-      }else{
-        statusText = '終了';
-        statusClass = 'ended';
-        pet.status = 'ended';
-        pets[name] = pet;
-        savePets(pets);
-      }
-    }else if(pet.status === 'ended'){
-      statusText = '終了';
-      statusClass = 'ended';
-    }else{
-      statusText = '▶ 発動';
-      statusClass = 'waiting';
-      showActivateBtn = true;
-    }
-
-    let timeDisplay = '';
-
-    // 名前に基づいてアイコンを選択
-    const petIcon = getPetIconForName(name);
-    
-    // アイコン（状態によって表示を変える）
-    let iconButton = '';
-    if(statusClass === 'waiting'){
-      // 待機中：普通のアイコン
-      iconButton = `<div class="pet-icon-wrapper"><img src="${petIcon}" class="pet-item-icon" alt="pet"></div>`;
-    }else if(statusClass === 'active'){
-      // 発動中：光る（クリックでリセット）
-      iconButton = `<div class="pet-icon-wrapper active" data-name="${name}"><img src="${petIcon}" class="pet-item-icon" alt="pet"></div>`;
-    }else if(statusClass === 'ended'){
-      // 終了：薄く＋💤
-      iconButton = `<div class="pet-icon-wrapper ended"><img src="${petIcon}" class="pet-item-icon" alt="pet"></div>`;
-    }else{
-      iconButton = `<div class="pet-icon-wrapper"><img src="${petIcon}" class="pet-item-icon" alt="pet"></div>`;
-    }
-    
-    // ステータス表示
-    let statusDisplay = `<span class="pet-item-status ${statusClass}">${statusText}</span>`;
-    
-    html += `
-      <div class="pet-item" data-name="${name}" data-status="${pet.status}">
-        ${iconButton}
-        <span class="pet-item-name">${name}</span>
-        ${statusDisplay}
-        ${timeDisplay}
-      </div>
-    `;
-  });
-
-  petListEl.innerHTML = html;
-
-  // アイコンボタンのクリックイベント（待機中のみ）
-  petListEl.querySelectorAll('.pet-icon-btn').forEach(btn => {
-    btn.addEventListener('click', function(e){
-      e.stopPropagation();
-      const name = this.getAttribute('data-name');
-      activatePet(name);
-    });
-  });
-  
-  // 待機中のONボタンクリックで発動
-  petListEl.querySelectorAll('.pet-item-status.waiting').forEach(btn => {
-    btn.addEventListener('click', function(e){
-      e.stopPropagation();
-      const parentItem = this.closest('.pet-item');
-      const name = parentItem.getAttribute('data-name');
-      activatePet(name);
-    });
-  });
-  
-  // 発動中のアイコンクリックでリセット
-  petListEl.querySelectorAll('.pet-icon-wrapper.active').forEach(icon => {
-    icon.addEventListener('click', function(e){
-      e.stopPropagation();
-      const name = this.getAttribute('data-name');
-      resetPetForMember(name);
-    });
-  });
-  
-  // 発動中のステータスクリックでもリセット
-  petListEl.querySelectorAll('.pet-item-status.active').forEach(btn => {
-    btn.addEventListener('click', function(e){
-      e.stopPropagation();
-      const parentItem = this.closest('.pet-item');
-      const name = parentItem.getAttribute('data-name');
-      resetPetForMember(name);
-    });
-  });
-  
-}
-
-function activatePet(name){
-  resetAllSwipeStates();
-  const pets = loadPets();
-  const now = Date.now();
-  const duration = 2 * 60 * 60 * 1000; // 2時間
-  const endTime = now + duration;
-
-  pets[name] = {
-    status: 'active',
-    endTime: endTime
-  };
-  
-  savePets(pets);
-  renderPetList();
-  resetAllSwipeStates();
-  showToast(`${name} ペット発動`);
-}
-
-function resetPetForMember(name){
-  resetAllSwipeStates();
-  const pets = loadPets();
-  pets[name] = { status: 'waiting' };
-  savePets(pets);
-  renderPetList();
-  resetAllSwipeStates();
-  showToast(`${name} リセット`);
-}
-
-function resetAllPets(){
-  if(!confirm('全員のペットスキルをリセットしますか？')){
-    return;
-  }
-
-  const pets = loadPets();
-  const currentMembers = [];
-  document.querySelectorAll('.name-text').forEach(input => {
-    const name = (input.textContent||'').trim();
-    if(name) currentMembers.push(name);
-  });
-
-  currentMembers.forEach(name => {
-    pets[name] = { status: 'waiting' };
-  });
-
-  savePets(pets);
-  renderPetList();
-}
-
-// ペットモーダルのイベント
-document.getElementById('reset-all-pets').addEventListener('click', resetAllPets);
-
-// モーダル背景クリックで閉じる
-document.getElementById('pet-modal').addEventListener('click', function(e){
-  if(e.target === this){
-    closePetModal();
-  }
-});
-
-// モーダル内のタッチイベントがホーム画面に伝播しないようにする
-document.querySelectorAll('.history-modal-content').forEach(content => {
-  content.addEventListener('touchstart', function(e){
-    e.stopPropagation();
-  }, { passive: true });
-  content.addEventListener('touchmove', function(e){
-    e.stopPropagation();
-  }, { passive: true });
-  content.addEventListener('touchend', function(e){
-    e.stopPropagation();
-  }, { passive: true });
-});
-
-/* ======= 下部ツールバー ======= */
-function toggleHistoryModal(){
-  const modal = document.getElementById('history-modal');
-  if(modal.classList.contains('show')){
-    closeHistoryModal();
-  }else{
-    openHistoryModal();
-  }
-}
-
-function togglePetModal(){
-  const modal = document.getElementById('pet-modal');
-  if(modal.classList.contains('show')){
-    closePetModal();
-  }else{
-    openPetModal();
-  }
-}
-
-// ツールバーのイベント（要素が存在する場合のみ）
-const tabHome = document.getElementById('tab-home');
-if(tabHome) tabHome.addEventListener('click', function(){
-  resetAllSwipeStates();
-  closeHistoryModal();
-  closePetModal();
-});
-const tabHistory = document.getElementById('tab-history');
-if(tabHistory) tabHistory.addEventListener('click', function(){
-  resetAllSwipeStates();
-  closePetModal();
-  toggleHistoryModal();
-});
-const tabPet = document.getElementById('tab-pet');
-if(tabPet) tabPet.addEventListener('click', function(){
-  resetAllSwipeStates();
-  closeHistoryModal();
-  togglePetModal();
-});
-
 
 /* ======= ページ切り替え ======= */
 function switchPage(pageId){
@@ -4279,38 +2598,11 @@ document.querySelectorAll('.page-tab-btn').forEach(btn => {
 /* ======= 着弾時刻発行ページ ======= */
 (function(){
 
-  function updateLandingMode(){
-    const event = document.getElementById('l-event').value;
-
-    let rallyOptions;
-    if(event === 'frost_dragon'){
-      rallyOptions = [{v:1,l:'1分'},{v:3,l:'3分'},{v:5,l:'5分'},{v:10,l:'10分'},{v:15,l:'15分'}];
-    } else if(event === 'toride'){
-      rallyOptions = [{v:1,l:'1分'},{v:3,l:'3分'}];
-    } else if(event === 'other'){
-      rallyOptions = [{v:1,l:'1分'},{v:2,l:'2分'},{v:3,l:'3分'},{v:5,l:'5分'},{v:10,l:'10分'}];
-    } else {
-      rallyOptions = [{v:5,l:'5分'},{v:10,l:'10分'}];
-    }
-    const lRallyMin = document.getElementById('l-rally-min');
-    const prevRally = parseInt(lRallyMin.value) || 0;
-    lRallyMin.innerHTML = rallyOptions.map(o=>`<option value="${o.v}">${o.l}</option>`).join('');
-    if(rallyOptions.some(o=>o.v==prevRally)){
-      lRallyMin.value = prevRally;
-    } else {
-      // 同じ値がなければ一番近い値に自動調整（データ持ち越し）
-      let nearest = rallyOptions[0];
-      let minDiff = Math.abs(nearest.v - prevRally);
-      for(const o of rallyOptions){
-        const diff = Math.abs(o.v - prevRally);
-        if(diff < minDiff){ minDiff = diff; nearest = o; }
-      }
-      lRallyMin.value = nearest.v;
-    }
-  }
-
-  document.getElementById('l-event').addEventListener('change', updateLandingMode);
-  updateLandingMode();
+  // 集結時間：カスタム入力のトグル(目的地/イベントには依存しない固定の選択肢)
+  document.getElementById('l-rally-min').addEventListener('change', function(){
+    const isCustom = this.value === 'custom';
+    document.getElementById('l-rally-custom-section').style.display = isCustom ? 'flex' : 'none';
+  });
 
   // ⓘボタン：ヒントのトグル
   document.getElementById('l-hint-btn').addEventListener('click', function(){
@@ -4334,6 +2626,15 @@ document.querySelectorAll('.page-tab-btn').forEach(btn => {
     return parseInt(sel.value) || 30;
   }
 
+  // 集結時間（プリセット or カスタム）を分で取得
+  function getLandingRallyMinutes(){
+    const sel = document.getElementById('l-rally-min');
+    if(sel.value === 'custom'){
+      return parseInt(document.getElementById('l-rally-custom-min').value) || 1;
+    }
+    return parseInt(sel.value) || 1;
+  }
+
   // 二段階集結トグル
   document.getElementById('l-two-wave').addEventListener('change', function(){
     document.getElementById('l-two-wave-section').style.display = this.checked ? 'flex' : 'none';
@@ -4341,7 +2642,7 @@ document.querySelectorAll('.page-tab-btn').forEach(btn => {
 
   // コピー共通処理
   function doCopy(timeStr, timeStr2){
-    const rallyMin = parseInt(document.getElementById('l-rally-min').value) || 1;
+    const rallyMin = getLandingRallyMinutes();
     let text;
     if(timeStr2){
       text = `${rallyMin}分集結お願いします。🙇‍♂️\n①【${timeStr} UTC】着弾\n②【${timeStr2} UTC】着弾`;
@@ -4379,7 +2680,7 @@ document.querySelectorAll('.page-tab-btn').forEach(btn => {
 
     setTimeout(function(){
       const fromNow  = getLandingPrepSeconds();
-      const rallyMin = parseInt(document.getElementById('l-rally-min').value) || 1;
+      const rallyMin = getLandingRallyMinutes();
       const twoWave  = document.getElementById('l-two-wave').checked;
 
       const now    = new Date();
@@ -4445,113 +2746,120 @@ if('serviceWorker' in navigator){
   });
 }
 
-/* ======= ペット通知システム ======= */
-const petNotificationTimers = {};
+/* ======= 行軍時間 自動算出エンジン(実測データから逆算) ======= */
+var RALLY_TARGET = { x: 599, y: 599 };
 
+function calcMarchTimeSeconds(x, y, stationBuff, pet){
+  var dx = x - RALLY_TARGET.x;
+  var dy = y - RALLY_TARGET.y;
+  var dist = Math.sqrt(dx * dx + dy * dy);
+  var slope, intercept;
+  if(stationBuff && pet){ slope = 3.4636; intercept = 5.51; }
+  else if(!stationBuff && pet){ slope = 3.9256; intercept = 5.24; }
+  else if(stationBuff && !pet){ slope = 4.3865; intercept = 4.98; }
+  else { slope = 5.0805; intercept = 4.074; }
+  return Math.max(1, Math.round(slope * dist + intercept));
+}
 
-function sendPetNotification(title, body) {
-  if (!('Notification' in window)) return;
-  if (Notification.permission !== 'granted') return;
-  
-  try {
-    new Notification(title, {
-      body: body,
-      icon: '/dog-icon.png',
-      badge: '/icon.png',
-      tag: 'pet-timer-' + Date.now(),
-      requireInteraction: false
-    });
-  } catch(e) {
-    console.log('通知エラー:', e);
+/* ======= 集結主データ(名前・座標・ステ強化・ペット・行軍時間を1つのIDで管理) =======
+   名前は識別キーにしない。memberId(固定)が唯一の識別子。 */
+var RALLY_MEMBERS_KEY = 'rallyMembers';
+
+function loadRallyMembers(){
+  try{
+    var raw = localStorage.getItem(RALLY_MEMBERS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){
+    return [];
   }
 }
 
-function schedulePetNotifications(name, endTime) {
-  cancelPetNotifications(name);
-  
-  const now = Date.now();
-  const fiveMinBefore = endTime - (5 * 60 * 1000);
-  
-  petNotificationTimers[name] = [];
-  
-  if (fiveMinBefore > now) {
-    const timer5min = setTimeout(() => {
-      sendPetNotification(
-        'ペット終了まであと5分',
-        `${name} のペットスキルが5分後に終了します`
-      );
-    }, fiveMinBefore - now);
-    petNotificationTimers[name].push(timer5min);
-  }
-  
-  if (endTime > now) {
-    const timerEnd = setTimeout(() => {
-      sendPetNotification(
-        'ペットスキル終了',
-        `${name} のペットスキルが終了しました`
-      );
-    }, endTime - now);
-    petNotificationTimers[name].push(timerEnd);
-  }
+function saveRallyMembers(list){
+  try{ localStorage.setItem(RALLY_MEMBERS_KEY, JSON.stringify(list)); }catch(e){}
 }
 
-function cancelPetNotifications(name) {
-  if (petNotificationTimers[name]) {
-    petNotificationTimers[name].forEach(timer => clearTimeout(timer));
-    delete petNotificationTimers[name];
+function findRallyMember(id){
+  var list = loadRallyMembers();
+  for(var i = 0; i < list.length; i++){
+    if(list[i].id === id) return list[i];
   }
+  return null;
 }
 
-function restoreNotificationsOnLoad() {
-  const pets = loadPets();
-  const now = Date.now();
-  
-  for (const name in pets) {
-    const pet = pets[name];
-    if (pet.status === 'active' && pet.endTime && pet.endTime > now) {
-      schedulePetNotifications(name, pet.endTime);
+function pushMemberToRoster(m){
+  if(!firebaseReady) return;
+  firebase.database().ref('roster/' + m.id).set({
+    name: m.name,
+    coordX: m.coordX,
+    coordY: m.coordY,
+    stationBuff: !!m.stationBuff,
+    pet: !!m.pet,
+    marchTime: m.marchTime
+  }).catch(function(err){ console.error('roster送信に失敗しました', err); });
+}
+
+function removeMemberFromRoster(id){
+  if(!firebaseReady) return;
+  firebase.database().ref('roster/' + id).remove().catch(function(){});
+}
+
+// data: {id(既存編集時のみ), name, coordX, coordY, stationBuff, pet}
+// idが無ければ新規発行、あれば同じIDのまま更新する(座標/ステ強化/ペット変更でIDは変わらない)
+function upsertRallyMember(data){
+  var list = loadRallyMembers();
+  var marchTime = calcMarchTimeSeconds(data.coordX, data.coordY, data.stationBuff, data.pet);
+  var member = null;
+  if(data.id){
+    for(var i = 0; i < list.length; i++){
+      if(list[i].id === data.id){ member = list[i]; break; }
     }
   }
+  if(member){
+    member.name = data.name;
+    member.coordX = data.coordX;
+    member.coordY = data.coordY;
+    member.stationBuff = !!data.stationBuff;
+    member.pet = !!data.pet;
+    member.marchTime = marchTime;
+  }else{
+    member = {
+      id: generateMemberId(),
+      name: data.name,
+      coordX: data.coordX,
+      coordY: data.coordY,
+      stationBuff: !!data.stationBuff,
+      pet: !!data.pet,
+      marchTime: marchTime
+    };
+    list.push(member);
+  }
+  saveRallyMembers(list);
+  rosterData[member.id] = { name: member.name };
+  pushMemberToRoster(member);
+  return member;
 }
 
-const originalActivatePet = activatePet;
-activatePet = function(name) {
-  if(!confirm(`${name}\nペット発動しますか？`)){
-    return;
+// 削除: rosterからも消し、同期対象だった場合は未選択に戻す(同期候補から自動除外)
+function deleteRallyMember(id){
+  var list = loadRallyMembers().filter(function(m){ return m.id !== id; });
+  saveRallyMembers(list);
+  delete rosterData[id];
+  removeMemberFromRoster(id);
+
+  var reg = loadDeviceRegistration();
+  if(reg && reg.id === id){
+    clearDeviceRegistration();
+    if(typeof stopMemberListening === 'function') stopMemberListening();
   }
-  const pets = loadPets();
-  const now = Date.now();
-  const duration = 2 * 60 * 60 * 1000;
-  const endTime = now + duration;
+  renderRallyMemberList();
+  applySyncNameUI();
+}
 
-  pets[name] = {
-    status: 'active',
-    endTime: endTime
-  };
-  
-  savePets(pets);
-  renderPetList();
-  
-  schedulePetNotifications(name, endTime);
-};
+function formatSeconds(sec){
+  return sec + '秒';
+}
 
-const originalResetPetForMember = resetPetForMember;
-resetPetForMember = function(name) {
-  cancelPetNotifications(name);
-  if(!confirm(`${name}\nリセットしますか？`)){
-    return;
-  }
-  const pets = loadPets();
-  pets[name] = { status: 'waiting' };
-  savePets(pets);
-  renderPetList();
-};
-
-window.addEventListener('load', function() {
-  restoreNotificationsOnLoad();
-});
-
-/* ======= 端末登録(設定タブ) ======= */
+/* ======= 端末登録(設定タブ: 出発時刻で登録済みの集結主から選ぶだけ) ======= */
 var DEVICE_MEMBER_ID_KEY = 'deviceMemberId';
 var DEVICE_MEMBER_NAME_KEY = 'deviceMemberName';
 
@@ -4584,96 +2892,280 @@ function setDeviceRegStatus(msg){
   if(el) el.textContent = msg || '';
 }
 
-function renderDeviceRegistrationOptions(){
-  var select = document.getElementById('device-reg-select');
-  if(!select) return;
-  select.innerHTML = '';
-  var names = Object.keys(rosterData)
-    .map(function(id){ return { id: id, name: rosterData[id] ? rosterData[id].name : '' }; })
-    .filter(function(m){ return m.name; });
-  names.sort(function(a, b){ return a.name.localeCompare(b.name, 'ja'); });
-  names.forEach(function(m){
-    var opt = document.createElement('option');
-    opt.value = m.id;
-    opt.textContent = m.name;
-    select.appendChild(opt);
-  });
-  var newOpt = document.createElement('option');
-  newOpt.value = '__new__';
-  newOpt.textContent = '＋ 新しい名前を追加';
-  select.appendChild(newOpt);
+function applySyncNameUI(){
+  var reg = loadDeviceRegistration();
+  var valueEl = document.getElementById('sync-name-value');
+  if(valueEl) valueEl.textContent = reg ? reg.name : '未選択';
+  setDeviceRegStatus(reg ? '' : 'タップして集結主を選択してください');
 }
 
-function applyDeviceRegistrationUI(){
-  var reg = loadDeviceRegistration();
-  var unregisteredEl = document.getElementById('device-reg-unregistered');
-  var registeredEl = document.getElementById('device-reg-registered');
-  if(!unregisteredEl || !registeredEl) return;
-  if(reg){
-    unregisteredEl.style.display = 'none';
-    registeredEl.style.display = '';
-    document.getElementById('device-reg-current-name').textContent = reg.name || '(名称未設定)';
-  }else{
-    unregisteredEl.style.display = '';
-    registeredEl.style.display = 'none';
-    renderDeviceRegistrationOptions();
-    document.getElementById('device-reg-new-name-row').style.display = 'none';
+function renderSyncNameList(){
+  var listEl = document.getElementById('sync-name-list');
+  if(!listEl) return;
+  listEl.innerHTML = '';
+  var members = loadRallyMembers();
+  if(members.length === 0){
+    var empty = document.createElement('div');
+    empty.style.cssText = 'padding:24px 4px;color:var(--text-muted);font-size:14px;text-align:center';
+    empty.textContent = '出発時刻タブで集結主を登録してください';
+    listEl.appendChild(empty);
+    return;
   }
-  setDeviceRegStatus('');
+  members.forEach(function(m){
+    var row = document.createElement('div');
+    row.className = 'l-row';
+    row.style.cursor = 'pointer';
+    var label = document.createElement('span');
+    label.className = 'l-label';
+    label.textContent = m.name;
+    row.appendChild(label);
+    row.addEventListener('click', function(){
+      saveDeviceRegistration(m.id, m.name);
+      applySyncNameUI();
+      closeSyncNameSheet();
+      if(typeof startMemberListening === 'function') startMemberListening(m.id);
+    });
+    listEl.appendChild(row);
+  });
+}
+
+function openSyncNameSheet(){
+  renderSyncNameList();
+  document.body.classList.add('modal-open');
+  var sheet = document.getElementById('sync-name-sheet');
+  if(sheet) sheet.classList.add('show');
+}
+function closeSyncNameSheet(){
+  var sheet = document.getElementById('sync-name-sheet');
+  if(sheet) sheet.classList.remove('show');
+  document.body.classList.remove('modal-open');
 }
 
 (function(){
- try{
-  var select = document.getElementById('device-reg-select');
-  var newNameRow = document.getElementById('device-reg-new-name-row');
-  var newNameInput = document.getElementById('device-reg-new-name');
-  var confirmBtn = document.getElementById('device-reg-confirm-btn');
-  var changeBtn = document.getElementById('device-reg-change-btn');
-
-  if(select){
-    select.addEventListener('change', function(){
-      newNameRow.style.display = (select.value === '__new__') ? '' : 'none';
-    });
-  }
-
-  if(confirmBtn){
-    confirmBtn.addEventListener('click', function(){
-      var id, name;
-      if(select.value === '__new__'){
-        name = (newNameInput.value || '').trim();
-        if(!name){
-          setDeviceRegStatus('名前を入力してください');
-          return;
-        }
-        id = ensureMemberId(name, null);
-      }else{
-        id = select.value;
-        name = rosterData[id] ? rosterData[id].name : '';
-        if(!id || !name){
-          setDeviceRegStatus('名前を選択してください');
-          return;
-        }
-      }
-      saveDeviceRegistration(id, name);
-      applyDeviceRegistrationUI();
-      if(typeof startMemberListening === 'function') startMemberListening(id);
-    });
-  }
-
-  if(changeBtn){
-    changeBtn.addEventListener('click', function(){
-      clearDeviceRegistration();
-      if(typeof stopMemberListening === 'function') stopMemberListening();
-      applyDeviceRegistrationUI();
-    });
-  }
-
-  applyDeviceRegistrationUI();
- }catch(e){
-  console.error('端末登録UI初期化エラー', e);
-  setDeviceRegStatus('端末登録の初期化に失敗しました: ' + (e && e.message ? e.message : e));
- }
+  var row = document.getElementById('sync-name-row');
+  if(row) row.addEventListener('click', openSyncNameSheet);
+  applySyncNameUI();
 })();
+
+/* ======= 出発時刻タブ: 集結主リスト表示(名前/行軍/ペットON-OFF直接切替) ======= */
+function renderRallyMemberList(){
+  var listEl = document.getElementById('rally-member-list');
+  if(!listEl) return;
+  listEl.innerHTML = '';
+  var members = loadRallyMembers();
+  members.forEach(function(m){
+    var row = document.createElement('div');
+    row.className = 'rally-member-row';
+
+    var nameEl = document.createElement('span');
+    nameEl.className = 'rally-member-name';
+    nameEl.textContent = m.name;
+
+    var marchEl = document.createElement('span');
+    marchEl.className = 'rally-member-march';
+    marchEl.textContent = formatSeconds(m.marchTime);
+
+    var petWrap = document.createElement('span');
+    petWrap.className = 'rally-member-pet';
+    var petToggle = document.createElement('input');
+    petToggle.type = 'checkbox';
+    petToggle.className = 'rally-pet-checkbox';
+    petToggle.checked = !!m.pet;
+    petToggle.addEventListener('click', function(e){ e.stopPropagation(); });
+    petToggle.addEventListener('change', function(){
+      var updated = upsertRallyMember({
+        id: m.id, name: m.name, coordX: m.coordX, coordY: m.coordY,
+        stationBuff: m.stationBuff, pet: petToggle.checked
+      });
+      marchEl.textContent = formatSeconds(updated.marchTime);
+    });
+    petWrap.appendChild(petToggle);
+
+    row.appendChild(nameEl);
+    row.appendChild(marchEl);
+    row.appendChild(petWrap);
+    row.addEventListener('click', function(){ openMemberSheet(m.id); });
+
+    listEl.appendChild(row);
+  });
+}
+
+/* ======= 集結主 追加/編集シート ======= */
+var memberSheetEditingId = null;
+
+function setSegmentedToggle(containerId, value){
+  var container = document.getElementById(containerId);
+  if(!container) return;
+  Array.prototype.forEach.call(container.querySelectorAll('.segmented-toggle-btn'), function(btn){
+    btn.classList.toggle('active', btn.dataset.value === value);
+  });
+}
+function getSegmentedToggleValue(containerId){
+  var container = document.getElementById(containerId);
+  if(!container) return '0';
+  var active = container.querySelector('.segmented-toggle-btn.active');
+  return active ? active.dataset.value : '0';
+}
+
+function updateMemberSheetMarchPreview(){
+  var x = parseFloat(document.getElementById('member-sheet-x').value);
+  var y = parseFloat(document.getElementById('member-sheet-y').value);
+  var previewEl = document.getElementById('member-sheet-march-preview');
+  if(!previewEl) return;
+  if(isNaN(x) || isNaN(y)){
+    previewEl.textContent = '-秒';
+    return;
+  }
+  var buff = getSegmentedToggleValue('member-sheet-buff-toggle') === '1';
+  var pet = getSegmentedToggleValue('member-sheet-pet-toggle') === '1';
+  previewEl.textContent = formatSeconds(calcMarchTimeSeconds(x, y, buff, pet));
+}
+
+function openMemberSheet(id){
+  memberSheetEditingId = id || null;
+  var m = id ? findRallyMember(id) : null;
+  document.getElementById('member-sheet-title').textContent = m ? '集結主を編集' : '集結主を追加';
+  document.getElementById('member-sheet-name').value = m ? m.name : '';
+  document.getElementById('member-sheet-x').value = m ? m.coordX : '';
+  document.getElementById('member-sheet-y').value = m ? m.coordY : '';
+  setSegmentedToggle('member-sheet-buff-toggle', m && m.stationBuff ? '1' : '0');
+  setSegmentedToggle('member-sheet-pet-toggle', m && m.pet ? '1' : '0');
+  document.getElementById('member-sheet-save-btn').textContent = m ? '保存' : '追加';
+  document.getElementById('member-sheet-delete-btn').style.display = m ? 'block' : 'none';
+  updateMemberSheetMarchPreview();
+  document.body.classList.add('modal-open');
+  document.getElementById('member-sheet').classList.add('show');
+}
+
+function closeMemberSheet(){
+  document.getElementById('member-sheet').classList.remove('show');
+  document.body.classList.remove('modal-open');
+}
+
+(function(){
+  var addBtn = document.getElementById('rally-add-member-btn');
+  if(addBtn) addBtn.addEventListener('click', function(){ openMemberSheet(null); });
+
+  ['member-sheet-buff-toggle', 'member-sheet-pet-toggle'].forEach(function(containerId){
+    var container = document.getElementById(containerId);
+    if(!container) return;
+    Array.prototype.forEach.call(container.querySelectorAll('.segmented-toggle-btn'), function(btn){
+      btn.addEventListener('click', function(){
+        setSegmentedToggle(containerId, btn.dataset.value);
+        updateMemberSheetMarchPreview();
+      });
+    });
+  });
+
+  var xInput = document.getElementById('member-sheet-x');
+  var yInput = document.getElementById('member-sheet-y');
+  if(xInput) xInput.addEventListener('input', updateMemberSheetMarchPreview);
+  if(yInput) yInput.addEventListener('input', updateMemberSheetMarchPreview);
+
+  var saveBtn = document.getElementById('member-sheet-save-btn');
+  if(saveBtn){
+    saveBtn.addEventListener('click', function(){
+      var name = (document.getElementById('member-sheet-name').value || '').trim();
+      var x = parseFloat(document.getElementById('member-sheet-x').value);
+      var y = parseFloat(document.getElementById('member-sheet-y').value);
+      if(!name){ alert('名前を入力してください'); return; }
+      if(isNaN(x) || isNaN(y)){ alert('座標を入力してください'); return; }
+      var buff = getSegmentedToggleValue('member-sheet-buff-toggle') === '1';
+      var pet = getSegmentedToggleValue('member-sheet-pet-toggle') === '1';
+      var updated = upsertRallyMember({
+        id: memberSheetEditingId, name: name, coordX: x, coordY: y,
+        stationBuff: buff, pet: pet
+      });
+      // 名前変更を同期対象の表示にも反映(同じmemberIdのまま名前だけ更新)
+      var reg = loadDeviceRegistration();
+      if(reg && reg.id === updated.id && reg.name !== updated.name){
+        saveDeviceRegistration(updated.id, updated.name);
+        applySyncNameUI();
+      }
+      closeMemberSheet();
+      renderRallyMemberList();
+    });
+  }
+
+  var deleteBtn = document.getElementById('member-sheet-delete-btn');
+  if(deleteBtn){
+    deleteBtn.addEventListener('click', function(){
+      if(!memberSheetEditingId) return;
+      if(!confirm('この集結主を削除しますか？')) return;
+      deleteRallyMember(memberSheetEditingId);
+      closeMemberSheet();
+    });
+  }
+})();
+
+/* ======= 出発時刻タブ: 開始/集結時間のカスタム切替、計算開始 ======= */
+(function(){
+  var startSel = document.getElementById('dep-start-select');
+  if(startSel){
+    startSel.addEventListener('change', function(){
+      document.getElementById('dep-start-custom-section').style.display = (this.value === 'custom') ? 'flex' : 'none';
+    });
+  }
+  var raSel = document.getElementById('dep-rally-select');
+  if(raSel){
+    raSel.addEventListener('change', function(){
+      document.getElementById('dep-rally-custom-section').style.display = (this.value === 'custom') ? 'flex' : 'none';
+    });
+  }
+})();
+
+function getDepartureStartSeconds(){
+  var sel = document.getElementById('dep-start-select');
+  if(sel.value === 'custom'){
+    var min = parseInt(document.getElementById('dep-start-custom-min').value) || 0;
+    var sec = parseInt(document.getElementById('dep-start-custom-sec').value) || 0;
+    return min * 60 + sec;
+  }
+  return parseInt(sel.value) || 30;
+}
+
+function getDepartureRallyMinutes(){
+  var sel = document.getElementById('dep-rally-select');
+  if(sel.value === 'custom'){
+    return parseInt(document.getElementById('dep-rally-custom-min').value) || 1;
+  }
+  return parseInt(sel.value) || 1;
+}
+
+(function(){
+  var btn = document.getElementById('dep-action-btn');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    var members = loadRallyMembers();
+    var startSec = getDepartureStartSeconds();
+    var rallyMin = getDepartureRallyMinutes();
+    var now = new Date();
+    var maxMarch = 0;
+    members.forEach(function(m){ if(m.marchTime > maxMarch) maxMarch = m.marchTime; });
+
+    var arriveUtc = new Date(now.getTime() + startSec * 1000 + rallyMin * 60 * 1000 + maxMarch * 1000);
+    document.getElementById('dep-impact-time').textContent =
+      pad2(arriveUtc.getUTCHours()) + ':' + pad2(arriveUtc.getUTCMinutes()) + ':' + pad2(arriveUtc.getUTCSeconds());
+
+    var membersPayload = {};
+    members.forEach(function(m){
+      var dep = new Date(now.getTime() + startSec * 1000 + (maxMarch - m.marchTime) * 1000);
+      membersPayload[m.id] = { name: m.name, launchTime: dep.toISOString() };
+    });
+
+    if(firebaseReady){
+      firebase.database().ref('activeRally').set({
+        landingTime: arriveUtc.toISOString(),
+        updatedAt: serverNow(),
+        members: membersPayload
+      }).catch(function(err){ console.error('activeRally送信に失敗しました', err); });
+    }
+
+    showToast('✓ 計算しました');
+  });
+})();
+
+renderRallyMemberList();
 
 /* ======= Picture in Picture(集結時刻カウントダウン表示) =======
    canvas -> captureStream() -> video -> requestPictureInPicture()。
