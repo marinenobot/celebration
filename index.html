@@ -621,17 +621,16 @@ body.modal-open .member-row-wrapper {
 /* ===== 出発時刻: 集結主リスト(新) ===== */
 .rally-member-list-header{
   display:grid;
-  grid-template-columns:1fr 70px 60px;
+  grid-template-columns:1fr 70px;
   padding:8px 2px;
   font-size:12px;
   color:var(--text-muted);
 }
 .rally-member-list-header span:nth-child(2){ text-align:right; }
-.rally-member-list-header span:nth-child(3){ text-align:right; }
 
 .rally-member-row{
   display:grid;
-  grid-template-columns:1fr 70px 60px;
+  grid-template-columns:1fr 70px;
   align-items:center;
   padding:12px 2px;
   border-bottom:1px solid var(--border);
@@ -653,75 +652,7 @@ body.modal-open .member-row-wrapper {
   color:var(--text-muted);
   text-align:right;
   font-variant-numeric:tabular-nums;
-  padding-right:10px;
-}
-.rally-member-pet{
-  display:flex;
-  justify-content:flex-end;
-}
-
-/* iOS風ミニトグル(集結主一覧のペットON/OFF直接切替用) */
-.rally-pet-checkbox{
-  -webkit-appearance:none !important;
-  appearance:none !important;
-  width:40px !important;
-  height:24px !important;
-  min-width:40px !important;
-  min-height:24px !important;
-  margin:0 !important;
-  padding:0 !important;
-  border:none !important;
-  border-radius:999px !important;
-  background:#E5E5EA !important;
-  position:relative;
-  cursor:pointer;
-  transition:background 0.2s;
-}
-.rally-pet-checkbox::after{
-  content:'';
-  position:absolute;
-  top:2px;
-  left:2px;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:0 1px 2px rgba(0,0,0,0.2);
-  transition:left 0.2s;
-}
-.rally-pet-checkbox:checked{
-  background:var(--blue-primary) !important;
-}
-.rally-pet-checkbox:checked::after{
-  left:18px;
-}
-
-/* 追加/編集シート内: 2択セグメント */
-.segmented-toggle{
-  display:flex;
-  border-radius:8px;
-  overflow:hidden;
-  border:1px solid var(--border);
-}
-.segmented-toggle-btn{
-  width:auto !important;
-  min-height:32px !important;
-  margin:0 !important;
-  padding:6px 14px !important;
-  font-size:14px !important;
-  font-weight:600 !important;
-  background:var(--card-bg) !important;
-  color:var(--text-muted) !important;
-  border:none !important;
-  border-radius:0 !important;
-  box-shadow:none !important;
-}
-.segmented-toggle-btn + .segmented-toggle-btn{
-  border-left:1px solid var(--border);
-}
-.segmented-toggle-btn.active{
-  background:var(--blue-primary) !important;
-  color:#fff !important;
+  padding-right:2px;
 }
 
 /* コントロールボタン */
@@ -2221,7 +2152,7 @@ body.landing-active{ background:var(--bg); }
 
     <div class="mode-card" style="margin-top:var(--spacing)">
       <div class="rally-member-list-header">
-        <span>集結主</span><span>行軍</span><span>ペット</span>
+        <span>集結主</span><span>行軍</span>
       </div>
       <div id="rally-member-list"></div>
       <button type="button" id="rally-add-member-btn" class="control-btn full-width" style="margin-top:10px">＋ 集結主</button>
@@ -2404,35 +2335,12 @@ body.landing-active{ background:var(--bg); }
         <input type="text" id="member-sheet-name" class="inline-select" style="text-align:right;flex:1;min-width:0" placeholder="名前を入力" autocapitalize="off" autocorrect="off">
       </div>
       <div class="l-row">
-        <span class="l-label">座標</span>
+        <span class="l-label">行軍時間</span>
         <span style="display:flex;align-items:center;gap:4px">
-          <input type="number" id="member-sheet-x" class="inline-select" style="width:64px;text-align:right" placeholder="X">
-          <span class="inline-text">,</span>
-          <input type="number" id="member-sheet-y" class="inline-select" style="width:64px;text-align:right" placeholder="Y">
+          <input type="number" id="member-sheet-march" class="inline-select" style="width:70px;text-align:right" placeholder="秒数">
+          <span class="inline-text">秒</span>
         </span>
       </div>
-      <div class="l-row">
-        <span class="l-label">ステ強化</span>
-        <div class="segmented-toggle" id="member-sheet-buff-toggle">
-          <button type="button" class="segmented-toggle-btn active" data-value="0">なし</button>
-          <button type="button" class="segmented-toggle-btn" data-value="1">あり</button>
-        </div>
-      </div>
-      <div class="l-row">
-        <span class="l-label">ペット</span>
-        <div class="segmented-toggle" id="member-sheet-pet-toggle">
-          <button type="button" class="segmented-toggle-btn active" data-value="0">OFF</button>
-          <button type="button" class="segmented-toggle-btn" data-value="1">ON</button>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="l-row">
-        <span class="l-label">行軍時間</span>
-        <span id="member-sheet-march-preview" class="inline-text" style="font-weight:700;color:var(--blue-text);font-size:18px">-秒</span>
-      </div>
-      <div style="text-align:right;font-size:11px;color:var(--text-tertiary);margin-top:-6px">自動算出</div>
 
       <button type="button" id="member-sheet-save-btn" class="btn-primary full-width margin-top">追加</button>
       <button type="button" id="member-sheet-delete-btn" class="history-btn danger full-width" style="margin-top:8px;display:none">この集結主を削除</button>
@@ -2748,38 +2656,9 @@ if('serviceWorker' in navigator){
 
 /* ======= 行軍時間 実測マスターテーブル(計算式は使わず、いただいた数値をそのまま参照) =======
    目的地(599,599)からの |dx|,|dy| の組み合わせ(順序・符号は無関係)で決まる。
-   各値は [10%(ステ強化なし/ペットOFF), 25%(ステ強化あり/ペットOFF),
-           40%(ステ強化なし/ペットON), 55%(ステ強化あり/ペットON)] */
-var RALLY_TARGET = { x: 599, y: 599 };
+   座標機能は削除。行軍時間は集結主ごとに手入力する。 */
 
-var MARCH_TIME_TABLE = {
-  '1,7': [40, 36, 33, 30],
-  '1,9': [50, 45, 41, 37],
-  '3,7': [43, 39, 35, 32],
-  '3,9': [52, 47, 42, 39],
-  '5,7': [48, 43, 39, 36],
-  '5,9': [56, 50, 45, 41],
-  '7,7': [54, 48, 44, 40],
-  '7,9': [62, 55, 50, 45]
-};
-
-// テーブルに無い座標の場合は null を返す(推測・計算はしない)
-function calcMarchTimeSeconds(x, y, stationBuff, pet){
-  var dx = Math.abs(x - RALLY_TARGET.x);
-  var dy = Math.abs(y - RALLY_TARGET.y);
-  var a = Math.min(dx, dy);
-  var b = Math.max(dx, dy);
-  var row = MARCH_TIME_TABLE[a + ',' + b];
-  if(!row) return null;
-  var idx;
-  if(!stationBuff && !pet) idx = 0;
-  else if(stationBuff && !pet) idx = 1;
-  else if(!stationBuff && pet) idx = 2;
-  else idx = 3;
-  return row[idx];
-}
-
-/* ======= 集結主データ(名前・座標・ステ強化・ペット・行軍時間を1つのIDで管理) =======
+/* ======= 集結主データ(名前・行軍時間を1つのIDで管理) =======
    名前は識別キーにしない。memberId(固定)が唯一の識別子。 */
 var RALLY_MEMBERS_KEY = 'rallyMembers';
 
@@ -2808,10 +2687,6 @@ function pushMemberToRoster(m){
   if(!firebaseReady) return;
   firebase.database().ref('roster/' + m.id).set({
     name: m.name,
-    coordX: m.coordX,
-    coordY: m.coordY,
-    stationBuff: !!m.stationBuff,
-    pet: !!m.pet,
     marchTime: m.marchTime
   }).catch(function(err){ console.error('roster送信に失敗しました', err); });
 }
@@ -2821,11 +2696,10 @@ function removeMemberFromRoster(id){
   firebase.database().ref('roster/' + id).remove().catch(function(){});
 }
 
-// data: {id(既存編集時のみ), name, coordX, coordY, stationBuff, pet}
-// idが無ければ新規発行、あれば同じIDのまま更新する(座標/ステ強化/ペット変更でIDは変わらない)
+// data: {id(既存編集時のみ), name, marchTime}
+// idが無ければ新規発行、あれば同じIDのまま更新する(名前・行軍時間変更でIDは変わらない)
 function upsertRallyMember(data){
   var list = loadRallyMembers();
-  var marchTime = calcMarchTimeSeconds(data.coordX, data.coordY, data.stationBuff, data.pet);
   var member = null;
   if(data.id){
     for(var i = 0; i < list.length; i++){
@@ -2834,20 +2708,12 @@ function upsertRallyMember(data){
   }
   if(member){
     member.name = data.name;
-    member.coordX = data.coordX;
-    member.coordY = data.coordY;
-    member.stationBuff = !!data.stationBuff;
-    member.pet = !!data.pet;
-    member.marchTime = marchTime;
+    member.marchTime = data.marchTime;
   }else{
     member = {
       id: generateMemberId(),
       name: data.name,
-      coordX: data.coordX,
-      coordY: data.coordY,
-      stationBuff: !!data.stationBuff,
-      pet: !!data.pet,
-      marchTime: marchTime
+      marchTime: data.marchTime
     };
     list.push(member);
   }
@@ -2874,7 +2740,7 @@ function deleteRallyMember(id){
 }
 
 function formatSeconds(sec){
-  return (sec === null || sec === undefined) ? '対応範囲外' : sec + '秒';
+  return (sec === null || sec === undefined || isNaN(sec)) ? '-秒' : sec + '秒';
 }
 
 /* ======= 端末登録(設定タブ: 出発時刻で登録済みの集結主から選ぶだけ) ======= */
@@ -2983,25 +2849,8 @@ function renderRallyMemberList(){
     marchEl.className = 'rally-member-march';
     marchEl.textContent = formatSeconds(m.marchTime);
 
-    var petWrap = document.createElement('span');
-    petWrap.className = 'rally-member-pet';
-    var petToggle = document.createElement('input');
-    petToggle.type = 'checkbox';
-    petToggle.className = 'rally-pet-checkbox';
-    petToggle.checked = !!m.pet;
-    petToggle.addEventListener('click', function(e){ e.stopPropagation(); });
-    petToggle.addEventListener('change', function(){
-      var updated = upsertRallyMember({
-        id: m.id, name: m.name, coordX: m.coordX, coordY: m.coordY,
-        stationBuff: m.stationBuff, pet: petToggle.checked
-      });
-      marchEl.textContent = formatSeconds(updated.marchTime);
-    });
-    petWrap.appendChild(petToggle);
-
     row.appendChild(nameEl);
     row.appendChild(marchEl);
-    row.appendChild(petWrap);
     row.addEventListener('click', function(){ openMemberSheet(m.id); });
 
     listEl.appendChild(row);
@@ -3011,47 +2860,14 @@ function renderRallyMemberList(){
 /* ======= 集結主 追加/編集シート ======= */
 var memberSheetEditingId = null;
 
-function setSegmentedToggle(containerId, value){
-  var container = document.getElementById(containerId);
-  if(!container) return;
-  Array.prototype.forEach.call(container.querySelectorAll('.segmented-toggle-btn'), function(btn){
-    btn.classList.toggle('active', btn.dataset.value === value);
-  });
-}
-function getSegmentedToggleValue(containerId){
-  var container = document.getElementById(containerId);
-  if(!container) return '0';
-  var active = container.querySelector('.segmented-toggle-btn.active');
-  return active ? active.dataset.value : '0';
-}
-
-function updateMemberSheetMarchPreview(){
-  var x = parseFloat(document.getElementById('member-sheet-x').value);
-  var y = parseFloat(document.getElementById('member-sheet-y').value);
-  var previewEl = document.getElementById('member-sheet-march-preview');
-  if(!previewEl) return;
-  if(isNaN(x) || isNaN(y)){
-    previewEl.textContent = '-秒';
-    return;
-  }
-  var buff = getSegmentedToggleValue('member-sheet-buff-toggle') === '1';
-  var pet = getSegmentedToggleValue('member-sheet-pet-toggle') === '1';
-  var t = calcMarchTimeSeconds(x, y, buff, pet);
-  previewEl.textContent = (t === null) ? '対応範囲外' : formatSeconds(t);
-}
-
 function openMemberSheet(id){
   memberSheetEditingId = id || null;
   var m = id ? findRallyMember(id) : null;
   document.getElementById('member-sheet-title').textContent = m ? '集結主を編集' : '集結主を追加';
   document.getElementById('member-sheet-name').value = m ? m.name : '';
-  document.getElementById('member-sheet-x').value = m ? m.coordX : '';
-  document.getElementById('member-sheet-y').value = m ? m.coordY : '';
-  setSegmentedToggle('member-sheet-buff-toggle', m && m.stationBuff ? '1' : '0');
-  setSegmentedToggle('member-sheet-pet-toggle', m && m.pet ? '1' : '0');
+  document.getElementById('member-sheet-march').value = (m && typeof m.marchTime === 'number') ? m.marchTime : '';
   document.getElementById('member-sheet-save-btn').textContent = m ? '保存' : '追加';
   document.getElementById('member-sheet-delete-btn').style.display = m ? 'block' : 'none';
-  updateMemberSheetMarchPreview();
   document.body.classList.add('modal-open');
   document.getElementById('member-sheet').classList.add('show');
 }
@@ -3065,35 +2881,15 @@ function closeMemberSheet(){
   var addBtn = document.getElementById('rally-add-member-btn');
   if(addBtn) addBtn.addEventListener('click', function(){ openMemberSheet(null); });
 
-  ['member-sheet-buff-toggle', 'member-sheet-pet-toggle'].forEach(function(containerId){
-    var container = document.getElementById(containerId);
-    if(!container) return;
-    Array.prototype.forEach.call(container.querySelectorAll('.segmented-toggle-btn'), function(btn){
-      btn.addEventListener('click', function(){
-        setSegmentedToggle(containerId, btn.dataset.value);
-        updateMemberSheetMarchPreview();
-      });
-    });
-  });
-
-  var xInput = document.getElementById('member-sheet-x');
-  var yInput = document.getElementById('member-sheet-y');
-  if(xInput) xInput.addEventListener('input', updateMemberSheetMarchPreview);
-  if(yInput) yInput.addEventListener('input', updateMemberSheetMarchPreview);
-
   var saveBtn = document.getElementById('member-sheet-save-btn');
   if(saveBtn){
     saveBtn.addEventListener('click', function(){
       var name = (document.getElementById('member-sheet-name').value || '').trim();
-      var x = parseFloat(document.getElementById('member-sheet-x').value);
-      var y = parseFloat(document.getElementById('member-sheet-y').value);
+      var marchTime = parseInt(document.getElementById('member-sheet-march').value, 10);
       if(!name){ alert('名前を入力してください'); return; }
-      if(isNaN(x) || isNaN(y)){ alert('座標を入力してください'); return; }
-      var buff = getSegmentedToggleValue('member-sheet-buff-toggle') === '1';
-      var pet = getSegmentedToggleValue('member-sheet-pet-toggle') === '1';
+      if(isNaN(marchTime) || marchTime <= 0){ alert('行軍時間を入力してください'); return; }
       var updated = upsertRallyMember({
-        id: memberSheetEditingId, name: name, coordX: x, coordY: y,
-        stationBuff: buff, pet: pet
+        id: memberSheetEditingId, name: name, marchTime: marchTime
       });
       // 名前変更を同期対象の表示にも反映(同じmemberIdのまま名前だけ更新)
       var reg = loadDeviceRegistration();
