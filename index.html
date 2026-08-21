@@ -3255,7 +3255,7 @@ body.departure-edit-open{
     <button type="button" id="app-settings-button" class="app-settings-button" aria-label="設定を開く">…</button>
     <div class="clock aligned-box" id="utc-clock-trigger" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="utc-clock-overlay" aria-label="UTC時計を拡大表示">
       <span class="clock-heading">現在時刻</span>
-      <div class="clock-time-line"><span class="clock-time-value"><span id="utc-now">--:--:--</span><span id="utc-millis">.00</span></span><span class="utc-label">UTC</span></div>
+      <div class="clock-time-line"><span class="clock-time-value"><span id="utc-now">--:--:--</span><span id="utc-millis">:00</span></span><span class="utc-label">UTC</span></div>
       <span class="clock-tap-hint">タップでPiP小窓</span>
     </div>
     <div id="device-countdown-card" class="device-countdown-card" hidden><span id="device-countdown-name" class="device-countdown-name"></span><span>出発まで残り</span><span id="device-countdown-time" class="device-countdown-time">--:--:--</span></div>
@@ -3483,7 +3483,7 @@ body.departure-edit-open{
   <div class="utc-clock-overlay-card" role="dialog" aria-modal="true" aria-label="UTC時計">
     <button type="button" id="utc-clock-overlay-close" class="utc-clock-overlay-close" aria-label="閉じる">×</button>
     <div class="utc-clock-overlay-label">現在時刻</div>
-    <div class="utc-clock-overlay-time-line"><span id="utc-overlay-time">--:--:--</span><span id="utc-overlay-millis">.00</span><span class="utc-clock-overlay-unit">UTC</span></div>
+    <div class="utc-clock-overlay-time-line"><span id="utc-overlay-time">--:--:--</span><span id="utc-overlay-millis">:00</span><span class="utc-clock-overlay-unit">UTC</span></div>
   </div>
 </div>
 
@@ -3772,7 +3772,17 @@ const utcPipContext = utcPipCanvas?.getContext('2d');
 let utcPipWindow = null;
 let utcVideoPipStream = null;
 
-function drawUtcVideoFrame(timeText, millisText){
+function getUtcPipDepartureData(){
+  if(!currentRemoteDeparture) return null;
+  const remainingMs = currentRemoteDeparture.departureTime - firebaseNow();
+  if(remainingMs <= 0) return null;
+  return {
+    name:currentRemoteDeparture.name,
+    countdown:formatCountdown(remainingMs / 1000)
+  };
+}
+
+function drawUtcVideoFrame(timeText, millisText, departureData){
   if(!utcPipContext || !utcPipCanvas) return;
   const ctx = utcPipContext;
   const width = utcPipCanvas.width;
@@ -3781,15 +3791,36 @@ function drawUtcVideoFrame(timeText, millisText){
   ctx.fillRect(0, 0, width, height);
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#aeb0b5';
-  ctx.font = '700 30px -apple-system, BlinkMacSystemFont, sans-serif';
-  ctx.fillText('現在時刻 UTC', width / 2, 92);
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '800 76px ui-monospace, SFMono-Regular, Menlo, monospace';
-  ctx.fillText(`${timeText}.${millisText}`, width / 2, 202);
-  ctx.fillStyle = '#77777d';
-  ctx.font = '600 22px -apple-system, BlinkMacSystemFont, sans-serif';
-  ctx.fillText('submarineride.live', width / 2, 292);
+  if(departureData){
+    ctx.fillStyle = '#aeb0b5';
+    ctx.font = '700 24px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillText('現在時刻 UTC', width / 2, 42);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '800 58px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.fillText(`${timeText}:${millisText}`, width / 2, 108);
+    ctx.fillStyle = '#0d2b49';
+    ctx.fillRect(44, 162, width - 88, 154);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '800 27px -apple-system, BlinkMacSystemFont, sans-serif';
+    const displayName = departureData.name.length > 15 ? `${departureData.name.slice(0, 15)}…` : departureData.name;
+    ctx.fillText(displayName, width / 2, 201);
+    ctx.fillStyle = '#8ec8ff';
+    ctx.font = '700 21px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillText('出発まで残り', width / 2, 238);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '800 48px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.fillText(departureData.countdown, width / 2, 282);
+  }else{
+    ctx.fillStyle = '#aeb0b5';
+    ctx.font = '700 30px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillText('現在時刻 UTC', width / 2, 92);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '800 76px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.fillText(`${timeText}:${millisText}`, width / 2, 202);
+    ctx.fillStyle = '#77777d';
+    ctx.font = '600 22px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillText('submarineride.live', width / 2, 292);
+  }
 }
 
 function tickUTC(){
@@ -3797,18 +3828,29 @@ function tickUTC(){
   const utcText = `${pad2(d.getUTCHours())}:${pad2(d.getUTCMinutes())}:${pad2(d.getUTCSeconds())}`;
   const millisText = String(Math.floor(d.getUTCMilliseconds() / 10)).padStart(2, '0');
   document.getElementById('utc-now').textContent = utcText;
-  document.getElementById('utc-millis').textContent = `.${millisText}`;
+  document.getElementById('utc-millis').textContent = `:${millisText}`;
   const overlayTime = document.getElementById('utc-overlay-time');
   const overlayMillis = document.getElementById('utc-overlay-millis');
   if(overlayTime) overlayTime.textContent = utcText;
-  if(overlayMillis) overlayMillis.textContent = `.${millisText}`;
+  if(overlayMillis) overlayMillis.textContent = `:${millisText}`;
+  const departureData = getUtcPipDepartureData();
   if(utcPipWindow && !utcPipWindow.closed){
     const pipTime = utcPipWindow.document.getElementById('utc-pip-time');
     const pipMillis = utcPipWindow.document.getElementById('utc-pip-millis');
+    const pipCountdown = utcPipWindow.document.getElementById('utc-pip-countdown');
+    const pipCountdownName = utcPipWindow.document.getElementById('utc-pip-countdown-name');
+    const pipCountdownValue = utcPipWindow.document.getElementById('utc-pip-countdown-value');
     if(pipTime) pipTime.textContent = utcText;
-    if(pipMillis) pipMillis.textContent = `.${millisText}`;
+    if(pipMillis) pipMillis.textContent = `:${millisText}`;
+    if(pipCountdown){
+      pipCountdown.hidden = !departureData;
+      if(departureData){
+        if(pipCountdownName) pipCountdownName.textContent = departureData.name;
+        if(pipCountdownValue) pipCountdownValue.textContent = departureData.countdown;
+      }
+    }
   }
-  drawUtcVideoFrame(utcText, millisText);
+  drawUtcVideoFrame(utcText, millisText, departureData);
 }
 
 setInterval(tickUTC,40); tickUTC();
@@ -3868,9 +3910,9 @@ async function openUtcClockOverlay(){
       utcPipWindow.document.head.innerHTML = `<meta charset="UTF-8"><style>
         *{box-sizing:border-box} body{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh;margin:0;background:#141416;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden}
         .pip-clock{text-align:center}.pip-label{margin-bottom:5px;color:#aeb0b5;font-size:12px;font-weight:700}.pip-line{display:flex;align-items:baseline;justify-content:center;gap:8px;white-space:nowrap}
-        #utc-pip-time{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:34px;font-weight:800;letter-spacing:-.06em;font-variant-numeric:tabular-nums}#utc-pip-millis{color:#d0d0d4;font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:19px;font-weight:800}.pip-unit{color:#aeb0b5;font-size:14px;font-weight:700}
+        #utc-pip-time{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:32px;font-weight:800;letter-spacing:-.06em;font-variant-numeric:tabular-nums}#utc-pip-millis{color:#d0d0d4;font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:18px;font-weight:800}.pip-unit{color:#aeb0b5;font-size:13px;font-weight:700}.pip-countdown{min-width:240px;margin:9px auto 0;padding:6px 10px;border-radius:10px;background:#0d2b49}.pip-countdown[hidden]{display:none}.pip-countdown-name{overflow:hidden;color:#fff;font-size:11px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}.pip-countdown-label{color:#8ec8ff;font-size:9px;font-weight:700}.pip-countdown-value{color:#fff;font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:19px;font-weight:800;line-height:1.1}
       </style>`;
-      utcPipWindow.document.body.innerHTML = '<div class="pip-clock"><div class="pip-label">現在時刻</div><div class="pip-line"><span id="utc-pip-time">--:--:--</span><span id="utc-pip-millis">.00</span><span class="pip-unit">UTC</span></div></div>';
+      utcPipWindow.document.body.innerHTML = '<div class="pip-clock"><div class="pip-label">現在時刻</div><div class="pip-line"><span id="utc-pip-time">--:--:--</span><span id="utc-pip-millis">:00</span><span class="pip-unit">UTC</span></div><div id="utc-pip-countdown" class="pip-countdown" hidden><div id="utc-pip-countdown-name" class="pip-countdown-name"></div><div class="pip-countdown-label">出発まで残り</div><div id="utc-pip-countdown-value" class="pip-countdown-value">00:00:00</div></div></div>';
       utcPipWindow.addEventListener('pagehide', () => { utcPipWindow = null; });
       tickUTC();
       return;
