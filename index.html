@@ -974,6 +974,83 @@ body.landing-active .page-tabs{ background:var(--card-bg); }
 }
 /* ===== /Tab2 ===== */
 
+/* ===== Tab3 (スイッチ) スコープ限定 ===== */
+#page-switch .mode-card{
+  padding:12px;
+  margin:12px 0;
+}
+#page-switch .sw-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 2px;
+  border-bottom:1px solid var(--border);
+}
+#page-switch .sw-row:last-of-type{
+  border-bottom:none;
+}
+#page-switch .sw-row-label{
+  font-size:15px;
+  font-weight:600;
+  color:var(--text-secondary);
+}
+#page-switch .sw-row-control{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+#page-switch .sw-row-control select{
+  -webkit-appearance:none;
+  appearance:none;
+  background-image:none;
+}
+#page-switch .sw-number-input{
+  width:80px;
+  text-align:center;
+  font-variant-numeric:tabular-nums;
+  font-family:var(--font-num);
+}
+#page-switch .sw-row-suffix{
+  font-size:15px;
+  font-weight:600;
+  color:var(--text-secondary);
+}
+#page-switch .impact-display{
+  display:block;
+}
+#page-switch .sw-chevron{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:20px;
+  min-width:20px;
+  min-height:44px;
+  margin:0;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:#c7c7cc;
+  font-size:0;
+}
+#page-switch .sw-chevron::after{
+  content:"";
+  display:block;
+  width:7px;
+  height:7px;
+  border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;
+  border-radius:1px;
+  transform:rotate(-45deg);
+}
+#page-switch .sw-chevron:hover,
+#page-switch .sw-chevron:focus,
+#page-switch .sw-chevron:active{
+  color:#007aff;
+  background:transparent;
+}
+/* ===== /Tab3 ===== */
+
 @keyframes tableFlashEffect{
   0%{
     border-color:transparent;
@@ -2671,11 +2748,11 @@ body.landing-active .page-tab-btn.active{
   position:fixed;
   inset:0;
   z-index:12000;
-  align-items:stretch;
+  align-items:flex-end;
   justify-content:center;
   visibility:hidden;
   pointer-events:none;
-  background:#f7f7f5;
+  background:transparent;
   transition:visibility 0s .3s;
 }
 
@@ -2690,46 +2767,66 @@ body.departure-edit-open{
 }
 
 .departure-edit-backdrop{
-  display:none;
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  opacity:0;
+  transition:opacity .25s ease;
+}
+
+.departure-edit-modal.show .departure-edit-backdrop{
+  opacity:1;
 }
 
 .departure-edit-sheet{
-  position:absolute;
-  inset:0;
+  position:relative;
   z-index:1;
   width:100%;
   max-width:480px;
-  min-height:100%;
+  max-height:min(80vh, 640px);
   margin:0 auto;
-  padding:max(18px, env(safe-area-inset-top)) 18px max(22px, env(safe-area-inset-bottom));
-  border-radius:0;
+  padding:14px 16px max(18px, env(safe-area-inset-bottom));
+  border-radius:20px 20px 0 0;
   background:#f7f7f5;
-  box-shadow:none;
+  box-shadow:0 -8px 30px rgba(0,0,0,.18);
   overflow-x:hidden;
   overflow-y:auto;
-  transform:translateX(100%);
+  transform:translateY(100%);
   transition:transform .3s cubic-bezier(.22,.75,.2,1);
 }
 
 .departure-edit-modal.show .departure-edit-sheet{
-  transform:translateX(0);
+  transform:translateY(0);
 }
 
 .departure-edit-header{
   display:flex;
   align-items:center;
-  min-height:44px;
-  margin-bottom:28px;
+  justify-content:center;
+  min-height:20px;
+  margin-bottom:12px;
 }
 
 .departure-edit-header h3{
-  flex:1;
   margin:0;
-  color:#090909;
-  font-size:17px;
-  font-weight:800;
+  color:#8e8e93;
+  font-size:13px;
+  font-weight:600;
   text-align:center;
   white-space:nowrap;
+}
+
+.departure-custom-section[hidden],
+.departure-preset-section[hidden]{
+  display:none !important;
+}
+
+.departure-custom-actions{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:44px;
+  margin-top:14px;
 }
 
 #departure-edit-close,
@@ -2780,46 +2877,8 @@ body.departure-edit-open{
   background:#fff;
 }
 
-.departure-edit-fields[hidden]{
-  display:none !important;
-}
-
-.departure-preset-section[hidden],
-.departure-custom-title[hidden]{
-  display:none !important;
-}
-
-.departure-preset-title,
-.departure-custom-title{
-  margin:0 4px 7px;
-  color:#8e8e93;
-  font-size:13px;
-  font-weight:600;
-}
-
-.departure-preset-heading{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.departure-preset-edit{
-  width:auto;
-  min-width:50px;
-  min-height:36px;
-  margin:0 2px 5px 0;
-  padding:0 4px;
-  border:0;
-  background:transparent;
-  color:#0a84ff;
-  font-size:14px;
-  font-weight:600;
-  box-shadow:none;
-  transform:none;
-}
-
-.departure-custom-title{
-  margin-top:22px;
+.departure-preset-section{
+  margin-bottom:0;
 }
 
 .departure-preset-list{
@@ -2828,29 +2887,15 @@ body.departure-edit-open{
   background:#fff;
 }
 
-.departure-preset-row{
-  display:flex;
-  align-items:center;
-  position:relative;
-  min-height:48px;
-  overflow:hidden;
-  border-bottom:1px solid #e5e5ea;
-  background:#fff;
-}
-
-.departure-preset-row:last-of-type{
-  border-bottom:0;
-}
-
 .departure-preset-option{
   display:flex;
   align-items:center;
   width:100%;
-  min-height:48px;
+  min-height:50px;
   margin:0;
-  padding:0 14px;
+  padding:0 16px;
   border:0;
-  border-bottom:0;
+  border-bottom:1px solid #e5e5ea;
   border-radius:0;
   background:#fff;
   color:#090909;
@@ -2859,10 +2904,10 @@ body.departure-edit-open{
   text-align:left;
   box-shadow:none;
   transform:none;
-  position:relative;
-  z-index:1;
-  touch-action:pan-y;
-  transition:transform .2s ease;
+}
+
+.departure-preset-option:last-child{
+  border-bottom:0;
 }
 
 .departure-preset-option::after{
@@ -2876,53 +2921,6 @@ body.departure-edit-open{
   transform:rotate(45deg);
 }
 
-.departure-preset-delete{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:absolute;
-  top:0;
-  right:0;
-  bottom:0;
-  z-index:0;
-  width:76px;
-  min-width:76px;
-  min-height:100%;
-  margin:0;
-  padding:0;
-  border:0;
-  border-radius:0;
-  background:#ff3b30;
-  color:#fff;
-  font-size:14px;
-  font-weight:700;
-  box-shadow:none;
-  transform:none;
-}
-
-.departure-preset-add{
-  display:none;
-  align-items:center;
-  width:100%;
-  min-height:48px;
-  margin:0;
-  padding:0 14px;
-  border:0;
-  border-top:1px solid #e5e5ea;
-  border-radius:0;
-  background:#fff;
-  color:#0a84ff;
-  font-size:15px;
-  font-weight:600;
-  text-align:left;
-  box-shadow:none;
-  transform:none;
-}
-
-.departure-preset-section.editing .departure-preset-add{
-  display:flex;
-}
-
 .departure-preset-option.selected::after{
   opacity:1;
 }
@@ -2932,6 +2930,36 @@ body.departure-edit-open{
 .departure-preset-option:active{
   background:#f2f2f7;
   color:#090909;
+  box-shadow:none;
+  transform:none;
+}
+
+.departure-preset-option[data-role="custom"]{
+  color:#0a84ff;
+  font-weight:600;
+}
+
+.departure-sheet-cancel{
+  display:block;
+  width:100%;
+  min-height:50px;
+  margin-top:8px;
+  border:0;
+  border-radius:14px;
+  background:#fff;
+  color:#0a84ff;
+  font-size:17px;
+  font-weight:600;
+  text-align:center;
+  box-shadow:none;
+  transform:none;
+}
+
+.departure-sheet-cancel:hover,
+.departure-sheet-cancel:focus,
+.departure-sheet-cancel:active{
+  background:#f2f2f7;
+  color:#0a84ff;
   box-shadow:none;
   transform:none;
 }
@@ -3027,6 +3055,24 @@ body.departure-edit-open{
   font-weight:700;
   transform:translateY(-50%);
   pointer-events:none;
+}
+
+/* ボトムシート化に伴い、行タップでシートを開くため、内側のネイティブコントロール自体は無効化する */
+#page-calc .departure-setting-control select,
+#page-calc .departure-time-control select,
+#page-landing .l-setting-control select,
+#page-switch .sw-row-control select,
+#page-switch .sw-row-control input[type="number"]{
+  pointer-events:none;
+}
+
+#page-calc .departure-setting-row:active,
+#page-calc .departure-setting-control:active,
+#page-calc .departure-time-control:active,
+#page-landing .l-setting-row:active,
+#page-landing .l-wave-options:active,
+#page-switch .sw-row:active{
+  background:rgba(120,120,128,.08);
 }
 
 .departure-edit-field{
@@ -3209,14 +3255,9 @@ body.departure-edit-open{
     margin-bottom:22px;
   }
 
-  .departure-preset-row,
   .departure-preset-option,
-  .departure-preset-add{
+  .departure-sheet-cancel{
     min-height:44px;
-  }
-
-  .departure-custom-title{
-    margin-top:18px;
   }
 
   #page-calc .footer,
@@ -4116,7 +4157,7 @@ body .toast{
 body .departure-edit-sheet,
 body .departure-edit-header h3,
 body .departure-preset-option,
-body .departure-preset-add,
+body .departure-sheet-cancel,
 body .departure-wheel-option{
   font-family:var(--font-ui);
   letter-spacing:-.01em;
@@ -4223,13 +4264,11 @@ body .utc-clock-overlay-close{
 
 
 /* --- 編集シート：区切り線をiOS流に左インセット --- */
-body .departure-preset-row + .departure-preset-row{
-  border-top:1px solid var(--ios-separator);
+body .departure-preset-option:not(:last-child){
+  border-bottom:1px solid var(--ios-separator);
 }
 
-body .departure-preset-title,
-body .departure-custom-title,
-body .departure-preset-heading{
+body .departure-edit-header h3{
   font-family:var(--font-ui);
   font-size:13px;
   font-weight:400;
@@ -4405,6 +4444,59 @@ body #page-landing > #l-result{
 body #page-calc > .collapsible-card,
 body #page-calc > .collapsible-card + .collapsible-card{
   margin:0 0 var(--space-4) !important;
+}
+
+/* ===== #page-switch: 他タブと同じ余白密度に揃える（追加のみ、既存ルールは無変更） ===== */
+body #page-switch > .mode-card{
+  margin:0 0 var(--space-4) !important;
+}
+
+body #page-switch > .switch-action{
+  margin:0 0 var(--space-3) !important;
+}
+
+body #page-switch > #sw-result{
+  margin:0 0 var(--space-4) !important;
+}
+
+body #page-switch > .collapsible-card{
+  margin:0 0 var(--space-4) !important;
+}
+
+body #page-switch .sw-row{
+  min-height:60px;
+  margin:0 var(--space-3);
+  padding:0;
+  border-bottom:1px solid var(--separator-soft);
+}
+
+body #page-switch .sw-row:last-of-type{
+  border-bottom:0;
+}
+
+body #page-switch .sw-row-control{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:var(--space-1);
+  min-height:var(--control-height);
+  padding:0 10px 0 12px;
+  border-radius:var(--radius-control);
+  background:var(--surface-tertiary);
+}
+
+body #page-switch .switch-action{
+  min-height:52px;
+  border-radius:14px;
+  background:var(--action-primary);
+  font-size:17px;
+  font-weight:600;
+  box-shadow:none;
+}
+
+body #page-switch .switch-action:hover,
+body #page-switch .switch-action:active{
+  background:var(--action-primary-pressed);
 }
 
 body #page-calc .calculating-msg{
@@ -4818,6 +4910,7 @@ body .history-btn.danger:active{
   <div class="page-tabs">
     <button type="button" class="page-tab-btn" data-page="page-calc">王城決戦</button>
     <button type="button" class="page-tab-btn active" data-page="page-landing">着弾時刻</button>
+    <button type="button" class="page-tab-btn" data-page="page-switch">スイッチ</button>
   </div>
 
   <!-- ページ1: 集結計算機 -->
@@ -4825,32 +4918,32 @@ body .history-btn.danger:active{
 
   <!-- モード設定 -->
   <div class="mode-card departure-settings-card">
-    <label class="departure-setting-row" for="rally-min">
+    <div class="departure-setting-row" id="rally-row" role="button" tabindex="0" aria-haspopup="dialog" aria-label="集結時間を編集">
       <span class="departure-setting-name">集結時間</span>
       <span class="departure-setting-control">
-        <select id="rally-min" class="inline-select"></select>
+        <select id="rally-min" class="inline-select" tabindex="-1"></select>
         <button type="button" class="departure-chevron departure-edit-trigger" data-editor="rally" aria-label="集結時間を編集">›</button>
       </span>
-    </label>
+    </div>
 
-    <label id="departure-schedule-row" class="departure-setting-row departure-schedule-row" for="prep-time">
+    <div id="departure-schedule-row" class="departure-setting-row departure-schedule-row">
       <span class="departure-setting-name departure-schedule-label">今から</span>
       <select id="rally-type" class="departure-mode-select" aria-label="時刻の指定方法">
         <option value="now" selected>今から</option>
         <option value="time">時刻指定</option>
       </select>
 
-      <span id="prep-input-group" class="departure-setting-control">
-        <select id="prep-time" class="inline-select"></select>
+      <span id="prep-input-group" class="departure-setting-control" role="button" tabindex="0" aria-haspopup="dialog" aria-label="準備時間を編集">
+        <select id="prep-time" class="inline-select" tabindex="-1"></select>
         <span id="after-prep" class="departure-after-text">後</span>
         <button type="button" class="departure-chevron departure-edit-trigger" data-editor="prep" aria-label="準備時間を編集">›</button>
       </span>
 
-      <span id="time-input-group" class="departure-time-control" style="display:none;white-space:nowrap;">
-        <select id="hh" class="time-select-sm"></select><span class="time-sep">:</span><select id="mm" class="time-select-sm"></select><span class="time-sep">:</span><select id="ss" class="time-select-sm"></select>
+      <span id="time-input-group" class="departure-time-control" style="display:none;white-space:nowrap;" role="button" tabindex="0" aria-haspopup="dialog" aria-label="着弾時刻を編集">
+        <select id="hh" class="time-select-sm" tabindex="-1"></select><span class="time-sep">:</span><select id="mm" class="time-select-sm" tabindex="-1"></select><span class="time-sep">:</span><select id="ss" class="time-select-sm" tabindex="-1"></select>
         <button type="button" class="departure-chevron departure-edit-trigger" data-editor="clock" aria-label="着弾時刻を編集">›</button>
       </span>
-    </label>
+    </div>
 
     <select id="rally-min-time" style="display:none" aria-hidden="true"></select>
   </div>
@@ -4932,10 +5025,10 @@ body .history-btn.danger:active{
     <div class="mode-card landing-settings-card">
 
       <!-- 集結時間 -->
-      <label class="l-setting-row" for="l-rally-min">
+      <div class="l-setting-row" id="l-rally-row" role="button" tabindex="0" aria-haspopup="dialog" aria-label="集結時間を編集">
         <span class="l-setting-name">集結時間</span>
         <span class="l-setting-control">
-          <select id="l-rally-min" class="inline-select">
+          <select id="l-rally-min" class="inline-select" tabindex="-1">
             <option value="1">1分</option>
             <option value="2">2分</option>
             <option value="5" selected>5分</option>
@@ -4943,13 +5036,13 @@ body .history-btn.danger:active{
           </select>
           <button type="button" class="l-chevron departure-edit-trigger" data-editor="landing-rally" aria-label="集結時間を編集">›</button>
         </span>
-      </label>
+      </div>
 
       <!-- 準備時間 -->
-      <label class="l-setting-row" for="l-from-now">
+      <div class="l-setting-row" id="l-prep-row" role="button" tabindex="0" aria-haspopup="dialog" aria-label="準備時間を編集">
         <span class="l-setting-name">準備時間</span>
         <span class="l-setting-control">
-          <select id="l-from-now" class="inline-select">
+          <select id="l-from-now" class="inline-select" tabindex="-1">
             <option value="60" selected>1分</option>
             <option value="80">1分20秒</option>
             <option value="100">1分40秒</option>
@@ -4963,7 +5056,7 @@ body .history-btn.danger:active{
           </select>
           <button type="button" class="l-chevron departure-edit-trigger" data-editor="landing-prep" aria-label="準備時間を編集">›</button>
         </span>
-      </label>
+      </div>
 
       <!-- 二段階集結 -->
       <label class="l-setting-row l-two-wave-row" for="l-two-wave">
@@ -4971,10 +5064,10 @@ body .history-btn.danger:active{
         <input type="checkbox" id="l-two-wave">
       </label>
 
-      <div id="l-two-wave-section" class="l-wave-options" style="display:none">
+      <div id="l-two-wave-section" class="l-wave-options" style="display:none" role="button" tabindex="0" aria-haspopup="dialog" aria-label="二段階集結の時差を編集">
         <span class="l-setting-name">時差</span>
         <span class="l-setting-control">
-          <select id="l-diff-min" class="inline-select">
+          <select id="l-diff-min" class="inline-select" tabindex="-1">
             <option value="1" selected>1分</option>
             <option value="2">2分</option>
             <option value="3">3分</option>
@@ -4986,7 +5079,7 @@ body .history-btn.danger:active{
             <option value="9">9分</option>
             <option value="10">10分</option>
           </select>
-          <select id="l-diff-sec" class="inline-select">
+          <select id="l-diff-sec" class="inline-select" tabindex="-1">
             <option value="0" selected>0秒</option>
             <option value="10">10秒</option>
             <option value="20">20秒</option>
@@ -5023,6 +5116,72 @@ body .history-btn.danger:active{
       </div>
     <div class="footer">© 1524_Off</div>
   </div><!-- /page-landing -->
+
+  <!-- ページ3: スイッチ -->
+  <div id="page-switch" class="page-content">
+    <div class="mode-card switch-settings-card">
+      <div class="sw-row" id="sw-rally-row" role="button" tabindex="0" aria-haspopup="dialog" aria-label="行軍基準を編集">
+        <span class="sw-row-label">行軍基準</span>
+        <span class="sw-row-control">
+          <select id="sw-rally-min" class="inline-select" tabindex="-1">
+            <option value="55" selected>55秒</option>
+            <option value="50">50秒</option>
+            <option value="45">45秒</option>
+            <option value="40">40秒</option>
+            <option value="39">39秒</option>
+            <option value="36">36秒</option>
+            <option value="35">35秒</option>
+            <option value="33">33秒</option>
+            <option value="32">32秒</option>
+            <option value="30">30秒</option>
+          </select>
+          <button type="button" class="sw-chevron departure-edit-trigger" data-editor="switch-rally" aria-label="行軍基準を編集">›</button>
+        </span>
+      </div>
+
+      <div class="sw-row" id="sw-from-now-row" role="button" tabindex="0" aria-haspopup="dialog" aria-label="今から○秒後を編集">
+        <span class="sw-row-label">今から</span>
+        <span class="sw-row-control">
+          <input type="number" id="sw-from-now" class="sw-number-input" inputmode="numeric" min="1" step="1" value="30" tabindex="-1">
+          <span class="sw-row-suffix">秒後</span>
+          <button type="button" class="sw-chevron departure-edit-trigger" data-editor="switch-from-now" aria-label="今から○秒後を編集">›</button>
+        </span>
+      </div>
+    </div>
+
+    <button id="sw-action-btn" class="btn-primary switch-action">計算開始</button>
+
+    <div id="sw-result" style="display:none">
+      <div class="divider"></div>
+      <div id="sw-result-inner">
+        <div class="impact-display" style="margin-top:0">
+          <div class="impact-display-inner">
+            <span class="impact-label">着弾</span>
+            <span id="sw-impact-time" class="impact-time">--:--:--</span>
+            <span class="impact-label">UTC</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- プレビュー -->
+    <div class="collapsible-card">
+      <button type="button" id="sw-preview-toggle" class="collapsible-header">
+        <span class="collapsible-header-title">チャット貼り付け用プレビュー</span>
+        <span id="sw-preview-arrow" class="collapsible-arrow">▼</span>
+      </button>
+      <div id="sw-preview-content" class="collapsible-content" style="height:0;">
+        <div class="collapsible-content-inner">
+          <pre id="sw-preview-text" class="preview-text-box"></pre>
+          <div class="copy-btn-container">
+            <button type="button" id="sw-copy-btn" class="control-btn">コピー</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">© 1524_Off</div>
+  </div><!-- /page-switch -->
 
 </div><!-- /container -->
 
@@ -5064,13 +5223,19 @@ body .history-btn.danger:active{
   <div class="departure-edit-backdrop"></div>
   <div class="departure-edit-sheet" role="dialog" aria-modal="true" aria-labelledby="departure-edit-title">
     <div class="departure-edit-header">
-      <button type="button" id="departure-edit-close" aria-label="戻る">‹ 戻る</button>
       <h3 id="departure-edit-title">時間を編集</h3>
-      <button type="button" id="departure-edit-save">完了</button>
     </div>
-    <div id="departure-preset-section" class="departure-preset-section" hidden></div>
-    <div id="departure-custom-title" class="departure-custom-title" hidden>カスタム</div>
-    <div id="departure-edit-fields" class="departure-edit-fields"></div>
+    <div id="departure-preset-section" class="departure-preset-section" hidden>
+      <div id="departure-preset-list" class="departure-preset-list"></div>
+      <button type="button" id="departure-preset-cancel" class="departure-sheet-cancel">キャンセル</button>
+    </div>
+    <div id="departure-custom-section" class="departure-custom-section" hidden>
+      <div id="departure-edit-fields" class="departure-edit-fields"></div>
+      <div class="departure-custom-actions">
+        <button type="button" id="departure-edit-close" aria-label="キャンセル">キャンセル</button>
+        <button type="button" id="departure-edit-save">完了</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -5120,6 +5285,11 @@ const FIXED_MEMBER_ROSTER = Object.freeze([
   'KAI','サーフィス','のえたん','マリン','くまさん','おーちゃん','夏野菜','たいが','ゆーた主任','プリム',
   'マリィ','とんちゃん','たろー','ごったん','チョコちゃん','Emu','かなしゃん','いか人参バイトリーダー','pomuたん','土井メロ'
 ]);
+
+/* ======= スイッチモードの行軍秒数一覧（時間編集ボトムシートと共有） ======= */
+const SWITCH_MARCH_SECONDS = Object.freeze([55,50,45,40,39,36,35,33,32,30]);
+const swRallyMinSel = document.getElementById('sw-rally-min');
+const swFromNowInput = document.getElementById('sw-from-now');
 
 function canonicalRosterName(name){
   const normalized = String(name || '').trim().toLocaleLowerCase('ja-JP');
@@ -6093,12 +6263,13 @@ function updateMode(){
 
 rallyTypeSel.addEventListener('change', ()=>{ updateMode(); saveSettings(); });
 
-/* ======= 出発時刻：時間編集シート ======= */
+/* ======= 出発時刻：時間編集ボトムシート ======= */
 const departureEditModal = document.getElementById('departure-edit-modal');
 const departureEditTitle = document.getElementById('departure-edit-title');
-const departureEditFields = document.getElementById('departure-edit-fields');
 const departurePresetSection = document.getElementById('departure-preset-section');
-const departureCustomTitle = document.getElementById('departure-custom-title');
+const departurePresetListEl = document.getElementById('departure-preset-list');
+const departureCustomSection = document.getElementById('departure-custom-section');
+const departureEditFields = document.getElementById('departure-edit-fields');
 const departureHhSel = document.getElementById('hh');
 const departureMmSel = document.getElementById('mm');
 const departureSsSel = document.getElementById('ss');
@@ -6113,29 +6284,34 @@ const DEFAULT_DEPARTURE_PRESETS = Object.freeze({
   'castle-rally':[5, 10],
   'landing-rally':[1, 2, 5, 10],
   prep:[0, 10, 30, 60, 120],
-  diff:[30, 60, 90, 120, 180]
+  diff:[30, 60, 90, 120, 180],
+  'switch-rally':[...SWITCH_MARCH_SECONDS],
+  'switch-from-now':[10, 20, 30, 45, 60]
+});
+const DEPARTURE_NO_CUSTOM_KINDS = new Set(['switch-rally']);
+const DEPARTURE_PRESET_KIND_BY_EDITOR = Object.freeze({
+  rally:'castle-rally',
+  'landing-rally':'landing-rally',
+  prep:'prep',
+  'landing-prep':'prep',
+  'landing-diff':'diff',
+  'switch-rally':'switch-rally',
+  'switch-from-now':'switch-from-now'
+  // 'clock' は意図的に含めない -> プリセットなし -> 常にカスタム(ホイール)表示
+});
+const DEPARTURE_EDITOR_TITLES = Object.freeze({
+  'landing-rally':'集結時間を編集',
+  'landing-prep':'準備時間を編集',
+  rally:'集結時間を編集',
+  prep:'準備時間を編集',
+  'landing-diff':'二段階集結の時差を編集',
+  'switch-rally':'行軍基準を編集',
+  'switch-from-now':'今から○秒後を編集',
+  clock:'着弾時刻を編集'
 });
 
 function loadDeparturePresets(kind){
-  if(kind === 'castle-rally') return [...DEFAULT_DEPARTURE_PRESETS[kind]];
-  const storageKey = kind === 'landing-rally'
-    ? 'arrivalLandingRallyPresetsV2'
-    : (kind === 'diff' ? 'arrivalLandingDiffPresets' : 'arrivalPrepPresets');
-  try{
-    const saved = JSON.parse(localStorage.getItem(storageKey));
-    if(Array.isArray(saved)){
-      return [...new Set(saved.map(Number).filter(Number.isFinite))].sort((a, b) => a - b);
-    }
-  }catch(e){}
-  return [...DEFAULT_DEPARTURE_PRESETS[kind]];
-}
-
-function saveDeparturePresets(kind, values){
-  if(kind === 'castle-rally') return;
-  const storageKey = kind === 'landing-rally'
-    ? 'arrivalLandingRallyPresetsV2'
-    : (kind === 'diff' ? 'arrivalLandingDiffPresets' : 'arrivalPrepPresets');
-  localStorage.setItem(storageKey, JSON.stringify([...new Set(values)].sort((a, b) => a - b)));
+  return [...(DEFAULT_DEPARTURE_PRESETS[kind] || [])];
 }
 
 function departurePresetLabel(kind, value){
@@ -6167,32 +6343,57 @@ function createWheelHtml(id, values, selectedValue, unit, pad = false){
     </div>`;
 }
 
-function createPresetHtml(items, editable = true){
-  const editButton = editable ? '<button type="button" class="departure-preset-edit">編集</button>' : '';
-  const rows = items.map(item => {
-    const deleteButton = editable ? `<button type="button" class="departure-preset-delete" data-value="${item.value}" aria-label="${item.label}を削除">削除</button>` : '';
-    return `<div class="departure-preset-row"><button type="button" class="departure-preset-option" data-value="${item.value}">${item.label}</button>${deleteButton}</div>`;
-  }).join('');
-  const addButton = editable ? '<button type="button" class="departure-preset-add">＋ 現在の時間を追加</button>' : '';
-  return `<div class="departure-preset-heading"><div class="departure-preset-title">よく使う時間</div>${editButton}</div><div class="departure-preset-list">${rows}${addButton}</div>`;
+function createPresetHtml(kind, items){
+  const rows = items.map(item =>
+    `<button type="button" class="departure-preset-option" data-value="${item.value}">${item.label}</button>`
+  ).join('');
+  const customRow = DEPARTURE_NO_CUSTOM_KINDS.has(kind)
+    ? ''
+    : `<button type="button" class="departure-preset-option" data-role="custom">その他…</button>`;
+  return rows + customRow;
 }
 
-function renderDeparturePresetSection(editing = false){
+function getCurrentDepartureValue(editorType){
+  if(editorType === 'landing-rally') return parseInt(landingRallyMinSel.value) || 0;
+  if(editorType === 'rally') return parseInt(rallyMinSel.value) || 0;
+  if(editorType === 'landing-prep') return parseInt(landingPrepTimeSel.value) || 0;
+  if(editorType === 'prep') return parseInt(prepTimeSel.value) || 0;
+  if(editorType === 'landing-diff') return (parseInt(landingDiffMinSel.value) || 0) * 60 + (parseInt(landingDiffSecSel.value) || 0);
+  if(editorType === 'switch-rally') return parseInt(swRallyMinSel.value) || 0;
+  if(editorType === 'switch-from-now') return parseInt(swFromNowInput.value) || 0;
+  return null;
+}
+
+function syncDeparturePresetSelection(){
+  const currentValue = getCurrentDepartureValue(currentDepartureEditor);
+  departurePresetListEl.querySelectorAll('.departure-preset-option[data-value]').forEach(option => {
+    option.classList.toggle('selected', parseInt(option.dataset.value, 10) === currentValue);
+  });
+}
+
+function renderDeparturePresetSection(){
   if(!currentDeparturePresetKind) return;
   const items = loadDeparturePresets(currentDeparturePresetKind).map(value => ({
     value,
     label:departurePresetLabel(currentDeparturePresetKind, value)
   }));
-  const editable = currentDeparturePresetKind !== 'castle-rally';
-  departurePresetSection.innerHTML = createPresetHtml(items, editable);
-  departurePresetSection.classList.toggle('editing', editing);
-  if(editable){
-    departureEditFields.hidden = !editing;
-    departureCustomTitle.hidden = !editing;
-  }
-  const editButton = departurePresetSection.querySelector('.departure-preset-edit');
-  if(editButton) editButton.textContent = editing ? '完了' : '編集';
-  initializeDeparturePresets();
+  departurePresetListEl.innerHTML = createPresetHtml(currentDeparturePresetKind, items);
+  initializeDeparturePresetRows();
+  syncDeparturePresetSelection();
+}
+
+function initializeDeparturePresetRows(){
+  departurePresetListEl.querySelectorAll('.departure-preset-option').forEach(option => {
+    option.addEventListener('click', () => {
+      if(option.dataset.role === 'custom'){
+        showDepartureCustomView();
+        return;
+      }
+      const value = parseInt(option.dataset.value, 10) || 0;
+      applyEditorValue(currentDepartureEditor, value);
+      closeDepartureEditor();
+    });
+  });
 }
 
 function getDepartureEditorValue(){
@@ -6217,156 +6418,17 @@ function getDepartureEditorValue(){
     const seconds = parseInt(document.getElementById('departure-edit-landing-diff-sec')?.dataset.value) || 0;
     return minutes * 60 + seconds;
   }
+  if(currentDepartureEditor === 'switch-from-now'){
+    return parseInt(document.getElementById('departure-edit-switch-from-now')?.dataset.value) || 0;
+  }
+  if(currentDepartureEditor === 'clock'){
+    return {
+      hh: parseInt(document.getElementById('departure-edit-clock-hh')?.dataset.value) || 0,
+      mm: parseInt(document.getElementById('departure-edit-clock-mm')?.dataset.value) || 0,
+      ss: parseInt(document.getElementById('departure-edit-clock-ss')?.dataset.value) || 0
+    };
+  }
   return null;
-}
-
-function syncDeparturePresetSelection(){
-  const currentValue = getDepartureEditorValue();
-  departurePresetSection.querySelectorAll('.departure-preset-option').forEach(option => {
-    option.classList.toggle('selected', parseInt(option.dataset.value) === currentValue);
-  });
-}
-
-function setDepartureWheelByValue(id, value){
-  const wheel = document.getElementById(id);
-  if(!wheel) return;
-  const options = Array.from(wheel.querySelectorAll('.departure-wheel-option'));
-  const index = Math.max(0, options.findIndex(option => parseInt(option.dataset.value) === value));
-  setWheelValue(wheel, index);
-  wheel.scrollTo({top:index * 44, behavior:'smooth'});
-}
-
-function closeDeparturePresetSwipes(exceptRow = null){
-  departurePresetSection.querySelectorAll('.departure-preset-row.swipe-open').forEach(row => {
-    if(row === exceptRow) return;
-    row.classList.remove('swipe-open');
-    const option = row.querySelector('.departure-preset-option');
-    if(option) option.style.transform = 'translateX(0)';
-  });
-}
-
-function initializeDeparturePresetSwipe(row){
-  const option = row.querySelector('.departure-preset-option');
-  const deleteButton = row.querySelector('.departure-preset-delete');
-  if(!option || !deleteButton) return;
-
-  let startX = 0;
-  let startY = 0;
-  let startOffset = 0;
-  let currentOffset = 0;
-  let dragging = false;
-
-  option.addEventListener('pointerdown', event => {
-    if(event.pointerType === 'mouse' && event.button !== 0) return;
-    closeDeparturePresetSwipes(row);
-    startX = event.clientX;
-    startY = event.clientY;
-    startOffset = row.classList.contains('swipe-open') ? -76 : 0;
-    currentOffset = startOffset;
-    dragging = false;
-    option.style.transition = 'none';
-    try{ option.setPointerCapture(event.pointerId); }catch(e){}
-  });
-
-  option.addEventListener('pointermove', event => {
-    if(!option.hasPointerCapture?.(event.pointerId)) return;
-    const dx = event.clientX - startX;
-    const dy = event.clientY - startY;
-    if(!dragging && Math.abs(dx) < 6) return;
-    if(!dragging && Math.abs(dy) > Math.abs(dx)) return;
-    dragging = true;
-    currentOffset = Math.max(-76, Math.min(0, startOffset + dx));
-    option.style.transform = `translateX(${currentOffset}px)`;
-    event.preventDefault();
-  });
-
-  const finishSwipe = event => {
-    if(!option.hasPointerCapture?.(event.pointerId)) return;
-    try{ option.releasePointerCapture(event.pointerId); }catch(e){}
-    option.style.transition = 'transform .2s ease';
-    const shouldOpen = dragging ? currentOffset < -34 : startOffset < 0;
-    row.classList.toggle('swipe-open', shouldOpen);
-    option.style.transform = shouldOpen ? 'translateX(-76px)' : 'translateX(0)';
-    if(dragging){
-      row.dataset.suppressClick = 'true';
-      setTimeout(() => { delete row.dataset.suppressClick; }, 350);
-    }
-  };
-
-  option.addEventListener('pointerup', finishSwipe);
-  option.addEventListener('pointercancel', finishSwipe);
-}
-
-function initializeDeparturePresets(){
-  departurePresetSection.querySelectorAll('.departure-preset-row').forEach(initializeDeparturePresetSwipe);
-  departurePresetSection.querySelectorAll('.departure-preset-option').forEach(option => {
-    option.addEventListener('click', event => {
-      const row = option.closest('.departure-preset-row');
-      if(row?.dataset.suppressClick === 'true'){
-        event.preventDefault();
-        return;
-      }
-      if(row?.classList.contains('swipe-open')){
-        event.preventDefault();
-        row.classList.remove('swipe-open');
-        option.style.transform = 'translateX(0)';
-        return;
-      }
-      const value = parseInt(option.dataset.value) || 0;
-      if(currentDepartureEditor === 'landing-rally') setDepartureWheelByValue('departure-edit-landing-rally', value);
-      if(currentDepartureEditor === 'rally') setDepartureWheelByValue('departure-edit-rally', value);
-      if(currentDepartureEditor === 'landing-prep'){
-        setDepartureWheelByValue('departure-edit-landing-prep-min', Math.floor(value / 60));
-        setDepartureWheelByValue('departure-edit-landing-prep-sec', value % 60);
-      }
-      if(currentDepartureEditor === 'prep'){
-        setDepartureWheelByValue('departure-edit-prep-min', Math.floor(value / 60));
-        setDepartureWheelByValue('departure-edit-prep-sec', value % 60);
-      }
-      if(currentDepartureEditor === 'landing-diff'){
-        setDepartureWheelByValue('departure-edit-landing-diff-min', Math.floor(value / 60));
-        setDepartureWheelByValue('departure-edit-landing-diff-sec', value % 60);
-      }
-      syncDeparturePresetSelection();
-    });
-  });
-  const editButton = departurePresetSection.querySelector('.departure-preset-edit');
-  if(editButton) editButton.addEventListener('click', () => {
-    const editing = !departurePresetSection.classList.contains('editing');
-    departurePresetSection.classList.toggle('editing', editing);
-    editButton.textContent = editing ? '完了' : '編集';
-    departureEditFields.hidden = !editing;
-    departureCustomTitle.hidden = !editing;
-    if(editing){
-      requestAnimationFrame(() => {
-        departureEditFields.querySelectorAll('.departure-wheel').forEach(wheel => {
-          const options = Array.from(wheel.querySelectorAll('.departure-wheel-option'));
-          const selectedIndex = Math.max(0, options.findIndex(option => option.dataset.value === wheel.dataset.value));
-          wheel.scrollTop = selectedIndex * 44;
-        });
-      });
-    }
-  });
-  departurePresetSection.querySelectorAll('.departure-preset-delete').forEach(button => {
-    button.addEventListener('click', event => {
-      event.stopPropagation();
-      const value = parseInt(button.dataset.value);
-      const values = loadDeparturePresets(currentDeparturePresetKind).filter(item => item !== value);
-      saveDeparturePresets(currentDeparturePresetKind, values);
-      const editing = departurePresetSection.classList.contains('editing');
-      renderDeparturePresetSection(editing);
-    });
-  });
-  const addButton = departurePresetSection.querySelector('.departure-preset-add');
-  if(addButton) addButton.addEventListener('click', () => {
-    const value = getDepartureEditorValue();
-    if(value === null) return;
-    const values = loadDeparturePresets(currentDeparturePresetKind);
-    if(!values.includes(value)) values.push(value);
-    saveDeparturePresets(currentDeparturePresetKind, values);
-    renderDeparturePresetSection(true);
-  });
-  syncDeparturePresetSelection();
 }
 
 function setWheelValue(wheel, index){
@@ -6390,7 +6452,6 @@ function initializeDepartureWheels(){
         const index = Math.round(wheel.scrollTop / 44);
         setWheelValue(wheel, index);
         wheel.scrollTo({top:index * 44, behavior:'smooth'});
-        syncDeparturePresetSelection();
       }, 80);
     }, {passive:true});
 
@@ -6398,20 +6459,14 @@ function initializeDepartureWheels(){
       option.addEventListener('click', () => {
         setWheelValue(wheel, index);
         wheel.scrollTo({top:index * 44, behavior:'smooth'});
-        syncDeparturePresetSelection();
       });
     });
   });
 }
 
-function openDepartureEditor(editorType){
-  currentDepartureEditor = editorType;
-  currentDeparturePresetKind = null;
-
+function buildDepartureCustomFields(editorType){
   if(editorType === 'landing-rally'){
-    currentDeparturePresetKind = 'landing-rally';
     const minutes = parseInt(landingRallyMinSel.value) || 5;
-    departureEditTitle.textContent = '集結時間を編集';
     departureEditFields.innerHTML = createWheelHtml(
       'departure-edit-landing-rally',
       Array.from({length:120}, (_, index) => index + 1),
@@ -6419,16 +6474,12 @@ function openDepartureEditor(editorType){
       '分'
     );
   }else if(editorType === 'landing-prep'){
-    currentDeparturePresetKind = 'prep';
     const totalSeconds = parseInt(landingPrepTimeSel.value) || 0;
-    departureEditTitle.textContent = '準備時間を編集';
     departureEditFields.innerHTML =
       createWheelHtml('departure-edit-landing-prep-min', Array.from({length:61}, (_, index) => index), Math.min(60, Math.floor(totalSeconds / 60)), '分') +
       createWheelHtml('departure-edit-landing-prep-sec', Array.from({length:60}, (_, index) => index), totalSeconds % 60, '秒', true);
   }else if(editorType === 'rally'){
-    currentDeparturePresetKind = 'castle-rally';
     const minutes = parseInt(rallyMinSel.value) || 5;
-    departureEditTitle.textContent = '集結時間を編集';
     departureEditFields.innerHTML = createWheelHtml(
       'departure-edit-rally',
       Array.from({length:120}, (_, index) => index + 1),
@@ -6436,38 +6487,70 @@ function openDepartureEditor(editorType){
       '分'
     );
   }else if(editorType === 'prep'){
-    currentDeparturePresetKind = 'prep';
     const totalSeconds = parseInt(prepTimeSel.value) || 0;
-    departureEditTitle.textContent = '準備時間を編集';
     departureEditFields.innerHTML =
       createWheelHtml('departure-edit-prep-min', Array.from({length:61}, (_, index) => index), Math.min(60, Math.floor(totalSeconds / 60)), '分') +
       createWheelHtml('departure-edit-prep-sec', Array.from({length:60}, (_, index) => index), totalSeconds % 60, '秒', true);
   }else if(editorType === 'landing-diff'){
-    currentDeparturePresetKind = 'diff';
     const totalSeconds = (parseInt(landingDiffMinSel.value) || 0) * 60 + (parseInt(landingDiffSecSel.value) || 0);
-    departureEditTitle.textContent = '二段階集結の時差を編集';
     departureEditFields.innerHTML =
       createWheelHtml('departure-edit-landing-diff-min', Array.from({length:61}, (_, index) => index), Math.min(60, Math.floor(totalSeconds / 60)), '分') +
       createWheelHtml('departure-edit-landing-diff-sec', Array.from({length:60}, (_, index) => index), totalSeconds % 60, '秒', true);
-  }else{
-    departureEditTitle.textContent = '着弾時刻を編集';
+  }else if(editorType === 'switch-from-now'){
+    const totalSeconds = Math.max(1, parseInt(swFromNowInput.value) || 30);
+    departureEditFields.innerHTML = createWheelHtml(
+      'departure-edit-switch-from-now',
+      Array.from({length:300}, (_, index) => index + 1),
+      Math.min(300, totalSeconds),
+      '秒'
+    );
+  }else{ // 'clock'
     departureEditFields.innerHTML =
       createWheelHtml('departure-edit-clock-hh', Array.from({length:24}, (_, index) => index), parseInt(departureHhSel.value) || 0, '時', true) +
       createWheelHtml('departure-edit-clock-mm', Array.from({length:60}, (_, index) => index), parseInt(departureMmSel.value) || 0, '分', true) +
       createWheelHtml('departure-edit-clock-ss', Array.from({length:60}, (_, index) => index), parseInt(departureSsSel.value) || 0, '秒', true);
   }
+  initializeDepartureWheels();
+}
 
-  departurePresetSection.hidden = !currentDeparturePresetKind;
-  departureCustomTitle.hidden = true;
-  departureEditFields.hidden = !!currentDeparturePresetKind;
-  if(currentDeparturePresetKind) renderDeparturePresetSection();
-  else departurePresetSection.innerHTML = '';
+function showDeparturePresetView(){
+  departurePresetSection.hidden = false;
+  departureCustomSection.hidden = true;
+}
+
+function showDepartureCustomView(){
+  if(departureEditFields.dataset.builtFor !== currentDepartureEditor){
+    buildDepartureCustomFields(currentDepartureEditor);
+    departureEditFields.dataset.builtFor = currentDepartureEditor;
+  }
+  departurePresetSection.hidden = true;
+  departureCustomSection.hidden = false;
+  requestAnimationFrame(() => {
+    departureEditFields.querySelectorAll('.departure-wheel').forEach(wheel => {
+      const options = Array.from(wheel.querySelectorAll('.departure-wheel-option'));
+      const selectedIndex = Math.max(0, options.findIndex(option => option.dataset.value === wheel.dataset.value));
+      wheel.scrollTop = selectedIndex * 44;
+    });
+  });
+}
+
+function openDepartureEditor(editorType){
+  currentDepartureEditor = editorType;
+  currentDeparturePresetKind = DEPARTURE_PRESET_KIND_BY_EDITOR[editorType] || null;
+  departureEditTitle.textContent = DEPARTURE_EDITOR_TITLES[editorType] || '時間を編集';
+  departureEditFields.dataset.builtFor = '';
 
   departureEditModal.classList.add('show');
   departureEditModal.setAttribute('aria-hidden', 'false');
   document.body.classList.add('departure-edit-open');
   departureEditModal.querySelector('.departure-edit-sheet').scrollTop = 0;
-  initializeDepartureWheels();
+
+  if(currentDeparturePresetKind){
+    renderDeparturePresetSection();
+    showDeparturePresetView();
+  }else{
+    showDepartureCustomView();
+  }
 }
 
 function closeDepartureEditor(){
@@ -6478,6 +6561,76 @@ function closeDepartureEditor(){
   currentDeparturePresetKind = null;
 }
 
+function applyEditorValue(editorType, value){
+  if(editorType === 'landing-rally'){
+    const minutes = value || 1;
+    ensureSelectOption(landingRallyMinSel, minutes, `${minutes}分`);
+    landingRallyMinSel.dispatchEvent(new Event('change'));
+    localStorage.setItem('landingRallyMin', String(minutes));
+  }else if(editorType === 'landing-prep'){
+    const totalSeconds = value || 0;
+    ensureSelectOption(landingPrepTimeSel, totalSeconds, marchLabel(totalSeconds));
+    landingPrepTimeSel.dispatchEvent(new Event('change'));
+    localStorage.setItem('landingPrepTime', String(totalSeconds));
+  }else if(editorType === 'rally'){
+    const minutes = value || 1;
+    ensureSelectOption(rallyMinSel, minutes, `${minutes}分`);
+    ensureSelectOption(rallyMinTimeSel, minutes, `${minutes}分`);
+    rallyMinSel.dispatchEvent(new Event('change'));
+  }else if(editorType === 'prep'){
+    const totalSeconds = value || 0;
+    ensureSelectOption(prepTimeSel, totalSeconds, marchLabel(totalSeconds));
+    prepTimeSel.dispatchEvent(new Event('change'));
+  }else if(editorType === 'landing-diff'){
+    const totalSeconds = value || 0;
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    ensureSelectOption(landingDiffMinSel, minutes, `${minutes}分`);
+    ensureSelectOption(landingDiffSecSel, seconds, `${seconds}秒`);
+    landingDiffMinSel.dispatchEvent(new Event('change'));
+    landingDiffSecSel.dispatchEvent(new Event('change'));
+    localStorage.setItem('landingDiffSeconds', String(totalSeconds));
+  }else if(editorType === 'switch-rally'){
+    const seconds = value || SWITCH_MARCH_SECONDS[0];
+    ensureSelectOption(swRallyMinSel, seconds, `${seconds}秒`);
+    swRallyMinSel.dispatchEvent(new Event('change'));
+  }else if(editorType === 'switch-from-now'){
+    const seconds = Math.max(1, value || 30);
+    swFromNowInput.value = String(seconds);
+    swFromNowInput.dispatchEvent(new Event('change'));
+  }else if(editorType === 'clock'){
+    const hours = String(value?.hh ?? 0).padStart(2, '0');
+    const minutes = String(value?.mm ?? 0).padStart(2, '0');
+    const seconds = String(value?.ss ?? 0).padStart(2, '0');
+    ensureSelectOption(departureHhSel, hours, hours);
+    ensureSelectOption(departureMmSel, minutes, minutes);
+    ensureSelectOption(departureSsSel, seconds, seconds);
+  }
+
+  saveSettings();
+  updateLandingTimeOptions();
+}
+
+function wireDepartureRowTrigger(el, editorType){
+  if(!el) return;
+  el.addEventListener('click', () => openDepartureEditor(editorType));
+  el.addEventListener('keydown', event => {
+    if(event.key === 'Enter' || event.key === ' '){
+      event.preventDefault();
+      openDepartureEditor(editorType);
+    }
+  });
+}
+
+wireDepartureRowTrigger(document.getElementById('rally-row'), 'rally');
+wireDepartureRowTrigger(document.getElementById('prep-input-group'), 'prep');
+wireDepartureRowTrigger(document.getElementById('time-input-group'), 'clock');
+wireDepartureRowTrigger(document.getElementById('l-rally-row'), 'landing-rally');
+wireDepartureRowTrigger(document.getElementById('l-prep-row'), 'landing-prep');
+wireDepartureRowTrigger(document.getElementById('l-two-wave-section'), 'landing-diff');
+wireDepartureRowTrigger(document.getElementById('sw-rally-row'), 'switch-rally');
+wireDepartureRowTrigger(document.getElementById('sw-from-now-row'), 'switch-from-now');
+
 document.querySelectorAll('.departure-edit-trigger').forEach(button => {
   button.addEventListener('click', event => {
     event.preventDefault();
@@ -6487,45 +6640,11 @@ document.querySelectorAll('.departure-edit-trigger').forEach(button => {
 });
 
 document.getElementById('departure-edit-close').addEventListener('click', closeDepartureEditor);
+document.getElementById('departure-preset-cancel').addEventListener('click', closeDepartureEditor);
 document.querySelector('.departure-edit-backdrop').addEventListener('click', closeDepartureEditor);
 
 document.getElementById('departure-edit-save').addEventListener('click', () => {
-  if(currentDepartureEditor === 'landing-rally'){
-    const minutes = parseInt(document.getElementById('departure-edit-landing-rally').dataset.value) || 1;
-    ensureSelectOption(landingRallyMinSel, minutes, `${minutes}分`);
-    localStorage.setItem('landingRallyMin', String(minutes));
-  }else if(currentDepartureEditor === 'landing-prep'){
-    const minutes = parseInt(document.getElementById('departure-edit-landing-prep-min').dataset.value) || 0;
-    const seconds = parseInt(document.getElementById('departure-edit-landing-prep-sec').dataset.value) || 0;
-    const totalSeconds = minutes * 60 + seconds;
-    ensureSelectOption(landingPrepTimeSel, totalSeconds, marchLabel(totalSeconds));
-    localStorage.setItem('landingPrepTime', String(totalSeconds));
-  }else if(currentDepartureEditor === 'rally'){
-    const minutes = parseInt(document.getElementById('departure-edit-rally').dataset.value) || 1;
-    ensureSelectOption(rallyMinSel, minutes, `${minutes}分`);
-    ensureSelectOption(rallyMinTimeSel, minutes, `${minutes}分`);
-  }else if(currentDepartureEditor === 'prep'){
-    const minutes = parseInt(document.getElementById('departure-edit-prep-min').dataset.value) || 0;
-    const seconds = parseInt(document.getElementById('departure-edit-prep-sec').dataset.value) || 0;
-    const totalSeconds = minutes * 60 + seconds;
-    ensureSelectOption(prepTimeSel, totalSeconds, marchLabel(totalSeconds));
-  }else if(currentDepartureEditor === 'landing-diff'){
-    const minutes = parseInt(document.getElementById('departure-edit-landing-diff-min').dataset.value) || 0;
-    const seconds = parseInt(document.getElementById('departure-edit-landing-diff-sec').dataset.value) || 0;
-    ensureSelectOption(landingDiffMinSel, minutes, `${minutes}分`);
-    ensureSelectOption(landingDiffSecSel, seconds, `${seconds}秒`);
-    localStorage.setItem('landingDiffSeconds', String(minutes * 60 + seconds));
-  }else if(currentDepartureEditor === 'clock'){
-    const hours = String(document.getElementById('departure-edit-clock-hh').dataset.value).padStart(2, '0');
-    const minutes = String(document.getElementById('departure-edit-clock-mm').dataset.value).padStart(2, '0');
-    const seconds = String(document.getElementById('departure-edit-clock-ss').dataset.value).padStart(2, '0');
-    ensureSelectOption(departureHhSel, hours, hours);
-    ensureSelectOption(departureMmSel, minutes, minutes);
-    ensureSelectOption(departureSsSel, seconds, seconds);
-  }
-
-  saveSettings();
-  updateLandingTimeOptions();
+  applyEditorValue(currentDepartureEditor, getDepartureEditorValue());
   closeDepartureEditor();
 });
 
@@ -8077,6 +8196,153 @@ document.querySelectorAll('.page-tab-btn').forEach(btn => {
     }, 600);
   });
 
+})();
+
+/* ======= スイッチページ ======= */
+(function(){
+  const swActionBtn = document.getElementById('sw-action-btn');
+  if(!swActionBtn || !swRallyMinSel || !swFromNowInput) return;
+
+  // 前回設定の復元
+  const savedSwBase = parseInt(localStorage.getItem('switchBaseMarchSeconds'), 10);
+  if(SWITCH_MARCH_SECONDS.includes(savedSwBase)){
+    swRallyMinSel.value = String(savedSwBase);
+  }
+  const savedSwFromNow = parseInt(localStorage.getItem('switchFromNowSeconds'), 10);
+  if(Number.isFinite(savedSwFromNow) && savedSwFromNow >= 1){
+    swFromNowInput.value = String(savedSwFromNow);
+  }
+  swRallyMinSel.addEventListener('change', () => localStorage.setItem('switchBaseMarchSeconds', swRallyMinSel.value));
+  swFromNowInput.addEventListener('change', () => localStorage.setItem('switchFromNowSeconds', swFromNowInput.value));
+
+  function formatSwitchUtc(date){
+    return `${pad2(date.getUTCHours())}:${pad2(date.getUTCMinutes())}:${pad2(date.getUTCSeconds())}`;
+  }
+
+  function buildSwitchPreview(baseMarch, impactDate, entries){
+    const lines = [];
+    lines.push('スイッチします🙌');
+    lines.push('自分の行軍時間と同じ秒数の出発時刻に、1軍で出発してください。');
+    lines.push('基準');
+    const baseEntry = entries.find(e => e.march === baseMarch);
+    lines.push(`${baseMarch}秒 → ${baseEntry.timeStr} UTC 出発`);
+    lines.push('出発時刻');
+    entries.filter(e => e.march !== baseMarch).forEach(e => {
+      lines.push(`${e.march}秒 → ${e.timeStr} UTC`);
+    });
+    lines.push('着弾');
+    lines.push(`${formatSwitchUtc(impactDate)} UTC`);
+    return lines.join('\n');
+  }
+
+  async function copySwitchText(text){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      try{ await navigator.clipboard.writeText(text); return true; }
+      catch(e){ /* フォールバックへ */ }
+    }
+    try{
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
+
+  function flashSwitchResult(){
+    const inner = document.getElementById('sw-result-inner');
+    if(!inner) return;
+    inner.classList.remove('flash');
+    void inner.offsetWidth;
+    inner.classList.add('flash');
+    setTimeout(()=>inner.classList.remove('flash'), 800);
+  }
+
+  // 計算ボタン：計算＋プレビュー生成＋自動コピー
+  swActionBtn.addEventListener('click', function(){
+    const btn = this;
+    const originalLabel = btn.textContent;
+    btn.textContent = '計算中...';
+    btn.disabled = true;
+
+    setTimeout(async function(){
+      const baseMarch = SWITCH_MARCH_SECONDS.includes(parseInt(swRallyMinSel.value, 10))
+        ? parseInt(swRallyMinSel.value, 10) : 55;
+      // 基準出発時刻が必ず未来になるよう最低1秒を確保
+      const fromNowSec = Math.max(1, parseInt(swFromNowInput.value, 10) || 30);
+
+      // 1. 押した瞬間のUTCを取得
+      const now = new Date();
+      // 2. 基準出発時刻 = 現在UTC + 今から○秒後
+      const baseDeparture = new Date(now.getTime() + fromNowSec * 1000);
+      // 3. 着弾時刻 = 基準出発時刻 + 行軍基準秒
+      const impact = new Date(baseDeparture.getTime() + baseMarch * 1000);
+      // 4. 各行軍秒数の出発時刻 = 着弾時刻 - 各行軍秒数
+      const entries = SWITCH_MARCH_SECONDS.map(march => ({
+        march,
+        timeStr: formatSwitchUtc(new Date(impact.getTime() - march * 1000))
+      }));
+
+      document.getElementById('sw-impact-time').textContent = formatSwitchUtc(impact);
+      document.getElementById('sw-result').style.display = 'block';
+
+      // 5. チャット貼り付け用プレビューを生成
+      const previewMsg = buildSwitchPreview(baseMarch, impact, entries);
+      const previewText = document.getElementById('sw-preview-text');
+      if(previewText) previewText.textContent = previewMsg;
+
+      btn.textContent = originalLabel;
+      btn.disabled = false;
+      flashSwitchResult();
+
+      // 6. プレビュー全文を自動でクリップボードにコピー
+      const copied = await copySwitchText(previewMsg);
+      if(copied) showToast('✓ コピーしました');
+    }, 600);
+  });
+
+  // 手動コピーボタン（プレビューを開いた状態からも再コピー可能）
+  const swCopyBtn = document.getElementById('sw-copy-btn');
+  if(swCopyBtn){
+    swCopyBtn.addEventListener('click', async function(){
+      const previewText = document.getElementById('sw-preview-text');
+      const text = previewText ? previewText.textContent : '';
+      if(!text) return;
+      const copied = await copySwitchText(text);
+      if(copied) showToast('✓ コピーしました');
+    });
+  }
+
+  // プレビュー折りたたみ（page-calcの実装と同じ挙動を独立実装）
+  const swPreviewToggle = document.getElementById('sw-preview-toggle');
+  const swPreviewContent = document.getElementById('sw-preview-content');
+  const swPreviewArrow = document.getElementById('sw-preview-arrow');
+  let swPreviewExpanded = false;
+  if(swPreviewToggle && swPreviewContent && swPreviewArrow){
+    swPreviewContent.addEventListener('transitionend', function(){
+      if(swPreviewExpanded) swPreviewContent.style.height = 'auto';
+    });
+    swPreviewToggle.addEventListener('click', function(){
+      if(swPreviewExpanded){
+        const currentHeight = swPreviewContent.scrollHeight;
+        swPreviewContent.style.height = currentHeight + 'px';
+        swPreviewContent.offsetHeight; // 強制リフロー
+        swPreviewContent.style.height = '0';
+        swPreviewArrow.style.transform = 'rotate(0deg)';
+        swPreviewToggle.style.background = 'var(--bg-light)';
+      }else{
+        const targetHeight = swPreviewContent.scrollHeight;
+        swPreviewContent.style.height = targetHeight + 'px';
+        swPreviewArrow.style.transform = 'rotate(-180deg)';
+        swPreviewToggle.style.background = 'linear-gradient(135deg, #e8eef4 0%, #dde5ed 100%)';
+      }
+      swPreviewExpanded = !swPreviewExpanded;
+    });
+  }
 })();
 
 /* ======= PWA: Service Worker登録 ======= */
