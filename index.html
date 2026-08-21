@@ -3089,6 +3089,160 @@ body.departure-edit-open{
   }
 }
 
+/* ===== スマホ：iOS設定画面に近い縦密度 ===== */
+@media (max-width:600px){
+  /* 左右余白と時計カードの寸法は上の共通指定を維持 */
+  .header,
+  body.landing-active .header{
+    margin-bottom:24px;
+  }
+
+  .page-tabs,
+  body.landing-active .page-tabs{
+    margin-bottom:22px;
+  }
+
+  .page-tab-btn,
+  body.landing-active .page-tab-btn{
+    min-height:40px;
+    padding-top:6px;
+    padding-bottom:6px;
+  }
+
+  /* 着弾時刻：1つの設定グループ内だけをコンパクトにする */
+  #page-landing .l-setting-row,
+  #page-landing .l-wave-options{
+    min-height:56px;
+  }
+
+  #page-landing .l-setting-control select,
+  #page-landing .l-chevron{
+    min-height:44px;
+  }
+
+  #page-landing .l-wave-options{
+    min-height:54px;
+  }
+
+  #page-landing .landing-action{
+    min-height:56px;
+    margin-top:20px;
+    font-size:18px;
+  }
+
+  #page-landing #l-result{
+    margin-top:14px;
+  }
+
+  #page-landing #l-result .impact-display{
+    padding:13px 14px;
+  }
+
+  /* 王城決戦：設定行、一覧行、内部ボタンを同じ基準へ揃える */
+  #page-calc .mode-card{
+    margin-bottom:12px;
+  }
+
+  #page-calc .departure-setting-row{
+    min-height:56px;
+  }
+
+  #page-calc .departure-mode-select,
+  #page-calc .departure-setting-control select,
+  #page-calc .departure-time-control select,
+  #page-calc .departure-chevron{
+    min-height:44px;
+  }
+
+  #page-calc .departure-action{
+    min-height:56px;
+    margin-top:20px;
+    font-size:18px;
+  }
+
+  #page-calc .departure-result{
+    margin-top:14px;
+    padding:13px 14px;
+  }
+
+  #page-calc > .collapsible-card{
+    margin-top:14px;
+    margin-bottom:0 !important;
+  }
+
+  #page-calc > .collapsible-card + .collapsible-card{
+    margin-top:10px;
+  }
+
+  #page-calc .collapsible-header{
+    min-height:48px;
+    padding:8px 14px !important;
+  }
+
+  .member-identity-row{
+    min-height:44px;
+    padding-top:4px;
+    padding-bottom:4px;
+  }
+
+  .member-settings-toggle{
+    width:34px;
+    min-width:34px;
+    min-height:34px;
+  }
+
+  .member-auto-settings{
+    padding:8px 10px 10px;
+  }
+
+  .member-settings-primary,
+  .member-settings-options{
+    min-height:44px;
+    padding-top:5px;
+    padding-bottom:5px;
+  }
+
+  .button-controls{
+    margin-top:8px;
+    margin-bottom:8px;
+  }
+
+  .control-btn{
+    min-height:44px;
+    padding-top:9px;
+    padding-bottom:9px;
+  }
+
+  /* 設定・時間編集画面も同じ行密度に統一 */
+  .device-settings-header{
+    margin-bottom:20px;
+  }
+
+  .device-settings-row{
+    min-height:52px;
+  }
+
+  .departure-edit-header{
+    margin-bottom:22px;
+  }
+
+  .departure-preset-row,
+  .departure-preset-option,
+  .departure-preset-add{
+    min-height:44px;
+  }
+
+  .departure-custom-title{
+    margin-top:18px;
+  }
+
+  #page-calc .footer,
+  #page-landing .footer,
+  body.landing-active #page-landing .footer{
+    margin-top:28px;
+  }
+}
+
 </style>
 </head>
 <body class="landing-active">
