@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -2226,7 +2225,7 @@ body.landing-active .clock-heading{
   background:#f2f2f7;
 }
 
-.device-settings-modal.show{visibility:visible;pointer-events:auto}
+device-settings-modal.show{visibility:visible;pointer-events:auto}
 .device-settings-panel{width:100%;max-width:480px;padding:max(18px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom));background:#f2f2f7}
 .device-settings-header{display:flex;align-items:center;min-height:44px;margin-bottom:24px}
 .device-settings-header h2{flex:1;margin:0;font-size:17px;text-align:center}
@@ -4236,6 +4235,567 @@ body .departure-preset-heading{
   color:var(--ios-secondary);
 }
 
+/* ===== HIG polish: hierarchy, spacing, consistency ===== */
+:root{
+  --space-1:8px;
+  --space-2:12px;
+  --space-3:16px;
+  --space-4:24px;
+  --space-5:32px;
+  --radius-control:12px;
+  --radius-section:16px;
+  --surface-primary:#ffffff;
+  --surface-secondary:#f2f2f7;
+  --surface-tertiary:rgba(118,118,128,.12);
+  --separator-soft:rgba(60,60,67,.14);
+  --label-strong:#111111;
+  --label-secondary:#6e6e73;
+  --label-tertiary:#a1a1a7;
+  --action-primary:#0a84ff;
+  --action-primary-pressed:#0075e3;
+  --danger-soft:rgba(255,59,48,.1);
+  --danger-text:#d93025;
+  --control-height:44px;
+}
+
+body,
+body.landing-active{
+  padding:max(10px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+  background:var(--surface-secondary);
+  color:var(--label-strong);
+  font-family:-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif;
+  font-size:16px;
+  line-height:1.45;
+}
+
+body .container,
+body.landing-active .container{
+  max-width:430px;
+}
+
+body .header,
+body.landing-active .header{
+  margin:0 0 var(--space-4);
+  padding-top:var(--space-5);
+}
+
+body .app-settings-button,
+body.landing-active .app-settings-button{
+  top:0;
+  right:0;
+  width:44px;
+  min-width:44px;
+  height:44px;
+  min-height:44px;
+  padding:0;
+  border-radius:22px;
+  background:transparent;
+}
+
+body .app-settings-button::before,
+body.landing-active .app-settings-button::before{
+  content:'';
+  position:absolute;
+  inset:9px;
+  border-radius:50%;
+  background:var(--surface-tertiary);
+}
+
+body .app-settings-button,
+body .app-settings-button::after,
+body.landing-active .app-settings-button,
+body.landing-active .app-settings-button::after{
+  z-index:2;
+}
+
+body .clock,
+body.landing-active .clock{
+  width:100%;
+  padding:var(--space-3) var(--space-3) var(--space-2);
+  border-radius:20px;
+  background:var(--surface-primary);
+  box-shadow:0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.04);
+}
+
+body .clock-heading,
+body.landing-active .clock-heading,
+body .utc-clock-overlay-label{
+  color:var(--label-secondary);
+  font-size:13px;
+  font-weight:500;
+}
+
+body #utc-now,
+body.landing-active #utc-now{
+  font-size:clamp(38px, 10.6vw, 46px);
+  font-weight:600;
+  letter-spacing:-.03em;
+}
+
+body #utc-millis,
+body.landing-active #utc-millis,
+body #utc-overlay-millis{
+  color:var(--label-secondary);
+  font-size:clamp(18px, 4.8vw, 22px);
+  font-weight:600;
+}
+
+body .utc-label,
+body.landing-active .utc-label,
+body .utc-clock-overlay-unit{
+  margin-left:8px;
+  color:var(--label-secondary);
+  font-size:13px;
+  font-weight:500;
+}
+
+body .clock-tap-hint,
+body .member-pet-remaining,
+body .march-auto-badge,
+body .coord-axis,
+body .calculating-msg,
+body .device-sync-status,
+body .footer,
+body #page-calc .footer,
+body #page-landing .footer,
+body.landing-active #page-landing .footer{
+  color:var(--label-tertiary);
+  font-size:13px;
+  font-weight:400;
+}
+
+body .page-tabs,
+body.landing-active .page-tabs{
+  margin:0 0 var(--space-5);
+  padding:2px;
+  border-radius:10px;
+  background:var(--surface-tertiary);
+}
+
+body .page-tab-btn,
+body.landing-active .page-tab-btn{
+  min-height:var(--control-height);
+  padding:0 var(--space-3);
+  border-radius:8px;
+  font-size:15px;
+  font-weight:600;
+}
+
+body .page-tab-btn.active,
+body.landing-active .page-tab-btn.active{
+  box-shadow:0 1px 2px rgba(0,0,0,.05), 0 6px 16px rgba(0,0,0,.05);
+}
+
+body #page-calc > .mode-card,
+body #page-landing > .mode-card{
+  margin:0 0 var(--space-4) !important;
+}
+
+body #page-calc > .departure-action,
+body #page-landing > .landing-action{
+  margin:0 0 var(--space-3) !important;
+}
+
+body #page-calc > #impact-display,
+body #page-landing > #l-result{
+  margin:0 0 var(--space-4) !important;
+}
+
+body #page-calc > .collapsible-card,
+body #page-calc > .collapsible-card + .collapsible-card{
+  margin:0 0 var(--space-4) !important;
+}
+
+body #page-calc .calculating-msg{
+  margin:-8px 0 var(--space-3);
+}
+
+body .mode-card,
+body .collapsible-card,
+body #page-calc .mode-card,
+body #page-calc .collapsible-card,
+body .landing-settings-card,
+body #l-result-inner{
+  border-radius:var(--radius-section);
+  background:var(--surface-primary);
+  box-shadow:none;
+}
+
+body .collapsible-header,
+body #page-calc .collapsible-header{
+  min-height:52px;
+  padding:0 var(--space-3) !important;
+}
+
+body .collapsible-header-title,
+body .section-title,
+body label,
+body #page-calc .departure-setting-name,
+body #page-landing .l-setting-name,
+body .member-setting-label{
+  color:var(--label-strong);
+  font-size:17px;
+  font-weight:600;
+}
+
+body #page-calc .departure-setting-row,
+body #page-landing .l-setting-row,
+body #page-landing .l-wave-options{
+  min-height:60px;
+  margin:0 var(--space-3);
+  padding:0;
+  border-bottom:1px solid var(--separator-soft);
+}
+
+body #page-calc .departure-setting-row:last-of-type,
+body #page-landing .l-setting-row:last-of-type{
+  border-bottom:0;
+}
+
+body #page-landing .l-wave-options{
+  margin:0 var(--space-3);
+}
+
+body #page-calc .departure-setting-control,
+body #page-calc .departure-time-control,
+body #page-landing .l-setting-control{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:var(--space-1);
+  min-height:var(--control-height);
+  padding:0 10px 0 12px;
+  border-radius:var(--radius-control);
+  background:var(--surface-tertiary);
+}
+
+body #time-input-group,
+body #prep-input-group{
+  margin-right:0;
+}
+
+body #departure-schedule-row{
+  gap:var(--space-2);
+}
+
+body #page-calc .departure-setting-control select,
+body #page-calc .departure-time-control select,
+body #page-calc .departure-after-text,
+body #page-calc .departure-mode-select,
+body #page-landing .l-setting-control select,
+body .inline-select,
+body .time-select,
+body .time-select-sm,
+body select,
+body input:not([type="checkbox"]){
+  min-height:var(--control-height);
+  border:0;
+  background:transparent;
+  box-shadow:none;
+  color:var(--label-secondary);
+  font-size:16px;
+  font-weight:500;
+}
+
+body #page-calc .departure-mode-select{
+  flex:0 0 auto;
+  min-width:96px;
+  padding:0 30px 0 14px;
+  border-radius:var(--radius-control);
+  background:var(--surface-tertiary);
+  background-image:linear-gradient(45deg, transparent 50%, var(--label-tertiary) 50%), linear-gradient(135deg, var(--label-tertiary) 50%, transparent 50%);
+  background-position:calc(100% - 17px) calc(50% - 1px), calc(100% - 12px) calc(50% - 1px);
+  background-size:5px 5px, 5px 5px;
+  background-repeat:no-repeat;
+  color:var(--label-strong);
+  font-size:15px;
+  font-weight:500;
+}
+
+body #page-calc .departure-schedule-label{
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--control-height);
+}
+
+body #page-calc .departure-schedule-row .departure-mode-select{
+  position:absolute;
+  width:1px;
+  height:1px;
+  margin:-1px;
+  padding:0;
+  overflow:hidden;
+  clip:rect(0 0 0 0);
+  clip-path:inset(50%);
+  white-space:nowrap;
+  border:0;
+}
+
+body #page-calc .departure-time-control select,
+body .time-select-sm,
+body .time-select{
+  font-family:var(--font-num);
+  font-variant-numeric:tabular-nums;
+}
+
+body .time-sep,
+body #page-calc .departure-after-text{
+  color:var(--label-secondary);
+  font-size:15px;
+  font-weight:500;
+}
+
+body #prep-input-group,
+body #time-input-group{
+  gap:6px;
+  padding-left:14px;
+  padding-right:8px;
+}
+
+body #page-calc .departure-after-text{
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--control-height);
+  line-height:1;
+}
+
+body #page-calc .departure-chevron,
+body #page-landing .l-chevron,
+body .member-settings-toggle{
+  min-height:var(--control-height);
+}
+
+body #page-calc .departure-action,
+body #page-landing .landing-action{
+  min-height:52px;
+  border-radius:14px;
+  background:var(--action-primary);
+  font-size:17px;
+  font-weight:600;
+  box-shadow:none;
+}
+
+body #page-calc .departure-action:hover,
+body #page-landing .landing-action:hover,
+body #page-calc .departure-action:active,
+body #page-landing .landing-action:active{
+  background:var(--action-primary-pressed);
+}
+
+body .impact-display,
+body #page-calc .impact-display,
+body #page-landing #l-result .impact-display{
+  padding:18px 20px;
+  border-radius:18px;
+  background:rgba(10,132,255,.09);
+}
+
+body .impact-display-inner,
+body #page-calc .departure-result .impact-display-inner,
+body #page-landing #l-result .impact-display-inner{
+  display:grid;
+  grid-template-columns:max-content max-content;
+  grid-template-areas:
+    "label label"
+    "time unit";
+  justify-content:start;
+  align-items:end;
+  column-gap:8px;
+  row-gap:4px;
+  margin:0;
+}
+
+body .impact-display-inner > .impact-label:first-child{
+  grid-area:label;
+  color:var(--label-secondary);
+  font-size:13px;
+  font-weight:500;
+}
+
+body .impact-display-inner > .impact-time{
+  grid-area:time;
+  color:var(--action-primary);
+  font-size:32px;
+  font-weight:600;
+  line-height:1.05;
+}
+
+body .impact-display-inner > .impact-label:last-child{
+  grid-area:unit;
+  align-self:end;
+  padding-bottom:4px;
+  color:var(--label-secondary);
+  font-size:12px;
+  font-weight:500;
+}
+
+body #page-calc .member-row-wrapper,
+body #page-calc .member-row,
+body #page-calc .button-controls{
+  background:var(--surface-primary);
+}
+
+body .member-row::after,
+body .member-setting-row::after,
+body #players .member-row-wrapper:first-child .member-row::before{
+  background:var(--separator-soft);
+}
+
+body .member-identity-row{
+  min-height:56px;
+  padding:0 var(--space-3);
+  gap:var(--space-2);
+}
+
+body .member-identity-row .name-text{
+  color:var(--label-strong);
+  font-size:17px;
+  font-weight:600;
+}
+
+body .member-departure-status,
+body .member-departure-countdown-value{
+  color:var(--label-secondary);
+  font-size:15px;
+  font-weight:600;
+}
+
+body .member-departure-status.counting,
+body .member-departure-status.counting .member-departure-countdown-value{
+  color:var(--action-primary);
+}
+
+body .member-departure-status.departed,
+body .member-departure-status.departed .member-departure-countdown-value{
+  color:var(--label-tertiary);
+}
+
+body .member-settings-toggle{
+  width:44px;
+  min-width:44px;
+  color:var(--label-tertiary);
+}
+
+body .member-auto-settings{
+  background:rgba(118,118,128,.06);
+}
+
+body .member-setting-row{
+  min-height:48px;
+  padding:0 var(--space-3);
+}
+
+body .member-setting-label{
+  color:var(--label-secondary);
+  font-size:13px;
+  font-weight:500;
+}
+
+body .member-setting-value,
+body .member-coordinates,
+body .march-select,
+body #page-calc .march-select,
+body .member-pet-remaining{
+  color:var(--label-secondary);
+  font-size:15px;
+  font-weight:500;
+}
+
+body .coord-input{
+  width:56px;
+  min-width:56px;
+  min-height:36px;
+  height:36px;
+  padding:0 8px;
+  border-radius:10px;
+  background:var(--surface-tertiary);
+  color:var(--label-strong);
+  font-size:15px;
+  font-weight:500;
+}
+
+body .march-control{
+  gap:4px;
+}
+
+body .march-auto-badge,
+body .coord-axis,
+body .member-pet-remaining{
+  font-size:13px;
+  font-weight:500;
+}
+
+body .delete-bg,
+body .member-row-wrapper .delete-bg{
+  width:72px;
+  background:var(--danger-soft);
+  color:var(--danger-text);
+  font-size:13px;
+  font-weight:600;
+}
+
+body .button-controls .control-btn,
+body #page-calc .button-controls .control-btn,
+body #add-member{
+  min-height:50px;
+  color:var(--action-primary);
+  font-size:17px;
+  font-weight:500;
+}
+
+body .preview-text-box,
+body .copy{
+  padding:var(--space-3);
+  border:0;
+  border-radius:0;
+  background:rgba(118,118,128,.06);
+  color:var(--label-secondary);
+  font-family:var(--font-num);
+  font-size:14px;
+  line-height:1.65;
+}
+
+body .history-btn.danger,
+body button.secondary{
+  min-height:var(--control-height);
+  border-radius:14px;
+  box-shadow:none;
+  font-size:15px;
+  font-weight:600;
+}
+
+body .history-btn.danger{
+  background:var(--danger-soft);
+  color:var(--danger-text);
+}
+
+body .history-btn.danger:hover,
+body .history-btn.danger:active{
+  background:rgba(255,59,48,.14);
+  color:var(--danger-text);
+}
+
+@media (max-width:380px){
+  body .header,
+  body.landing-active .header{
+    padding-top:28px;
+  }
+
+  body .page-tabs,
+  body.landing-active .page-tabs{
+    margin-bottom:var(--space-4);
+  }
+
+  body #utc-now,
+  body.landing-active #utc-now{
+    font-size:34px;
+  }
+
+  body .impact-display-inner > .impact-time{
+    font-size:28px;
+  }
+}
+
 </style>
 </head>
 <body class="landing-active">
@@ -4248,8 +4808,8 @@ body .departure-preset-heading{
     <button type="button" id="app-settings-button" class="app-settings-button" aria-label="設定を開く">…</button>
     <div class="clock aligned-box" id="utc-clock-trigger" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="utc-clock-overlay" aria-label="UTC時計をPiP小窓で表示">
       <span class="clock-heading">現在時刻</span>
-      <div class="clock-time-line"><span class="clock-time-value"><span id="utc-now">--:--:--</span><span id="utc-millis">:00</span></span><span class="utc-label">UTC</span></div>
-      <span class="clock-tap-hint">タップでPiP小窓</span>
+      <div class="clock-time-line"><span class="clock-time-value"><span id="utc-now">--:--:--</span><span id="utc-millis">.0</span></span><span class="utc-label">UTC</span></div>
+      <span class="clock-tap-hint">タップでオーバーレイ</span>
     </div>
   </div>
 
@@ -4272,7 +4832,8 @@ body .departure-preset-heading{
       </span>
     </label>
 
-    <label id="departure-schedule-row" class="departure-setting-row" for="prep-time">
+    <label id="departure-schedule-row" class="departure-setting-row departure-schedule-row" for="prep-time">
+      <span class="departure-setting-name departure-schedule-label">今から</span>
       <select id="rally-type" class="departure-mode-select" aria-label="時刻の指定方法">
         <option value="now" selected>今から</option>
         <option value="time">時刻指定</option>
@@ -4473,10 +5034,10 @@ body .departure-preset-heading{
   <div class="utc-clock-overlay-card" role="dialog" aria-modal="true" aria-label="UTC時計">
     <button type="button" id="utc-clock-overlay-close" class="utc-clock-overlay-close" aria-label="閉じる">×</button>
     <div class="utc-clock-overlay-label">現在時刻</div>
-    <div class="utc-clock-overlay-time-line"><span id="utc-overlay-time">--:--:--</span><span id="utc-overlay-millis">:00</span><span class="utc-clock-overlay-unit">UTC</span></div>
+    <div class="utc-clock-overlay-time-line"><span id="utc-overlay-time">--:--:--</span><span id="utc-overlay-millis">.0</span><span class="utc-clock-overlay-unit">UTC</span></div>
     <div id="utc-overlay-countdown" class="utc-clock-overlay-countdown" hidden>
       <span id="utc-overlay-countdown-name" class="utc-clock-overlay-countdown-name"></span>
-      <span class="utc-clock-overlay-countdown-line">出発まで <span id="utc-overlay-countdown-value" class="utc-clock-overlay-countdown-value">0.00</span>秒</span>
+      <span class="utc-clock-overlay-countdown-line">出発まで <span id="utc-overlay-countdown-value" class="utc-clock-overlay-countdown-value">0.0</span>秒</span>
     </div>
   </div>
 </div>
@@ -4619,7 +5180,7 @@ function updateDeviceRegistrationUi(){
 
 function clearDeviceCountdown(options = {}){
   currentRemoteDeparture = null;
-  /* 時間切れのときだけ、0.00秒の残り表示をしばらく残す */
+  /* 時間切れのときだけ、0.0秒の残り表示をしばらく残す */
   if(!options.keepPipHold) utcPipLastDeparture = null;
 }
 
@@ -4772,9 +5333,9 @@ if(utcPipCanvas){
   utcPipCanvas.height = UTC_PIP_BASE_HEIGHT;
 }
 
-/* 「21.38秒」のように秒＋小数2桁で表す */
+/* 「21.4秒」のように秒＋小数1桁で表す */
 function formatRemainingSeconds(totalMs){
-  return (Math.max(0, totalMs) / 1000).toFixed(2);
+  return (Math.max(0, totalMs) / 1000).toFixed(1);
 }
 
 function getUtcPipDepartureData(){
@@ -4786,7 +5347,7 @@ function getUtcPipDepartureData(){
   }
   if(!utcPipLastDeparture) return null;
   const remainingMs = utcPipLastDeparture.departureTime - firebaseNow();
-  /* 0秒になっても少しの間は 0.00秒 を出したままにする */
+  /* 0秒になっても少しの間は 0.0秒 を出したままにする */
   if(remainingMs <= -UTC_PIP_HOLD_MS){
     utcPipLastDeparture = null;
     return null;
@@ -4834,14 +5395,14 @@ function drawPipLine(ctx, parts, centerX, centerY, maxWidth){
 
 /* 各サイズ・位置はキャンバスの高さ(H)に対する比率。比率を変えれば全体が追従する */
 const UTC_PIP_LAYOUT = {
-  sideMargin:0.05,      // 左右の余白（Hに対する比率）
-  timeSize:0.62,        // 通常時の時刻
-  unitSize:0.24,        // 通常時のUTC
+  sideMargin:0.05,
+  timeSize:0.62,
+  unitSize:0.24,
   timeY:0.53,
-  labelSize:0.14,       // カウントダウン1行目
+  labelSize:0.14,
   labelY:0.23,
-  valueSize:0.54,       // カウントダウンの数字
-  secondSize:0.24,      // 「秒」
+  valueSize:0.54,
+  secondSize:0.24,
   valueY:0.68
 };
 
@@ -4875,13 +5436,13 @@ function drawUtcVideoFrame(timeText, departureData){
 function tickUTC(){
   const d=new Date();
   const utcText = `${pad2(d.getUTCHours())}:${pad2(d.getUTCMinutes())}:${pad2(d.getUTCSeconds())}`;
-  const millisText = String(Math.floor(d.getUTCMilliseconds() / 10)).padStart(2, '0');
+  const millisText = (d.getUTCMilliseconds() / 1000).toFixed(1).slice(1);
   document.getElementById('utc-now').textContent = utcText;
-  document.getElementById('utc-millis').textContent = `:${millisText}`;
+  document.getElementById('utc-millis').textContent = millisText;
   const overlayTime = document.getElementById('utc-overlay-time');
   const overlayMillis = document.getElementById('utc-overlay-millis');
   if(overlayTime) overlayTime.textContent = utcText;
-  if(overlayMillis) overlayMillis.textContent = `:${millisText}`;
+  if(overlayMillis) overlayMillis.textContent = millisText;
   const departureData = getUtcPipDepartureData();
   const overlayCountdown = document.getElementById('utc-overlay-countdown');
   if(overlayCountdown){
@@ -4937,7 +5498,6 @@ async function openUtcVideoPip(){
   if(!initializeUtcVideoPipSource()) return false;
   const playPromise = utcPipVideo.play().catch(()=>{});
 
-  /* iPhone Safariはタップ直後の同期呼び出しでないとPiPを拒否することがある */
   try{
     if(typeof utcPipVideo.webkitSetPresentationMode === 'function'){
       const supportsPip = typeof utcPipVideo.webkitSupportsPresentationMode !== 'function'
@@ -4948,12 +5508,10 @@ async function openUtcVideoPip(){
       }
     }
   }catch(error){
-    // 標準PiP方式を続けて試す
   }
 
   try{
     await playPromise;
-    /* 初回タップ時に再生準備が完了した端末向けにWebKit方式を再試行 */
     if(typeof utcPipVideo.webkitSetPresentationMode === 'function'){
       const supportsPip = typeof utcPipVideo.webkitSupportsPresentationMode !== 'function'
         || utcPipVideo.webkitSupportsPresentationMode('picture-in-picture');
@@ -4968,7 +5526,6 @@ async function openUtcVideoPip(){
       return true;
     }
   }catch(error){
-    // 呼び出し元で通常オーバーレイへ切り替える
   }
   return false;
 }
@@ -5003,7 +5560,7 @@ async function openUtcPipWindow(){
         .pip-cd-value{color:#0a84ff;font-size:9vh;font-weight:600;letter-spacing:-.02em;white-space:nowrap}
         .pip-cd-value small{font-size:.5em;font-weight:600}
       </style>`;
-      utcPipWindow.document.body.innerHTML = '<div><div id="utc-pip-normal" class="pip-line"><span id="utc-pip-time">--:--:--</span><span class="pip-unit">UTC</span></div><div id="utc-pip-countdown" class="pip-cd" hidden><div class="pip-cd-head"><b id="utc-pip-countdown-name"></b>出発まで</div><div class="pip-cd-value"><span id="utc-pip-countdown-value">0.00</span><small>秒</small></div></div></div>';
+      utcPipWindow.document.body.innerHTML = '<div><div id="utc-pip-normal" class="pip-line"><span id="utc-pip-time">--:--:--</span><span class="pip-unit">UTC</span></div><div id="utc-pip-countdown" class="pip-cd" hidden><div class="pip-cd-head"><b id="utc-pip-countdown-name"></b>出発まで</div><div class="pip-cd-value"><span id="utc-pip-countdown-value">0.0</span><small>秒</small></div></div></div>';
       utcPipWindow.addEventListener('pagehide', () => { utcPipWindow = null; });
       tickUTC();
       return true;
@@ -5014,7 +5571,6 @@ async function openUtcPipWindow(){
   return openUtcVideoPip();
 }
 
-/* タップ：まずPiPを試し、非対応の端末では画面内表示に切り替える */
 async function handleUtcClockTap(){
   if(await openUtcPipWindow()) return;
   showToast('PiPを開始できません。iPhoneの「設定 → 一般 → ピクチャ・イン・ピクチャ」を確認してください');
@@ -5044,550 +5600,39 @@ document.addEventListener('keydown', event => {
 });
 
 /* ======= ペット終了チェック ======= */
-function checkPetExpiry(){
-  const pets = loadPets();
-  const now = Date.now();
-  let needsUpdate = false;
-  
-  for(const name in pets){
-    const pet = pets[name];
-    if(pet.status !== 'active' || !pet.endTime) continue;
-    
-    const remaining = pet.endTime - now;
-    
-    if(remaining <= 0) needsUpdate = true;
-  }
-  
-  
-  if(needsUpdate) renderPetList();
-}
-
-function isPetActiveForMember(memberName){
-  const pets = loadPets();
-  const now = Date.now();
-  const pet = pets[memberName];
-  return pet && pet.status === 'active' && pet.endTime && now < pet.endTime;
-}
-
-function updateMemberRowHighlights(){
-  let marchChanged = false;
-  document.querySelectorAll('#players .member-row-wrapper').forEach(wrapper => {
-    const row = wrapper.querySelector('.member-row');
-    if(!row) return;
-    
-    const nameEl = row.querySelector('.name-text');
-    const name = (nameEl.textContent || '').trim();
-    if(name && isPetActiveForMember(name)){
-      row.classList.add('pet-active');
-    } else {
-      row.classList.remove('pet-active');
-    }
-    const beforeMarch = row.querySelector('.march-select')?.value;
-    refreshMemberAutoMarch(row, {save:false, updateTime:false});
-    if(beforeMarch !== row.querySelector('.march-select')?.value) marchChanged = true;
-  });
-  if(marchChanged){
-    saveSettings();
-    updateLandingTimeOptions();
-  }
-}
-
-function formatCountdown(totalSeconds){
-  const safeSeconds = Math.max(0, Math.ceil(totalSeconds));
-  const hours = Math.floor(safeSeconds / 3600);
-  const minutes = Math.floor((safeSeconds % 3600) / 60);
-  const seconds = safeSeconds % 60;
-  return `${pad2(hours)}:${pad2(minutes)}:${pad2(seconds)}`;
-}
-
-function updateMemberDepartureCountdowns(){
-  const now = Date.now();
-  document.querySelectorAll('#players .member-row').forEach(row => {
-    const status = row.querySelector('.member-departure-status');
-    if(!status) return;
-    const departureTime = Number(row.dataset.departureTime || 0);
-    status.classList.remove('counting', 'departed');
-    if(!departureTime){
-      status.textContent = '未設定';
-      return;
-    }
-    const remainingMs = departureTime - now;
-    if(remainingMs <= 0){
-      status.textContent = '出発済';
-      status.classList.add('departed');
-      return;
-    }
-    status.textContent = `${formatRemainingSeconds(remainingMs)}秒`;
-    status.classList.add('counting');
-  });
-}
-
-setInterval(checkPetExpiry, 1000);
-setInterval(updateMemberRowHighlights, 1000);
-setInterval(updateMemberDepartureCountdowns, 50);
-
-/* ======= 行軍時間オプション生成 ======= */
-function marchLabel(i){
-  const min = Math.floor(i / 60);
-  const sec = i % 60;
-  if(min === 0) return `${sec}秒`;
-  if(sec === 0) return `${min}分`;
-  return `${min}分${sec}秒`;
-}
-function generateMarchOptions(selectElement, defaultValue, minSec = 10, maxSec = 120){
-  const useDefault = parseInt(defaultValue) || minSec;
-  let html = '';
-  // 範囲外の現在値も先頭に追加して保持する
-  if(useDefault < minSec){
-    html += `<option value="${useDefault}" selected>${marchLabel(useDefault)}</option>`;
-  }
-  for(let i=minSec; i<=maxSec; i++){
-    const selected = (i === useDefault) ? ' selected' : '';
-    html += `<option value="${i}"${selected}>${marchLabel(i)}</option>`;
-  }
-  if(useDefault > maxSec){
-    html += `<option value="${useDefault}" selected>${marchLabel(useDefault)}</option>`;
-  }
-  selectElement.innerHTML = html;
-}
-function updateAllMarchOptions(minSec = 10, maxSec = 120){
-  document.querySelectorAll('.march-select').forEach(sel=>{
-    // 現在値を必ず保存してから再生成
-    const savedVal = parseInt(sel.value) || minSec;
-    generateMarchOptions(sel, savedVal, minSec, maxSec);
-  });
-}
+function checkPetExpiry(){ const pets = loadPets(); const now = Date.now(); let needsUpdate = false; for(const name in pets){ const pet = pets[name]; if(pet.status !== 'active' || !pet.endTime) continue; const remaining = pet.endTime - now; if(remaining <= 0) needsUpdate = true; } if(needsUpdate) renderPetList(); }
+function isPetActiveForMember(memberName){ const pets = loadPets(); const now = Date.now(); const pet = pets[memberName]; return pet && pet.status === 'active' && pet.endTime && now < pet.endTime; }
+function updateMemberRowHighlights(){ let marchChanged = false; document.querySelectorAll('#players .member-row-wrapper').forEach(wrapper => { const row = wrapper.querySelector('.member-row'); if(!row) return; const nameEl = row.querySelector('.name-text'); const name = (nameEl.textContent || '').trim(); if(name && isPetActiveForMember(name)){ row.classList.add('pet-active'); } else { row.classList.remove('pet-active'); } const beforeMarch = row.querySelector('.march-select')?.value; refreshMemberAutoMarch(row, {save:false, updateTime:false}); if(beforeMarch !== row.querySelector('.march-select')?.value) marchChanged = true; }); if(marchChanged){ saveSettings(); updateLandingTimeOptions(); } }
+function formatCountdown(totalSeconds){ const safeSeconds = Math.max(0, Math.ceil(totalSeconds)); const hours = Math.floor(safeSeconds / 3600); const minutes = Math.floor((safeSeconds % 3600) / 60); const seconds = safeSeconds % 60; return `${pad2(hours)}:${pad2(minutes)}:${pad2(seconds)}`; }
+function updateMemberDepartureCountdowns(){ const now = Date.now(); document.querySelectorAll('#players .member-row').forEach(row => { const status = row.querySelector('.member-departure-status'); if(!status) return; const departureTime = Number(row.dataset.departureTime || 0); status.classList.remove('counting', 'departed'); if(!departureTime){ status.textContent = '未設定'; return; } const remainingMs = departureTime - now; if(remainingMs <= 0){ status.textContent = '出発済'; status.classList.add('departed'); return; } status.textContent = `${formatRemainingSeconds(remainingMs)}秒`; status.classList.add('counting'); }); }
+setInterval(checkPetExpiry, 1000); setInterval(updateMemberRowHighlights, 1000); setInterval(updateMemberDepartureCountdowns, 50);
+function marchLabel(i){ const min = Math.floor(i / 60); const sec = i % 60; if(min === 0) return `${sec}秒`; if(sec === 0) return `${min}分`; return `${min}分${sec}秒`; }
+function generateMarchOptions(selectElement, defaultValue, minSec = 10, maxSec = 120){ const useDefault = parseInt(defaultValue) || minSec; let html = ''; if(useDefault < minSec){ html += `<option value="${useDefault}" selected>${marchLabel(useDefault)}</option>`; } for(let i=minSec; i<=maxSec; i++){ const selected = (i === useDefault) ? ' selected' : ''; html += `<option value="${i}"${selected}>${marchLabel(i)}</option>`; } if(useDefault > maxSec){ html += `<option value="${useDefault}" selected>${marchLabel(useDefault)}</option>`; } selectElement.innerHTML = html; }
+function updateAllMarchOptions(minSec = 10, maxSec = 120){ document.querySelectorAll('.march-select').forEach(sel=>{ const savedVal = parseInt(sel.value) || minSec; generateMarchOptions(sel, savedVal, minSec, maxSec); }); }
 updateAllMarchOptions();
-
-/* ======= 固定目標向け・行軍時間実測マスター ======= */
-const MARCH_TIME_MASTER = Object.freeze({
-  '592,590':[62,55,50,45], '594,590':[56,50,45,41], '596,590':[52,47,42,39],
-  '598,590':[50,45,41,37], '600,590':[50,45,41,37], '602,590':[52,47,42,39],
-  '604,590':[56,50,45,41], '606,590':[62,55,50,45],
-  '590,592':[62,55,50,45], '592,592':[54,48,44,40], '594,592':[48,43,39,36],
-  '596,592':[43,39,35,32], '598,592':[40,36,33,30], '600,592':[40,36,33,30],
-  '602,592':[43,39,35,32], '604,592':[48,43,39,36], '606,592':[54,48,44,40],
-  '608,592':[62,55,50,45],
-  '590,594':[56,50,45,41], '592,594':[48,43,39,36], '606,594':[48,43,39,36],
-  '608,594':[56,50,45,41],
-  '590,596':[52,47,42,39], '592,596':[43,39,35,32], '606,596':[43,39,35,32],
-  '608,596':[52,47,42,39],
-  '590,598':[50,45,41,37], '592,598':[40,36,33,30], '606,598':[40,36,33,30],
-  '608,598':[50,45,41,37],
-  '590,600':[50,45,41,37], '592,600':[40,36,33,30], '606,600':[40,36,33,30],
-  '608,600':[50,45,41,37],
-  '590,602':[52,47,42,39], '592,602':[43,39,35,32], '606,602':[43,39,35,32],
-  '608,602':[52,47,42,39],
-  '590,604':[56,50,45,41], '592,604':[48,43,39,36], '606,604':[48,43,39,36],
-  '608,604':[56,50,45,41],
-  '590,606':[62,55,50,45], '592,606':[54,48,44,40], '594,606':[48,43,39,36],
-  '596,606':[43,39,35,32], '598,606':[40,36,33,30], '600,606':[40,36,33,30],
-  '602,606':[43,39,35,32], '604,606':[48,43,39,36], '606,606':[54,48,44,40],
-  '608,606':[62,55,50,45],
-  '592,608':[62,55,50,45], '594,608':[56,50,45,41], '596,608':[52,47,42,39],
-  '598,608':[50,45,41,37], '600,608':[50,45,41,37], '602,608':[52,47,42,39],
-  '604,608':[56,50,45,41], '606,608':[62,55,50,45]
-});
-
-function lookupMarchTime(coordX, coordY, statBoost, petActive){
-  const values = MARCH_TIME_MASTER[`${coordX},${coordY}`];
-  if(!values) return null;
-  const columnIndex = (petActive ? 2 : 0) + (statBoost ? 1 : 0);
-  return values[columnIndex];
-}
-
-function refreshMemberAutoMarch(row, options = {}){
-  if(!row) return null;
-  const xInput = row.querySelector('.coord-x');
-  const yInput = row.querySelector('.coord-y');
-  const boostToggle = row.querySelector('.stat-boost-toggle');
-  const marchSelect = row.querySelector('.march-select');
-  const badge = row.querySelector('.march-auto-badge');
-  const petToggle = row.querySelector('.member-settings-pet-toggle');
-  const petRemaining = row.querySelector('.member-pet-remaining');
-  if(!xInput || !yInput || !boostToggle || !marchSelect) return null;
-
-  const name = (row.querySelector('.name-text')?.textContent || '').trim();
-  const petRecord = name ? loadPets()[name] : null;
-  const remainingPetMs = petRecord?.status === 'active' && petRecord.endTime
-    ? petRecord.endTime - Date.now()
-    : 0;
-  const petActive = remainingPetMs > 0;
-  if(petToggle) petToggle.checked = petActive;
-  if(petRemaining){
-    petRemaining.textContent = petActive
-      ? `残り ${formatCountdown(remainingPetMs / 1000)}`
-      : (petRecord?.status === 'ended' || remainingPetMs < 0 ? '終了' : '未発動');
-  }
-  const coordX = xInput.value.trim();
-  const coordY = yInput.value.trim();
-  const hasCoordinates = coordX !== '' && coordY !== '';
-  const autoSeconds = hasCoordinates
-    ? lookupMarchTime(parseInt(coordX, 10), parseInt(coordY, 10), boostToggle.checked, petActive)
-    : null;
-
-  if(autoSeconds !== null){
-    if(parseInt(marchSelect.value, 10) !== autoSeconds || marchSelect.dataset.autoMarch !== 'true'){
-      generateMarchOptions(marchSelect, autoSeconds, 10, 300);
-    }
-    marchSelect.dataset.autoMarch = 'true';
-    marchSelect.disabled = true;
-    row.classList.add('auto-march-active');
-    row.classList.remove('auto-march-missing');
-    if(badge) badge.textContent = '自動';
-  }else{
-    marchSelect.dataset.autoMarch = 'false';
-    marchSelect.disabled = false;
-    row.classList.remove('auto-march-active');
-    row.classList.toggle('auto-march-missing', hasCoordinates);
-    if(badge) badge.textContent = '手動';
-  }
-
-  if(options.save !== false) saveSettings();
-  if(options.updateTime !== false) updateLandingTimeOptions();
-  return autoSeconds;
-}
-
-function refreshAllMemberAutoMarchTimes(options = {}){
-  document.querySelectorAll('#players .member-row').forEach(row => {
-    refreshMemberAutoMarch(row, {save:false, updateTime:false});
-  });
-  if(options.save !== false) saveSettings();
-  if(options.updateTime !== false) updateLandingTimeOptions();
-}
-
-/* ======= 着弾時刻の自動セット（切り替え時に一発計算） ======= */
-function autoSetLandingTime(){
-  const now = new Date();
-  const rallyMin = parseInt(document.getElementById('rally-min-time').value || document.getElementById('rally-min').value) || 1;
-
-  let maxMarch = 0;
-  document.querySelectorAll('.march-select').forEach(sel => {
-    const v = parseInt(sel.value) || 0;
-    if(v > maxMarch) maxMarch = v;
-  });
-
-  // 着弾時刻 = 現在UTC + 集結時間 + 最遅行軍 + 60秒（バッファ）
-  const target = new Date(now.getTime() + rallyMin * 60 * 1000 + maxMarch * 1000 + 60 * 1000);
-
-  // 10秒単位に切り上げ
-  let H = target.getUTCHours();
-  let M = target.getUTCMinutes();
-  let S = Math.ceil(target.getUTCSeconds() / 10) * 10;
-  if(S >= 60){ S = 0; M += 1; }
-  if(M >= 60){ M = 0; H += 1; }
-  if(H >= 24){ H = 0; }
-
-  // hh/mm/ss セレクトに強制セット（選択肢は updateLandingTimeOptions が後から作るので value だけ記憶させる）
-  const hhSel = document.getElementById('hh');
-  const mmSel = document.getElementById('mm');
-  const ssSel = document.getElementById('ss');
-  hhSel.dataset.autoH = H;
-  mmSel.dataset.autoM = M;
-  ssSel.dataset.autoS = S;
-}
-
-/* ======= 着弾指定のデフォルト時刻 ======= */
-function updateLandingTimeOptions(){
-  const now = new Date();
-  const hhSel = document.getElementById('hh');
-  const mmSel = document.getElementById('mm');
-  const ssSel = document.getElementById('ss');
-  const rallyMinSel = document.getElementById('rally-min');
-
-  const rallyMin = parseInt(rallyMinSel.value) || 5;
-
-  let maxMarch = 0;
-  document.querySelectorAll('.march-select').forEach(sel => {
-    const march = parseInt(sel.value) || 0;
-    if(march > maxMarch) maxMarch = march;
-  });
-
-  const minTime = new Date(now.getTime() + rallyMin * 60 * 1000 + maxMarch * 1000);
-
-  // デフォルト着弾時刻 = 現在時刻 + 集結時間（ただしminTime未満にはならない）
-  const defaultTime = new Date(now.getTime() + rallyMin * 60 * 1000);
-  const targetTime = defaultTime < minTime ? minTime : defaultTime;
-
-  // 1秒単位で選択できるようにする
-  let targetH = targetTime.getUTCHours();
-  let targetM = targetTime.getUTCMinutes();
-  let targetS = targetTime.getUTCSeconds();
-
-  // 繰り上がり処理
-  if(targetS >= 60){
-    targetS = 0;
-    targetM += 1;
-  }
-  if(targetM >= 60){
-    targetM = 0;
-    targetH += 1;
-  }
-  if(targetH >= 24){
-    targetH = 0;
-  }
-
-  // autoSetLandingTime() が記憶した値を優先、なければ targetH/M/S
-  const autoH = hhSel.dataset.autoH !== undefined ? parseInt(hhSel.dataset.autoH) : null;
-  const autoM = mmSel.dataset.autoM !== undefined ? parseInt(mmSel.dataset.autoM) : null;
-  const autoS = ssSel.dataset.autoS !== undefined ? parseInt(ssSel.dataset.autoS) : null;
-  const currentH = autoH !== null ? autoH : (parseInt(hhSel.value) >= 0 ? parseInt(hhSel.value) : targetH);
-  const currentM = autoM !== null ? autoM : (parseInt(mmSel.value) >= 0 ? parseInt(mmSel.value) : targetM);
-  const currentS = autoS !== null ? autoS : (parseInt(ssSel.value) >= 0 ? parseInt(ssSel.value) : targetS);
-  // 一度使ったら消す（ユーザーが手動変更したら上書きしない）
-  delete hhSel.dataset.autoH; delete mmSel.dataset.autoM; delete ssSel.dataset.autoS;
-
-  // 時（0-23）- minTime以降の時間のみ表示
-  let hhHTML='';
-  let validHours = [];
-  for(let i=0;i<24;i++){ 
-    let hasValidTime = false;
-    for(let m=0; m<60; m++){
-      for(let s=0; s<60; s++){
-        const testTime = new Date(now);
-        testTime.setUTCHours(i, m, s, 0);
-        if(testTime < now) testTime.setUTCDate(testTime.getUTCDate() + 1);
-        if(testTime >= minTime){
-          hasValidTime = true;
-          break;
-        }
-      }
-      if(hasValidTime) break;
-    }
-    if(hasValidTime){
-      validHours.push(i);
-      const v=String(i).padStart(2,'0'); 
-      hhHTML+=`<option value="${v}">${v}</option>`;
-    }
-  }
-  hhSel.innerHTML=hhHTML;
-
-  let selectedH = validHours.includes(currentH) ? currentH : validHours[0];
-  hhSel.value=String(selectedH).padStart(2,'0');
-
-  // 分（1分刻み）- 選択された時に応じてフィルタ
-  let mmHTML='';
-  let validMinutes = [];
-  for(let i=0;i<60;i++){
-    let hasValidTime = false;
-    for(let s=0; s<60; s++){
-      const testTime = new Date(now);
-      testTime.setUTCHours(selectedH, i, s, 0);
-      if(testTime < now) testTime.setUTCDate(testTime.getUTCDate() + 1);
-      if(testTime >= minTime){
-        hasValidTime = true;
-        break;
-      }
-    }
-    if(hasValidTime){
-      validMinutes.push(i);
-      const v=String(i).padStart(2,'0');
-      mmHTML+=`<option value="${v}">${v}</option>`;
-    }
-  }
-  mmSel.innerHTML=mmHTML;
-
-  let selectedM = validMinutes.includes(currentM) ? currentM : validMinutes[0];
-  if(selectedM !== undefined){
-    mmSel.value=String(selectedM).padStart(2,'0');
-  }
-
-  // 秒（1秒刻み）- 選択された時と分に応じてフィルタ
-  let ssHTML='';
-  let validSeconds = [];
-  selectedM = parseInt(mmSel.value) || 0;
-  for(let i=0;i<60;i++){
-    const v=String(i).padStart(2,'0');
-    const testTime = new Date(now);
-    testTime.setUTCHours(selectedH, selectedM, i, 0);
-    if(testTime < now) testTime.setUTCDate(testTime.getUTCDate() + 1);
-
-    if(testTime >= minTime){
-      validSeconds.push(i);
-      ssHTML+=`<option value="${v}">${v}</option>`;
-    }
-  }
-  ssSel.innerHTML=ssHTML;
-
-  let selectedS = validSeconds.includes(currentS) ? currentS : validSeconds[0];
-  if(selectedS !== undefined){
-    ssSel.value=String(selectedS).padStart(2,'0');
-  }
-}
+const MARCH_TIME_MASTER = Object.freeze({ '592,590':[62,55,50,45], '594,590':[56,50,45,41], '596,590':[52,47,42,39], '598,590':[50,45,41,37], '600,590':[50,45,41,37], '602,590':[52,47,42,39], '604,590':[56,50,45,41], '606,590':[62,55,50,45], '590,592':[62,55,50,45], '592,592':[54,48,44,40], '594,592':[48,43,39,36], '596,592':[43,39,35,32], '598,592':[40,36,33,30], '600,592':[40,36,33,30], '602,592':[43,39,35,32], '604,592':[48,43,39,36], '606,592':[54,48,44,40], '608,592':[62,55,50,45], '590,594':[56,50,45,41], '592,594':[48,43,39,36], '606,594':[48,43,39,36], '608,594':[56,50,45,41], '590,596':[52,47,42,39], '592,596':[43,39,35,32], '606,596':[43,39,35,32], '608,596':[52,47,42,39], '590,598':[50,45,41,37], '592,598':[40,36,33,30], '606,598':[40,36,33,30], '608,598':[50,45,41,37], '590,600':[50,45,41,37], '592,600':[40,36,33,30], '606,600':[40,36,33,30], '608,600':[50,45,41,37], '590,602':[52,47,42,39], '592,602':[43,39,35,32], '606,602':[43,39,35,32], '608,602':[52,47,42,39], '590,604':[56,50,45,41], '592,604':[48,43,39,36], '606,604':[48,43,39,36], '608,604':[56,50,45,41], '590,606':[62,55,50,45], '592,606':[54,48,44,40], '594,606':[48,43,39,36], '596,606':[43,39,35,32], '598,606':[40,36,33,30], '600,606':[40,36,33,30], '602,606':[43,39,35,32], '604,606':[48,43,39,36], '606,606':[54,48,44,40], '608,606':[62,55,50,45], '592,608':[62,55,50,45], '594,608':[56,50,45,41], '596,608':[52,47,42,39], '598,608':[50,45,41,37], '600,608':[50,45,41,37], '602,608':[52,47,42,39], '604,608':[56,50,45,41], '606,608':[62,55,50,45]});
+function lookupMarchTime(coordX, coordY, statBoost, petActive){ const values = MARCH_TIME_MASTER[`${coordX},${coordY}`]; if(!values) return null; const columnIndex = (petActive ? 2 : 0) + (statBoost ? 1 : 0); return values[columnIndex]; }
+function refreshMemberAutoMarch(row, options = {}){ if(!row) return null; const xInput = row.querySelector('.coord-x'); const yInput = row.querySelector('.coord-y'); const boostToggle = row.querySelector('.stat-boost-toggle'); const marchSelect = row.querySelector('.march-select'); const badge = row.querySelector('.march-auto-badge'); const petToggle = row.querySelector('.member-settings-pet-toggle'); const petRemaining = row.querySelector('.member-pet-remaining'); if(!xInput || !yInput || !boostToggle || !marchSelect) return null; const name = (row.querySelector('.name-text')?.textContent || '').trim(); const petRecord = name ? loadPets()[name] : null; const remainingPetMs = petRecord?.status === 'active' && petRecord.endTime ? petRecord.endTime - Date.now() : 0; const petActive = remainingPetMs > 0; if(petToggle) petToggle.checked = petActive; if(petRemaining){ petRemaining.textContent = petActive ? `残り ${formatCountdown(remainingPetMs / 1000)}` : (petRecord?.status === 'ended' || remainingPetMs < 0 ? '終了' : '未発動'); } const coordX = xInput.value.trim(); const coordY = yInput.value.trim(); const hasCoordinates = coordX !== '' && coordY !== ''; const autoSeconds = hasCoordinates ? lookupMarchTime(parseInt(coordX, 10), parseInt(coordY, 10), boostToggle.checked, petActive) : null; if(autoSeconds !== null){ if(parseInt(marchSelect.value, 10) !== autoSeconds || marchSelect.dataset.autoMarch !== 'true'){ generateMarchOptions(marchSelect, autoSeconds, 10, 300); } marchSelect.dataset.autoMarch = 'true'; marchSelect.disabled = true; row.classList.add('auto-march-active'); row.classList.remove('auto-march-missing'); if(badge) badge.textContent = '自動'; }else{ marchSelect.dataset.autoMarch = 'false'; marchSelect.disabled = false; row.classList.remove('auto-march-active'); row.classList.toggle('auto-march-missing', hasCoordinates); if(badge) badge.textContent = '手動'; } if(options.save !== false) saveSettings(); if(options.updateTime !== false) updateLandingTimeOptions(); return autoSeconds; }
+function refreshAllMemberAutoMarchTimes(options = {}){ document.querySelectorAll('#players .member-row').forEach(row => { refreshMemberAutoMarch(row, {save:false, updateTime:false}); }); if(options.save !== false) saveSettings(); if(options.updateTime !== false) updateLandingTimeOptions(); }
+function autoSetLandingTime(){ const now = new Date(); const rallyMin = parseInt(document.getElementById('rally-min-time').value || document.getElementById('rally-min').value) || 1; let maxMarch = 0; document.querySelectorAll('.march-select').forEach(sel => { const v = parseInt(sel.value) || 0; if(v > maxMarch) maxMarch = v; }); const target = new Date(now.getTime() + rallyMin * 60 * 1000 + maxMarch * 1000 + 60 * 1000); let H = target.getUTCHours(); let M = target.getUTCMinutes(); let S = Math.ceil(target.getUTCSeconds() / 10) * 10; if(S >= 60){ S = 0; M += 1; } if(M >= 60){ M = 0; H += 1; } if(H >= 24){ H = 0; } const hhSel = document.getElementById('hh'); const mmSel = document.getElementById('mm'); const ssSel = document.getElementById('ss'); hhSel.dataset.autoH = H; mmSel.dataset.autoM = M; ssSel.dataset.autoS = S; }
+function updateLandingTimeOptions(){ const now = new Date(); const hhSel = document.getElementById('hh'); const mmSel = document.getElementById('mm'); const ssSel = document.getElementById('ss'); const rallyMinSel = document.getElementById('rally-min'); const rallyMin = parseInt(rallyMinSel.value) || 5; let maxMarch = 0; document.querySelectorAll('.march-select').forEach(sel => { const march = parseInt(sel.value) || 0; if(march > maxMarch) maxMarch = march; }); const minTime = new Date(now.getTime() + rallyMin * 60 * 1000 + maxMarch * 1000); const defaultTime = new Date(now.getTime() + rallyMin * 60 * 1000); const targetTime = defaultTime < minTime ? minTime : defaultTime; let targetH = targetTime.getUTCHours(); let targetM = targetTime.getUTCMinutes(); let targetS = targetTime.getUTCSeconds(); if(targetS >= 60){ targetS = 0; targetM += 1; } if(targetM >= 60){ targetM = 0; targetH += 1; } if(targetH >= 24){ targetH = 0; } const autoH = hhSel.dataset.autoH !== undefined ? parseInt(hhSel.dataset.autoH) : null; const autoM = mmSel.dataset.autoM !== undefined ? parseInt(mmSel.dataset.autoM) : null; const autoS = ssSel.dataset.autoS !== undefined ? parseInt(ssSel.dataset.autoS) : null; const currentH = autoH !== null ? autoH : (parseInt(hhSel.value) >= 0 ? parseInt(hhSel.value) : targetH); const currentM = autoM !== null ? autoM : (parseInt(mmSel.value) >= 0 ? parseInt(mmSel.value) : targetM); const currentS = autoS !== null ? autoS : (parseInt(ssSel.value) >= 0 ? parseInt(ssSel.value) : targetS); delete hhSel.dataset.autoH; delete mmSel.dataset.autoM; delete ssSel.dataset.autoS; let hhHTML=''; let validHours = []; for(let i=0;i<24;i++){ let hasValidTime = false; for(let m=0; m<60; m++){ for(let s=0; s<60; s++){ const testTime = new Date(now); testTime.setUTCHours(i, m, s, 0); if(testTime < now) testTime.setUTCDate(testTime.getUTCDate() + 1); if(testTime >= minTime){ hasValidTime = true; break; } } if(hasValidTime) break; } if(hasValidTime){ validHours.push(i); const v=String(i).padStart(2,'0'); hhHTML+=`<option value="${v}">${v}</option>`; } } hhSel.innerHTML=hhHTML; let selectedH = validHours.includes(currentH) ? currentH : validHours[0]; hhSel.value=String(selectedH).padStart(2,'0'); let mmHTML=''; let validMinutes = []; for(let i=0;i<60;i++){ let hasValidTime = false; for(let s=0; s<60; s++){ const testTime = new Date(now); testTime.setUTCHours(selectedH, i, s, 0); if(testTime < now) testTime.setUTCDate(testTime.getUTCDate() + 1); if(testTime >= minTime){ hasValidTime = true; break; } } if(hasValidTime){ validMinutes.push(i); const v=String(i).padStart(2,'0'); mmHTML+=`<option value="${v}">${v}</option>`; } } mmSel.innerHTML=mmHTML; let selectedM = validMinutes.includes(currentM) ? currentM : validMinutes[0]; if(selectedM !== undefined){ mmSel.value=String(selectedM).padStart(2,'0'); } let ssHTML=''; let validSeconds = []; selectedM = parseInt(mmSel.value) || 0; for(let i=0;i<60;i++){ const v=String(i).padStart(2,'0'); const testTime = new Date(now); testTime.setUTCHours(selectedH, selectedM, i, 0); if(testTime < now) testTime.setUTCDate(testTime.getUTCDate() + 1); if(testTime >= minTime){ validSeconds.push(i); ssHTML+=`<option value="${v}">${v}</option>`; } } ssSel.innerHTML=ssHTML; let selectedS = validSeconds.includes(currentS) ? currentS : validSeconds[0]; if(selectedS !== undefined){ ssSel.value=String(selectedS).padStart(2,'0'); } }
 updateLandingTimeOptions();
-
-// 時刻ドロップダウンのイベントリスナー
-document.getElementById('hh').addEventListener('focus', updateLandingTimeOptions);
-document.getElementById('mm').addEventListener('focus', updateLandingTimeOptions);
-document.getElementById('ss').addEventListener('focus', updateLandingTimeOptions);
-document.getElementById('hh').addEventListener('click', updateLandingTimeOptions);
-document.getElementById('mm').addEventListener('click', updateLandingTimeOptions);
-document.getElementById('ss').addEventListener('click', updateLandingTimeOptions);
-document.getElementById('hh').addEventListener('change', updateLandingTimeOptions);
-document.getElementById('mm').addEventListener('change', updateLandingTimeOptions);
-document.getElementById('ss').addEventListener('change', updateLandingTimeOptions);
-document.getElementById('rally-min').addEventListener('change', updateLandingTimeOptions);
-
-/* ======= モード切替 ======= */
-const rallyTypeSel=document.getElementById('rally-type');
-const rallyMinSel=document.getElementById('rally-min');
-const actionBtn=document.getElementById('action-btn');
-const impactDisplay=document.getElementById('impact-display');
-
-function updateRallyMinOptions(){
-  const currentVal = parseInt(rallyMinSel.value) || 5;
-  const options = [{v:5, l:'5分'}, {v:10, l:'10分'}];
-  const html = options.map(o => `<option value="${o.v}">${o.l}</option>`).join('');
-  rallyMinSel.innerHTML = html;
-  rallyMinTimeSel.innerHTML = html;
-
-  if(options.some(o => o.v == currentVal)){
-    rallyMinSel.value = currentVal;
-    rallyMinTimeSel.value = currentVal;
-  }else{
-    rallyMinSel.value = options[0].v;
-    rallyMinTimeSel.value = options[0].v;
-  }
-}
-
-function updatePrepTimeOptions(){
-  const currentVal = parseInt(prepTimeSel.value);
-  const selectedVal = Number.isFinite(currentVal) ? currentVal : 30;
-  let html = '';
-  for(let seconds = 0; seconds <= 600; seconds++){
-    html += `<option value="${seconds}">${marchLabel(seconds)}</option>`;
-  }
-  if(selectedVal > 600) html += `<option value="${selectedVal}">${marchLabel(selectedVal)}</option>`;
-  prepTimeSel.innerHTML = html;
-  prepTimeSel.value = String(selectedVal);
-}
-
-function syncRallyMinValues(){
-  const val = rallyMinSel.value;
-  rallyMinTimeSel.value = val;
-}
-
-const timeInputGroup = document.getElementById('time-input-group');
-const prepTimeSel = document.getElementById('prep-time');
-const prepInputGroup = document.getElementById('prep-input-group');
-const departureScheduleRow = document.getElementById('departure-schedule-row');
-const rallyMinTimeSel = document.getElementById('rally-min-time');
-
-/* 各メンバーの行軍時間を履歴から復元 */
-function restoreMarchTimesFromHistory(){
-  const key = getHistoryKey();
-  const history = loadHistory();
-  if(!history[key]) return;
-
-  document.querySelectorAll('#players .member-row').forEach(row => {
-    const nameEl = row.querySelector('.name-text');
-    const sel = row.querySelector('.march-select');
-    if(!nameEl || !sel) return;
-    if(sel.dataset.autoMarch === 'true') return;
-    const name = nameEl.textContent.trim();
-    if(!name) return;
-    const normalizedName = name.toLowerCase();
-    const entry = history[key].find(item => item.name.toLowerCase() === normalizedName);
-    if(entry){
-      // 履歴にあればその値をセット（範囲外でも generateMarchOptions が保持）
-      const currentMin = parseInt(sel.options[0]?.value) || 10;
-      const currentMax = parseInt(sel.options[sel.options.length - 1]?.value) || 120;
-      generateMarchOptions(sel, entry.marchSec, currentMin, currentMax);
-    }
-  });
-}
-
-function updateMode(){
-  const rallyType = rallyTypeSel.value;
-
-  updateAllMarchOptions(10, 300);
-  restoreMarchTimesFromHistory();
-
-  // 時刻入力と準備時間の表示/非表示
-  if(rallyType === 'time'){
-    timeInputGroup.style.display='inline-flex';
-    prepInputGroup.style.display='none';
-    departureScheduleRow.htmlFor='hh';
-    // 切り替え時に自動計算してセット
-    autoSetLandingTime();
-    updateLandingTimeOptions();
-  }else{
-    timeInputGroup.style.display='none';
-    prepInputGroup.style.display='flex';
-    departureScheduleRow.htmlFor='prep-time';
-  }
-
-  updateRallyMinOptions();
-  updatePrepTimeOptions();
-  syncRallyMinValues();
-}
-
+document.getElementById('hh').addEventListener('focus', updateLandingTimeOptions); document.getElementById('mm').addEventListener('focus', updateLandingTimeOptions); document.getElementById('ss').addEventListener('focus', updateLandingTimeOptions); document.getElementById('hh').addEventListener('click', updateLandingTimeOptions); document.getElementById('mm').addEventListener('click', updateLandingTimeOptions); document.getElementById('ss').addEventListener('click', updateLandingTimeOptions); document.getElementById('hh').addEventListener('change', updateLandingTimeOptions); document.getElementById('mm').addEventListener('change', updateLandingTimeOptions); document.getElementById('ss').addEventListener('change', updateLandingTimeOptions); document.getElementById('rally-min').addEventListener('change', updateLandingTimeOptions);
+const rallyTypeSel=document.getElementById('rally-type'); const rallyMinSel=document.getElementById('rally-min'); const actionBtn=document.getElementById('action-btn'); const impactDisplay=document.getElementById('impact-display');
+function updateRallyMinOptions(){ const currentVal = parseInt(rallyMinSel.value) || 5; const options = [{v:5, l:'5分'}, {v:10, l:'10分'}]; const html = options.map(o => `<option value="${o.v}">${o.l}</option>`).join(''); rallyMinSel.innerHTML = html; rallyMinTimeSel.innerHTML = html; if(options.some(o => o.v == currentVal)){ rallyMinSel.value = currentVal; rallyMinTimeSel.value = currentVal; }else{ rallyMinSel.value = options[0].v; rallyMinTimeSel.value = options[0].v; } }
+function updatePrepTimeOptions(){ const currentVal = parseInt(prepTimeSel.value); const selectedVal = Number.isFinite(currentVal) ? currentVal : 30; let html = ''; for(let seconds = 0; seconds <= 600; seconds++){ html += `<option value="${seconds}">${marchLabel(seconds)}</option>`; } if(selectedVal > 600) html += `<option value="${selectedVal}">${marchLabel(selectedVal)}</option>`; prepTimeSel.innerHTML = html; prepTimeSel.value = String(selectedVal); }
+function syncRallyMinValues(){ const val = rallyMinSel.value; rallyMinTimeSel.value = val; }
+const timeInputGroup = document.getElementById('time-input-group'); const prepTimeSel = document.getElementById('prep-time'); const prepInputGroup = document.getElementById('prep-input-group'); const departureScheduleRow = document.getElementById('departure-schedule-row'); const rallyMinTimeSel = document.getElementById('rally-min-time');
+function restoreMarchTimesFromHistory(){ const key = getHistoryKey(); const history = loadHistory(); if(!history[key]) return; document.querySelectorAll('#players .member-row').forEach(row => { const nameEl = row.querySelector('.name-text'); const sel = row.querySelector('.march-select'); if(!nameEl || !sel) return; if(sel.dataset.autoMarch === 'true') return; const name = nameEl.textContent.trim(); if(!name) return; const normalizedName = name.toLowerCase(); const entry = history[key].find(item => item.name.toLowerCase() === normalizedName); if(entry){ const currentMin = parseInt(sel.options[0]?.value) || 10; const currentMax = parseInt(sel.options[sel.options.length - 1]?.value) || 120; generateMarchOptions(sel, entry.marchSec, currentMin, currentMax); } }); }
+function updateMode(){ rallyTypeSel.value = 'now'; const rallyType = rallyTypeSel.value; updateAllMarchOptions(10, 300); restoreMarchTimesFromHistory(); if(rallyType === 'time'){ timeInputGroup.style.display='inline-flex'; prepInputGroup.style.display='none'; departureScheduleRow.htmlFor='hh'; autoSetLandingTime(); updateLandingTimeOptions(); }else{ timeInputGroup.style.display='none'; prepInputGroup.style.display='flex'; departureScheduleRow.htmlFor='prep-time'; } updateRallyMinOptions(); updatePrepTimeOptions(); syncRallyMinValues(); }
 rallyTypeSel.addEventListener('change', ()=>{ updateMode(); saveSettings(); });
-
-/* ======= 出発時刻：時間編集シート ======= */
-const departureEditModal = document.getElementById('departure-edit-modal');
-const departureEditTitle = document.getElementById('departure-edit-title');
-const departureEditFields = document.getElementById('departure-edit-fields');
-const departurePresetSection = document.getElementById('departure-preset-section');
-const departureCustomTitle = document.getElementById('departure-custom-title');
-const departureHhSel = document.getElementById('hh');
-const departureMmSel = document.getElementById('mm');
-const departureSsSel = document.getElementById('ss');
-const landingRallyMinSel = document.getElementById('l-rally-min');
-const landingPrepTimeSel = document.getElementById('l-from-now');
-const landingDiffMinSel = document.getElementById('l-diff-min');
-const landingDiffSecSel = document.getElementById('l-diff-sec');
-let currentDepartureEditor = null;
-let currentDeparturePresetKind = null;
-
-const DEFAULT_DEPARTURE_PRESETS = Object.freeze({
-  'castle-rally':[5, 10],
-  'landing-rally':[1, 2, 5, 10],
-  prep:[0, 10, 30, 60, 120],
-  diff:[30, 60, 90, 120, 180]
-});
-
-function loadDeparturePresets(kind){
-  if(kind === 'castle-rally') return [...DEFAULT_DEPARTURE_PRESETS[kind]];
-  const storageKey = kind === 'landing-rally'
-    ? 'arrivalLandingRallyPresetsV2'
-    : (kind === 'diff' ? 'arrivalLandingDiffPresets' : 'arrivalPrepPresets');
-  try{
-    const saved = JSON.parse(localStorage.getItem(storageKey));
-    if(Array.isArray(saved)){
-      return [...new Set(saved.map(Number).filter(Number.isFinite))].sort((a, b) => a - b);
-    }
-  }catch(e){}
-  return [...DEFAULT_DEPARTURE_PRESETS[kind]];
-}
-
-function saveDeparturePresets(kind, values){
-  if(kind === 'castle-rally') return;
-  const storageKey = kind === 'landing-rally'
-    ? 'arrivalLandingRallyPresetsV2'
-    : (kind === 'diff' ? 'arrivalLandingDiffPresets' : 'arrivalPrepPresets');
-  localStorage.setItem(storageKey, JSON.stringify([...new Set(values)].sort((a, b) => a - b)));
-}
-
-function departurePresetLabel(kind, value){
-  if(kind === 'castle-rally' || kind === 'landing-rally') return `${value}分`;
-  return value === 0 ? 'なし' : marchLabel(value);
-}
-
-function ensureSelectOption(select, value, label){
-  const stringValue = String(value);
-  if(!Array.from(select.options).some(option => option.value === stringValue)){
-    select.add(new Option(label, stringValue));
-  }
-  select.value = stringValue;
-}
-
-function createWheelHtml(id, values, selectedValue, unit, pad = false){
-  const options = values.map(value => {
-    const label = pad ? String(value).padStart(2, '0') : String(value);
-    return `<button type="button" class="departure-wheel-option" data-value="${value}">${label}</button>`;
-  }).join('');
-  return `
+const departureEditModal = document.getElementById('departure-edit-modal'); const departureEditTitle = document.getElementById('departure-edit-title'); const departureEditFields = document.getElementById('departure-edit-fields'); const departurePresetSection = document.getElementById('departure-preset-section'); const departureCustomTitle = document.getElementById('departure-custom-title'); const departureHhSel = document.getElementById('hh'); const departureMmSel = document.getElementById('mm'); const departureSsSel = document.getElementById('ss'); const landingRallyMinSel = document.getElementById('l-rally-min'); const landingPrepTimeSel = document.getElementById('l-from-now'); const landingDiffMinSel = document.getElementById('l-diff-min'); const landingDiffSecSel = document.getElementById('l-diff-sec'); let currentDepartureEditor = null; let currentDeparturePresetKind = null;
+const DEFAULT_DEPARTURE_PRESETS = Object.freeze({ 'castle-rally':[5, 10], 'landing-rally':[1, 2, 5, 10], prep:[0, 10, 30, 60, 120], diff:[30, 60, 90, 120, 180]});
+function loadDeparturePresets(kind){ if(kind === 'castle-rally') return [...DEFAULT_DEPARTURE_PRESETS[kind]]; const storageKey = kind === 'landing-rally' ? 'arrivalLandingRallyPresetsV2' : (kind === 'diff' ? 'arrivalLandingDiffPresets' : 'arrivalPrepPresets'); try{ const saved = JSON.parse(localStorage.getItem(storageKey)); if(Array.isArray(saved)){ return [...new Set(saved.map(Number).filter(Number.isFinite))].sort((a, b) => a - b); } }catch(e){} return [...DEFAULT_DEPARTURE_PRESETS[kind]]; }
+function saveDeparturePresets(kind, values){ if(kind === 'castle-rally') return; const storageKey = kind === 'landing-rally' ? 'arrivalLandingRallyPresetsV2' : (kind === 'diff' ? 'arrivalLandingDiffPresets' : 'arrivalPrepPresets'); localStorage.setItem(storageKey, JSON.stringify([...new Set(values)].sort((a, b) => a - b))); }
+function departurePresetLabel(kind, value){ if(kind === 'castle-rally' || kind === 'landing-rally') return `${value}分`; return value === 0 ? 'なし' : marchLabel(value); }
+function ensureSelectOption(select, value, label){ const stringValue = String(value); if(!Array.from(select.options).some(option => option.value === stringValue)){ select.add(new Option(label, stringValue)); } select.value = stringValue; }
+function createWheelHtml(id, values, selectedValue, unit, pad = false){ const options = values.map(value => { const label = pad ? String(value).padStart(2, '0') : String(value); return `<button type="button" class="departure-wheel-option" data-value="${value}">${label}</button>`; }).join(''); return `
     <div class="departure-wheel-group">
       <div id="${id}" class="departure-wheel" data-value="${selectedValue}">
         <div class="departure-wheel-spacer"></div>
@@ -5595,626 +5640,32 @@ function createWheelHtml(id, values, selectedValue, unit, pad = false){
         <div class="departure-wheel-spacer"></div>
       </div>
       <span class="departure-wheel-unit">${unit}</span>
-    </div>`;
-}
-
-function createPresetHtml(items, editable = true){
-  const editButton = editable ? '<button type="button" class="departure-preset-edit">編集</button>' : '';
-  const rows = items.map(item => {
-    const deleteButton = editable ? `<button type="button" class="departure-preset-delete" data-value="${item.value}" aria-label="${item.label}を削除">削除</button>` : '';
-    return `<div class="departure-preset-row"><button type="button" class="departure-preset-option" data-value="${item.value}">${item.label}</button>${deleteButton}</div>`;
-  }).join('');
-  const addButton = editable ? '<button type="button" class="departure-preset-add">＋ 現在の時間を追加</button>' : '';
-  return `<div class="departure-preset-heading"><div class="departure-preset-title">よく使う時間</div>${editButton}</div><div class="departure-preset-list">${rows}${addButton}</div>`;
-}
-
-function renderDeparturePresetSection(editing = false){
-  if(!currentDeparturePresetKind) return;
-  const items = loadDeparturePresets(currentDeparturePresetKind).map(value => ({
-    value,
-    label:departurePresetLabel(currentDeparturePresetKind, value)
-  }));
-  const editable = currentDeparturePresetKind !== 'castle-rally';
-  departurePresetSection.innerHTML = createPresetHtml(items, editable);
-  departurePresetSection.classList.toggle('editing', editing);
-  if(editable){
-    departureEditFields.hidden = !editing;
-    departureCustomTitle.hidden = !editing;
-  }
-  const editButton = departurePresetSection.querySelector('.departure-preset-edit');
-  if(editButton) editButton.textContent = editing ? '完了' : '編集';
-  initializeDeparturePresets();
-}
-
-function getDepartureEditorValue(){
-  if(currentDepartureEditor === 'landing-rally'){
-    return parseInt(document.getElementById('departure-edit-landing-rally')?.dataset.value) || 0;
-  }
-  if(currentDepartureEditor === 'rally'){
-    return parseInt(document.getElementById('departure-edit-rally')?.dataset.value) || 0;
-  }
-  if(currentDepartureEditor === 'landing-prep'){
-    const minutes = parseInt(document.getElementById('departure-edit-landing-prep-min')?.dataset.value) || 0;
-    const seconds = parseInt(document.getElementById('departure-edit-landing-prep-sec')?.dataset.value) || 0;
-    return minutes * 60 + seconds;
-  }
-  if(currentDepartureEditor === 'prep'){
-    const minutes = parseInt(document.getElementById('departure-edit-prep-min')?.dataset.value) || 0;
-    const seconds = parseInt(document.getElementById('departure-edit-prep-sec')?.dataset.value) || 0;
-    return minutes * 60 + seconds;
-  }
-  if(currentDepartureEditor === 'landing-diff'){
-    const minutes = parseInt(document.getElementById('departure-edit-landing-diff-min')?.dataset.value) || 0;
-    const seconds = parseInt(document.getElementById('departure-edit-landing-diff-sec')?.dataset.value) || 0;
-    return minutes * 60 + seconds;
-  }
-  return null;
-}
-
-function syncDeparturePresetSelection(){
-  const currentValue = getDepartureEditorValue();
-  departurePresetSection.querySelectorAll('.departure-preset-option').forEach(option => {
-    option.classList.toggle('selected', parseInt(option.dataset.value) === currentValue);
-  });
-}
-
-function setDepartureWheelByValue(id, value){
-  const wheel = document.getElementById(id);
-  if(!wheel) return;
-  const options = Array.from(wheel.querySelectorAll('.departure-wheel-option'));
-  const index = Math.max(0, options.findIndex(option => parseInt(option.dataset.value) === value));
-  setWheelValue(wheel, index);
-  wheel.scrollTo({top:index * 44, behavior:'smooth'});
-}
-
-function closeDeparturePresetSwipes(exceptRow = null){
-  departurePresetSection.querySelectorAll('.departure-preset-row.swipe-open').forEach(row => {
-    if(row === exceptRow) return;
-    row.classList.remove('swipe-open');
-    const option = row.querySelector('.departure-preset-option');
-    if(option) option.style.transform = 'translateX(0)';
-  });
-}
-
-function initializeDeparturePresetSwipe(row){
-  const option = row.querySelector('.departure-preset-option');
-  const deleteButton = row.querySelector('.departure-preset-delete');
-  if(!option || !deleteButton) return;
-
-  let startX = 0;
-  let startY = 0;
-  let startOffset = 0;
-  let currentOffset = 0;
-  let dragging = false;
-
-  option.addEventListener('pointerdown', event => {
-    if(event.pointerType === 'mouse' && event.button !== 0) return;
-    closeDeparturePresetSwipes(row);
-    startX = event.clientX;
-    startY = event.clientY;
-    startOffset = row.classList.contains('swipe-open') ? -76 : 0;
-    currentOffset = startOffset;
-    dragging = false;
-    option.style.transition = 'none';
-    try{ option.setPointerCapture(event.pointerId); }catch(e){}
-  });
-
-  option.addEventListener('pointermove', event => {
-    if(!option.hasPointerCapture?.(event.pointerId)) return;
-    const dx = event.clientX - startX;
-    const dy = event.clientY - startY;
-    if(!dragging && Math.abs(dx) < 6) return;
-    if(!dragging && Math.abs(dy) > Math.abs(dx)) return;
-    dragging = true;
-    currentOffset = Math.max(-76, Math.min(0, startOffset + dx));
-    option.style.transform = `translateX(${currentOffset}px)`;
-    event.preventDefault();
-  });
-
-  const finishSwipe = event => {
-    if(!option.hasPointerCapture?.(event.pointerId)) return;
-    try{ option.releasePointerCapture(event.pointerId); }catch(e){}
-    option.style.transition = 'transform .2s ease';
-    const shouldOpen = dragging ? currentOffset < -34 : startOffset < 0;
-    row.classList.toggle('swipe-open', shouldOpen);
-    option.style.transform = shouldOpen ? 'translateX(-76px)' : 'translateX(0)';
-    if(dragging){
-      row.dataset.suppressClick = 'true';
-      setTimeout(() => { delete row.dataset.suppressClick; }, 350);
-    }
-  };
-
-  option.addEventListener('pointerup', finishSwipe);
-  option.addEventListener('pointercancel', finishSwipe);
-}
-
-function initializeDeparturePresets(){
-  departurePresetSection.querySelectorAll('.departure-preset-row').forEach(initializeDeparturePresetSwipe);
-  departurePresetSection.querySelectorAll('.departure-preset-option').forEach(option => {
-    option.addEventListener('click', event => {
-      const row = option.closest('.departure-preset-row');
-      if(row?.dataset.suppressClick === 'true'){
-        event.preventDefault();
-        return;
-      }
-      if(row?.classList.contains('swipe-open')){
-        event.preventDefault();
-        row.classList.remove('swipe-open');
-        option.style.transform = 'translateX(0)';
-        return;
-      }
-      const value = parseInt(option.dataset.value) || 0;
-      if(currentDepartureEditor === 'landing-rally') setDepartureWheelByValue('departure-edit-landing-rally', value);
-      if(currentDepartureEditor === 'rally') setDepartureWheelByValue('departure-edit-rally', value);
-      if(currentDepartureEditor === 'landing-prep'){
-        setDepartureWheelByValue('departure-edit-landing-prep-min', Math.floor(value / 60));
-        setDepartureWheelByValue('departure-edit-landing-prep-sec', value % 60);
-      }
-      if(currentDepartureEditor === 'prep'){
-        setDepartureWheelByValue('departure-edit-prep-min', Math.floor(value / 60));
-        setDepartureWheelByValue('departure-edit-prep-sec', value % 60);
-      }
-      if(currentDepartureEditor === 'landing-diff'){
-        setDepartureWheelByValue('departure-edit-landing-diff-min', Math.floor(value / 60));
-        setDepartureWheelByValue('departure-edit-landing-diff-sec', value % 60);
-      }
-      syncDeparturePresetSelection();
-    });
-  });
-  const editButton = departurePresetSection.querySelector('.departure-preset-edit');
-  if(editButton) editButton.addEventListener('click', () => {
-    const editing = !departurePresetSection.classList.contains('editing');
-    departurePresetSection.classList.toggle('editing', editing);
-    editButton.textContent = editing ? '完了' : '編集';
-    departureEditFields.hidden = !editing;
-    departureCustomTitle.hidden = !editing;
-    if(editing){
-      requestAnimationFrame(() => {
-        departureEditFields.querySelectorAll('.departure-wheel').forEach(wheel => {
-          const options = Array.from(wheel.querySelectorAll('.departure-wheel-option'));
-          const selectedIndex = Math.max(0, options.findIndex(option => option.dataset.value === wheel.dataset.value));
-          wheel.scrollTop = selectedIndex * 44;
-        });
-      });
-    }
-  });
-  departurePresetSection.querySelectorAll('.departure-preset-delete').forEach(button => {
-    button.addEventListener('click', event => {
-      event.stopPropagation();
-      const value = parseInt(button.dataset.value);
-      const values = loadDeparturePresets(currentDeparturePresetKind).filter(item => item !== value);
-      saveDeparturePresets(currentDeparturePresetKind, values);
-      const editing = departurePresetSection.classList.contains('editing');
-      renderDeparturePresetSection(editing);
-    });
-  });
-  const addButton = departurePresetSection.querySelector('.departure-preset-add');
-  if(addButton) addButton.addEventListener('click', () => {
-    const value = getDepartureEditorValue();
-    if(value === null) return;
-    const values = loadDeparturePresets(currentDeparturePresetKind);
-    if(!values.includes(value)) values.push(value);
-    saveDeparturePresets(currentDeparturePresetKind, values);
-    renderDeparturePresetSection(true);
-  });
-  syncDeparturePresetSelection();
-}
-
-function setWheelValue(wheel, index){
-  const options = wheel.querySelectorAll('.departure-wheel-option');
-  const safeIndex = Math.max(0, Math.min(options.length - 1, index));
-  options.forEach((option, optionIndex) => option.classList.toggle('selected', optionIndex === safeIndex));
-  wheel.dataset.value = options[safeIndex].dataset.value;
-}
-
-function initializeDepartureWheels(){
-  departureEditFields.querySelectorAll('.departure-wheel').forEach(wheel => {
-    const options = Array.from(wheel.querySelectorAll('.departure-wheel-option'));
-    const selectedIndex = Math.max(0, options.findIndex(option => option.dataset.value === wheel.dataset.value));
-    setWheelValue(wheel, selectedIndex);
-    requestAnimationFrame(() => { wheel.scrollTop = selectedIndex * 44; });
-
-    let scrollTimer;
-    wheel.addEventListener('scroll', () => {
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        const index = Math.round(wheel.scrollTop / 44);
-        setWheelValue(wheel, index);
-        wheel.scrollTo({top:index * 44, behavior:'smooth'});
-        syncDeparturePresetSelection();
-      }, 80);
-    }, {passive:true});
-
-    options.forEach((option, index) => {
-      option.addEventListener('click', () => {
-        setWheelValue(wheel, index);
-        wheel.scrollTo({top:index * 44, behavior:'smooth'});
-        syncDeparturePresetSelection();
-      });
-    });
-  });
-}
-
-function openDepartureEditor(editorType){
-  currentDepartureEditor = editorType;
-  currentDeparturePresetKind = null;
-
-  if(editorType === 'landing-rally'){
-    currentDeparturePresetKind = 'landing-rally';
-    const minutes = parseInt(landingRallyMinSel.value) || 5;
-    departureEditTitle.textContent = '集結時間を編集';
-    departureEditFields.innerHTML = createWheelHtml(
-      'departure-edit-landing-rally',
-      Array.from({length:120}, (_, index) => index + 1),
-      Math.min(120, minutes),
-      '分'
-    );
-  }else if(editorType === 'landing-prep'){
-    currentDeparturePresetKind = 'prep';
-    const totalSeconds = parseInt(landingPrepTimeSel.value) || 0;
-    departureEditTitle.textContent = '準備時間を編集';
-    departureEditFields.innerHTML =
-      createWheelHtml('departure-edit-landing-prep-min', Array.from({length:61}, (_, index) => index), Math.min(60, Math.floor(totalSeconds / 60)), '分') +
-      createWheelHtml('departure-edit-landing-prep-sec', Array.from({length:60}, (_, index) => index), totalSeconds % 60, '秒', true);
-  }else if(editorType === 'rally'){
-    currentDeparturePresetKind = 'castle-rally';
-    const minutes = parseInt(rallyMinSel.value) || 5;
-    departureEditTitle.textContent = '集結時間を編集';
-    departureEditFields.innerHTML = createWheelHtml(
-      'departure-edit-rally',
-      Array.from({length:120}, (_, index) => index + 1),
-      Math.min(120, minutes),
-      '分'
-    );
-  }else if(editorType === 'prep'){
-    currentDeparturePresetKind = 'prep';
-    const totalSeconds = parseInt(prepTimeSel.value) || 0;
-    departureEditTitle.textContent = '準備時間を編集';
-    departureEditFields.innerHTML =
-      createWheelHtml('departure-edit-prep-min', Array.from({length:61}, (_, index) => index), Math.min(60, Math.floor(totalSeconds / 60)), '分') +
-      createWheelHtml('departure-edit-prep-sec', Array.from({length:60}, (_, index) => index), totalSeconds % 60, '秒', true);
-  }else if(editorType === 'landing-diff'){
-    currentDeparturePresetKind = 'diff';
-    const totalSeconds = (parseInt(landingDiffMinSel.value) || 0) * 60 + (parseInt(landingDiffSecSel.value) || 0);
-    departureEditTitle.textContent = '二段階集結の時差を編集';
-    departureEditFields.innerHTML =
-      createWheelHtml('departure-edit-landing-diff-min', Array.from({length:61}, (_, index) => index), Math.min(60, Math.floor(totalSeconds / 60)), '分') +
-      createWheelHtml('departure-edit-landing-diff-sec', Array.from({length:60}, (_, index) => index), totalSeconds % 60, '秒', true);
-  }else{
-    departureEditTitle.textContent = '着弾時刻を編集';
-    departureEditFields.innerHTML =
-      createWheelHtml('departure-edit-clock-hh', Array.from({length:24}, (_, index) => index), parseInt(departureHhSel.value) || 0, '時', true) +
-      createWheelHtml('departure-edit-clock-mm', Array.from({length:60}, (_, index) => index), parseInt(departureMmSel.value) || 0, '分', true) +
-      createWheelHtml('departure-edit-clock-ss', Array.from({length:60}, (_, index) => index), parseInt(departureSsSel.value) || 0, '秒', true);
-  }
-
-  departurePresetSection.hidden = !currentDeparturePresetKind;
-  departureCustomTitle.hidden = true;
-  departureEditFields.hidden = !!currentDeparturePresetKind;
-  if(currentDeparturePresetKind) renderDeparturePresetSection();
-  else departurePresetSection.innerHTML = '';
-
-  departureEditModal.classList.add('show');
-  departureEditModal.setAttribute('aria-hidden', 'false');
-  document.body.classList.add('departure-edit-open');
-  departureEditModal.querySelector('.departure-edit-sheet').scrollTop = 0;
-  initializeDepartureWheels();
-}
-
-function closeDepartureEditor(){
-  departureEditModal.classList.remove('show');
-  departureEditModal.setAttribute('aria-hidden', 'true');
-  document.body.classList.remove('departure-edit-open');
-  currentDepartureEditor = null;
-  currentDeparturePresetKind = null;
-}
-
-document.querySelectorAll('.departure-edit-trigger').forEach(button => {
-  button.addEventListener('click', event => {
-    event.preventDefault();
-    event.stopPropagation();
-    openDepartureEditor(button.dataset.editor);
-  });
-});
-
-document.getElementById('departure-edit-close').addEventListener('click', closeDepartureEditor);
-document.querySelector('.departure-edit-backdrop').addEventListener('click', closeDepartureEditor);
-
-document.getElementById('departure-edit-save').addEventListener('click', () => {
-  if(currentDepartureEditor === 'landing-rally'){
-    const minutes = parseInt(document.getElementById('departure-edit-landing-rally').dataset.value) || 1;
-    ensureSelectOption(landingRallyMinSel, minutes, `${minutes}分`);
-    localStorage.setItem('landingRallyMin', String(minutes));
-  }else if(currentDepartureEditor === 'landing-prep'){
-    const minutes = parseInt(document.getElementById('departure-edit-landing-prep-min').dataset.value) || 0;
-    const seconds = parseInt(document.getElementById('departure-edit-landing-prep-sec').dataset.value) || 0;
-    const totalSeconds = minutes * 60 + seconds;
-    ensureSelectOption(landingPrepTimeSel, totalSeconds, marchLabel(totalSeconds));
-    localStorage.setItem('landingPrepTime', String(totalSeconds));
-  }else if(currentDepartureEditor === 'rally'){
-    const minutes = parseInt(document.getElementById('departure-edit-rally').dataset.value) || 1;
-    ensureSelectOption(rallyMinSel, minutes, `${minutes}分`);
-    ensureSelectOption(rallyMinTimeSel, minutes, `${minutes}分`);
-  }else if(currentDepartureEditor === 'prep'){
-    const minutes = parseInt(document.getElementById('departure-edit-prep-min').dataset.value) || 0;
-    const seconds = parseInt(document.getElementById('departure-edit-prep-sec').dataset.value) || 0;
-    const totalSeconds = minutes * 60 + seconds;
-    ensureSelectOption(prepTimeSel, totalSeconds, marchLabel(totalSeconds));
-  }else if(currentDepartureEditor === 'landing-diff'){
-    const minutes = parseInt(document.getElementById('departure-edit-landing-diff-min').dataset.value) || 0;
-    const seconds = parseInt(document.getElementById('departure-edit-landing-diff-sec').dataset.value) || 0;
-    ensureSelectOption(landingDiffMinSel, minutes, `${minutes}分`);
-    ensureSelectOption(landingDiffSecSel, seconds, `${seconds}秒`);
-    localStorage.setItem('landingDiffSeconds', String(minutes * 60 + seconds));
-  }else if(currentDepartureEditor === 'clock'){
-    const hours = String(document.getElementById('departure-edit-clock-hh').dataset.value).padStart(2, '0');
-    const minutes = String(document.getElementById('departure-edit-clock-mm').dataset.value).padStart(2, '0');
-    const seconds = String(document.getElementById('departure-edit-clock-ss').dataset.value).padStart(2, '0');
-    ensureSelectOption(departureHhSel, hours, hours);
-    ensureSelectOption(departureMmSel, minutes, minutes);
-    ensureSelectOption(departureSsSel, seconds, seconds);
-  }
-
-  saveSettings();
-  updateLandingTimeOptions();
-  closeDepartureEditor();
-});
-
-/* ======= 行削除（グローバル関数） ======= */
-function deleteThisRow(el){
-  const wrapper = el.closest('.member-row-wrapper');
-  if(wrapper){
-    wrapper.style.transition = 'all 0.3s ease';
-    wrapper.style.transform = 'translateX(-100%)';
-    wrapper.style.opacity = '0';
-    wrapper.style.height = '0';
-    wrapper.style.marginBottom = '0';
-    wrapper.style.overflow = 'hidden';
-    setTimeout(() => {
-      wrapper.remove();
-      generateCopyMessage();
-      saveSettings();
-      updateLandingTimeOptions();
-    }, 300);
-  }
-}
-
-/* ======= スワイプ削除（rowを移動して削除背景を見せる） ======= */
-function resetAllSwipeStates(){
-  document.querySelectorAll('.member-row-wrapper').forEach(wrapper => {
-    wrapper.classList.remove('swiping');
-    const row = wrapper.querySelector('.member-row');
-    if(row){
-      row.style.transition = 'transform 0.2s ease';
-      row.style.transform = 'translateX(0)';
-    }
-  });
-}
-
-function isAnyModalOpen(){
-  return document.body.classList.contains('modal-open');
-}
-
+    </div>`; }
+function createPresetHtml(items, editable = true){ const editButton = editable ? '<button type="button" class="departure-preset-edit">編集</button>' : ''; const rows = items.map(item => { const deleteButton = editable ? `<button type="button" class="departure-preset-delete" data-value="${item.value}" aria-label="${item.label}を削除">削除</button>` : ''; return `<div class="departure-preset-row"><button type="button" class="departure-preset-option" data-value="${item.value}">${item.label}</button>${deleteButton}</div>`; }).join(''); const addButton = editable ? '<button type="button" class="departure-preset-add">＋ 現在の時間を追加</button>' : ''; return `<div class="departure-preset-heading"><div class="departure-preset-title">よく使う時間</div>${editButton}</div><div class="departure-preset-list">${rows}${addButton}</div>`; }
+function renderDeparturePresetSection(editing = false){ if(!currentDeparturePresetKind) return; const items = loadDeparturePresets(currentDeparturePresetKind).map(value => ({ value, label:departurePresetLabel(currentDeparturePresetKind, value) })); const editable = currentDeparturePresetKind !== 'castle-rally'; departurePresetSection.innerHTML = createPresetHtml(items, editable); departurePresetSection.classList.toggle('editing', editing); if(editable){ departureEditFields.hidden = !editing; departureCustomTitle.hidden = !editing; } const editButton = departurePresetSection.querySelector('.departure-preset-edit'); if(editButton) editButton.textContent = editing ? '完了' : '編集'; initializeDeparturePresets(); }
+function getDepartureEditorValue(){ if(currentDepartureEditor === 'landing-rally'){ return parseInt(document.getElementById('departure-edit-landing-rally')?.dataset.value) || 0; } if(currentDepartureEditor === 'rally'){ return parseInt(document.getElementById('departure-edit-rally')?.dataset.value) || 0; } if(currentDepartureEditor === 'landing-prep'){ const minutes = parseInt(document.getElementById('departure-edit-landing-prep-min')?.dataset.value) || 0; const seconds = parseInt(document.getElementById('departure-edit-landing-prep-sec')?.dataset.value) || 0; return minutes * 60 + seconds; } if(currentDepartureEditor === 'prep'){ const minutes = parseInt(document.getElementById('departure-edit-prep-min')?.dataset.value) || 0; const seconds = parseInt(document.getElementById('departure-edit-prep-sec')?.dataset.value) || 0; return minutes * 60 + seconds; } if(currentDepartureEditor === 'landing-diff'){ const minutes = parseInt(document.getElementById('departure-edit-landing-diff-min')?.dataset.value) || 0; const seconds = parseInt(document.getElementById('departure-edit-landing-diff-sec')?.dataset.value) || 0; return minutes * 60 + seconds; } return null; }
+function syncDeparturePresetSelection(){ const currentValue = getDepartureEditorValue(); departurePresetSection.querySelectorAll('.departure-preset-option').forEach(option => { option.classList.toggle('selected', parseInt(option.dataset.value) === currentValue); }); }
+function setDepartureWheelByValue(id, value){ const wheel = document.getElementById(id); if(!wheel) return; const options = Array.from(wheel.querySelectorAll('.departure-wheel-option')); const index = Math.max(0, options.findIndex(option => parseInt(option.dataset.value) === value)); setWheelValue(wheel, index); wheel.scrollTo({top:index * 44, behavior:'smooth'}); }
+function closeDeparturePresetSwipes(exceptRow = null){ departurePresetSection.querySelectorAll('.departure-preset-row.swipe-open').forEach(row => { if(row === exceptRow) return; row.classList.remove('swipe-open'); const option = row.querySelector('.departure-preset-option'); if(option) option.style.transform = 'translateX(0)'; }); }
+function initializeDeparturePresetSwipe(row){ const option = row.querySelector('.departure-preset-option'); const deleteButton = row.querySelector('.departure-preset-delete'); if(!option || !deleteButton) return; let startX = 0; let startY = 0; let startOffset = 0; let currentOffset = 0; let dragging = false; option.addEventListener('pointerdown', event => { if(event.pointerType === 'mouse' && event.button !== 0) return; closeDeparturePresetSwipes(row); startX = event.clientX; startY = event.clientY; startOffset = row.classList.contains('swipe-open') ? -76 : 0; currentOffset = startOffset; dragging = false; option.style.transition = 'none'; try{ option.setPointerCapture(event.pointerId); }catch(e){} }); option.addEventListener('pointermove', event => { if(!option.hasPointerCapture?.(event.pointerId)) return; const dx = event.clientX - startX; const dy = event.clientY - startY; if(!dragging && Math.abs(dx) < 6) return; if(!dragging && Math.abs(dy) > Math.abs(dx)) return; dragging = true; currentOffset = Math.max(-76, Math.min(0, startOffset + dx)); option.style.transform = `translateX(${currentOffset}px)`; event.preventDefault(); }); const finishSwipe = event => { if(!option.hasPointerCapture?.(event.pointerId)) return; try{ option.releasePointerCapture(event.pointerId); }catch(e){} option.style.transition = 'transform .2s ease'; const shouldOpen = dragging ? currentOffset < -34 : startOffset < 0; row.classList.toggle('swipe-open', shouldOpen); option.style.transform = shouldOpen ? 'translateX(-76px)' : 'translateX(0)'; if(dragging){ row.dataset.suppressClick = 'true'; setTimeout(() => { delete row.dataset.suppressClick; }, 350); } }; option.addEventListener('pointerup', finishSwipe); option.addEventListener('pointercancel', finishSwipe); }
+function initializeDeparturePresets(){ departurePresetSection.querySelectorAll('.departure-preset-row').forEach(initializeDeparturePresetSwipe); departurePresetSection.querySelectorAll('.departure-preset-option').forEach(option => { option.addEventListener('click', event => { const row = option.closest('.departure-preset-row'); if(row?.dataset.suppressClick === 'true'){ event.preventDefault(); return; } if(row?.classList.contains('swipe-open')){ event.preventDefault(); row.classList.remove('swipe-open'); option.style.transform = 'translateX(0)'; return; } const value = parseInt(option.dataset.value) || 0; if(currentDepartureEditor === 'landing-rally') setDepartureWheelByValue('departure-edit-landing-rally', value); if(currentDepartureEditor === 'rally') setDepartureWheelByValue('departure-edit-rally', value); if(currentDepartureEditor === 'landing-prep'){ setDepartureWheelByValue('departure-edit-landing-prep-min', Math.floor(value / 60)); setDepartureWheelByValue('departure-edit-landing-prep-sec', value % 60); } if(currentDepartureEditor === 'prep'){ setDepartureWheelByValue('departure-edit-prep-min', Math.floor(value / 60)); setDepartureWheelByValue('departure-edit-prep-sec', value % 60); } if(currentDepartureEditor === 'landing-diff'){ setDepartureWheelByValue('departure-edit-landing-diff-min', Math.floor(value / 60)); setDepartureWheelByValue('departure-edit-landing-diff-sec', value % 60); } syncDeparturePresetSelection(); }); }); const editButton = departurePresetSection.querySelector('.departure-preset-edit'); if(editButton) editButton.addEventListener('click', () => { const editing = !departurePresetSection.classList.contains('editing'); departurePresetSection.classList.toggle('editing', editing); editButton.textContent = editing ? '完了' : '編集'; departureEditFields.hidden = !editing; departureCustomTitle.hidden = !editing; if(editing){ requestAnimationFrame(() => { departureEditFields.querySelectorAll('.departure-wheel').forEach(wheel => { const options = Array.from(wheel.querySelectorAll('.departure-wheel-option')); const selectedIndex = Math.max(0, options.findIndex(option => option.dataset.value === wheel.dataset.value)); wheel.scrollTop = selectedIndex * 44; }); }); } }); departurePresetSection.querySelectorAll('.departure-preset-delete').forEach(button => { button.addEventListener('click', event => { event.stopPropagation(); const value = parseInt(button.dataset.value); const values = loadDeparturePresets(currentDeparturePresetKind).filter(item => item !== value); saveDeparturePresets(currentDeparturePresetKind, values); const editing = departurePresetSection.classList.contains('editing'); renderDeparturePresetSection(editing); }); }); const addButton = departurePresetSection.querySelector('.departure-preset-add'); if(addButton) addButton.addEventListener('click', () => { const value = getDepartureEditorValue(); if(value === null) return; const values = loadDeparturePresets(currentDeparturePresetKind); if(!values.includes(value)) values.push(value); saveDeparturePresets(currentDeparturePresetKind, values); renderDeparturePresetSection(true); }); syncDeparturePresetSelection(); }
+function setWheelValue(wheel, index){ const options = wheel.querySelectorAll('.departure-wheel-option'); const safeIndex = Math.max(0, Math.min(options.length - 1, index)); options.forEach((option, optionIndex) => option.classList.toggle('selected', optionIndex === safeIndex)); wheel.dataset.value = options[safeIndex].dataset.value; }
+function initializeDepartureWheels(){ departureEditFields.querySelectorAll('.departure-wheel').forEach(wheel => { const options = Array.from(wheel.querySelectorAll('.departure-wheel-option')); const selectedIndex = Math.max(0, options.findIndex(option => option.dataset.value === wheel.dataset.value)); setWheelValue(wheel, selectedIndex); requestAnimationFrame(() => { wheel.scrollTop = selectedIndex * 44; }); let scrollTimer; wheel.addEventListener('scroll', () => { clearTimeout(scrollTimer); scrollTimer = setTimeout(() => { const index = Math.round(wheel.scrollTop / 44); setWheelValue(wheel, index); wheel.scrollTo({top:index * 44, behavior:'smooth'}); syncDeparturePresetSelection(); }, 80); }, {passive:true}); options.forEach((option, index) => { option.addEventListener('click', () => { setWheelValue(wheel, index); wheel.scrollTo({top:index * 44, behavior:'smooth'}); syncDeparturePresetSelection(); }); }); }); }
+function openDepartureEditor(editorType){ currentDepartureEditor = editorType; currentDeparturePresetKind = null; if(editorType === 'landing-rally'){ currentDeparturePresetKind = 'landing-rally'; const minutes = parseInt(landingRallyMinSel.value) || 5; departureEditTitle.textContent = '集結時間を編集'; departureEditFields.innerHTML = createWheelHtml('departure-edit-landing-rally', Array.from({length:120}, (_, index) => index + 1), Math.min(120, minutes), '分'); }else if(editorType === 'landing-prep'){ currentDeparturePresetKind = 'prep'; const totalSeconds = parseInt(landingPrepTimeSel.value) || 0; departureEditTitle.textContent = '準備時間を編集'; departureEditFields.innerHTML = createWheelHtml('departure-edit-landing-prep-min', Array.from({length:61}, (_, index) => index), Math.min(60, Math.floor(totalSeconds / 60)), '分') + createWheelHtml('departure-edit-landing-prep-sec', Array.from({length:60}, (_, index) => index), totalSeconds % 60, '秒', true); }else if(editorType === 'rally'){ currentDeparturePresetKind = 'castle-rally'; const minutes = parseInt(rallyMinSel.value) || 5; departureEditTitle.textContent = '集結時間を編集'; departureEditFields.innerHTML = createWheelHtml('departure-edit-rally', Array.from({length:120}, (_, index) => index + 1), Math.min(120, minutes), '分'); }else if(editorType === 'prep'){ currentDeparturePresetKind = 'prep'; const totalSeconds = parseInt(prepTimeSel.value) || 0; departureEditTitle.textContent = '準備時間を編集'; departureEditFields.innerHTML = createWheelHtml('departure-edit-prep-min', Array.from({length:61}, (_, index) => index), Math.min(60, Math.floor(totalSeconds / 60)), '分') + createWheelHtml('departure-edit-prep-sec', Array.from({length:60}, (_, index) => index), totalSeconds % 60, '秒', true); }else if(editorType === 'landing-diff'){ currentDeparturePresetKind = 'diff'; const totalSeconds = (parseInt(landingDiffMinSel.value) || 0) * 60 + (parseInt(landingDiffSecSel.value) || 0); departureEditTitle.textContent = '二段階集結の時差を編集'; departureEditFields.innerHTML = createWheelHtml('departure-edit-landing-diff-min', Array.from({length:61}, (_, index) => index), Math.min(60, Math.floor(totalSeconds / 60)), '分') + createWheelHtml('departure-edit-landing-diff-sec', Array.from({length:60}, (_, index) => index), totalSeconds % 60, '秒', true); }else{ departureEditTitle.textContent = '着弾時刻を編集'; departureEditFields.innerHTML = createWheelHtml('departure-edit-clock-hh', Array.from({length:24}, (_, index) => index), parseInt(departureHhSel.value) || 0, '時', true) + createWheelHtml('departure-edit-clock-mm', Array.from({length:60}, (_, index) => index), parseInt(departureMmSel.value) || 0, '分', true) + createWheelHtml('departure-edit-clock-ss', Array.from({length:60}, (_, index) => index), parseInt(departureSsSel.value) || 0, '秒', true); } departurePresetSection.hidden = !currentDeparturePresetKind; departureCustomTitle.hidden = true; departureEditFields.hidden = !!currentDeparturePresetKind; if(currentDeparturePresetKind) renderDeparturePresetSection(); else departurePresetSection.innerHTML = ''; departureEditModal.classList.add('show'); departureEditModal.setAttribute('aria-hidden', 'false'); document.body.classList.add('departure-edit-open'); departureEditModal.querySelector('.departure-edit-sheet').scrollTop = 0; initializeDepartureWheels(); }
+function closeDepartureEditor(){ departureEditModal.classList.remove('show'); departureEditModal.setAttribute('aria-hidden', 'true'); document.body.classList.remove('departure-edit-open'); currentDepartureEditor = null; currentDeparturePresetKind = null; }
+document.querySelectorAll('.departure-edit-trigger').forEach(button => { button.addEventListener('click', event => { event.preventDefault(); event.stopPropagation(); openDepartureEditor(button.dataset.editor); }); });
+document.getElementById('departure-edit-close').addEventListener('click', closeDepartureEditor); document.querySelector('.departure-edit-backdrop').addEventListener('click', closeDepartureEditor);
+document.getElementById('departure-edit-save').addEventListener('click', () => { if(currentDepartureEditor === 'landing-rally'){ const minutes = parseInt(document.getElementById('departure-edit-landing-rally').dataset.value) || 1; ensureSelectOption(landingRallyMinSel, minutes, `${minutes}分`); localStorage.setItem('landingRallyMin', String(minutes)); }else if(currentDepartureEditor === 'landing-prep'){ const minutes = parseInt(document.getElementById('departure-edit-landing-prep-min').dataset.value) || 0; const seconds = parseInt(document.getElementById('departure-edit-landing-prep-sec').dataset.value) || 0; const totalSeconds = minutes * 60 + seconds; ensureSelectOption(landingPrepTimeSel, totalSeconds, marchLabel(totalSeconds)); localStorage.setItem('landingPrepTime', String(totalSeconds)); }else if(currentDepartureEditor === 'rally'){ const minutes = parseInt(document.getElementById('departure-edit-rally').dataset.value) || 1; ensureSelectOption(rallyMinSel, minutes, `${minutes}分`); ensureSelectOption(rallyMinTimeSel, minutes, `${minutes}分`); }else if(currentDepartureEditor === 'prep'){ const minutes = parseInt(document.getElementById('departure-edit-prep-min').dataset.value) || 0; const seconds = parseInt(document.getElementById('departure-edit-prep-sec').dataset.value) || 0; const totalSeconds = minutes * 60 + seconds; ensureSelectOption(prepTimeSel, totalSeconds, marchLabel(totalSeconds)); }else if(currentDepartureEditor === 'landing-diff'){ const minutes = parseInt(document.getElementById('departure-edit-landing-diff-min').dataset.value) || 0; const seconds = parseInt(document.getElementById('departure-edit-landing-diff-sec').dataset.value) || 0; ensureSelectOption(landingDiffMinSel, minutes, `${minutes}分`); ensureSelectOption(landingDiffSecSel, seconds, `${seconds}秒`); localStorage.setItem('landingDiffSeconds', String(minutes * 60 + seconds)); }else if(currentDepartureEditor === 'clock'){ const hours = String(document.getElementById('departure-edit-clock-hh').dataset.value).padStart(2, '0'); const minutes = String(document.getElementById('departure-edit-clock-mm').dataset.value).padStart(2, '0'); const seconds = String(document.getElementById('departure-edit-clock-ss').dataset.value).padStart(2, '0'); ensureSelectOption(departureHhSel, hours, hours); ensureSelectOption(departureMmSel, minutes, minutes); ensureSelectOption(departureSsSel, seconds, seconds); } saveSettings(); updateLandingTimeOptions(); closeDepartureEditor(); });
+function deleteThisRow(el){ const wrapper = el.closest('.member-row-wrapper'); if(wrapper){ wrapper.style.transition = 'all 0.3s ease'; wrapper.style.transform = 'translateX(-100%)'; wrapper.style.opacity = '0'; wrapper.style.height = '0'; wrapper.style.marginBottom = '0'; wrapper.style.overflow = 'hidden'; setTimeout(() => { wrapper.remove(); generateCopyMessage(); saveSettings(); updateLandingTimeOptions(); }, 300); } }
+function resetAllSwipeStates(){ document.querySelectorAll('.member-row-wrapper').forEach(wrapper => { wrapper.classList.remove('swiping'); const row = wrapper.querySelector('.member-row'); if(row){ row.style.transition = 'transform 0.2s ease'; row.style.transform = 'translateX(0)'; } }); }
+function isAnyModalOpen(){ return document.body.classList.contains('modal-open'); }
 const swipeBoundRows = new WeakSet();
-function attachSwipeToRow(row){
-  const wrapper = row.closest('.member-row-wrapper');
-  if(!wrapper) return;
-
-  if(swipeBoundRows.has(wrapper)) return;
-  swipeBoundRows.add(wrapper);
-
-  let startX = 0;
-  let startY = 0;
-  let currentX = 0;
-  let isDragging = false;
-  let swipeActivated = false; // スワイプが有効になったか（閾値超え）
-
-  wrapper.addEventListener('touchstart', e => {
-    // モーダル表示中はスワイプ無効
-    if(isAnyModalOpen()) return;
-    
-    // ツールバーからのタッチは無視
-    if(e.target.closest('.app-toolbar')) return;
-    
-    // 他の行をリセット
-    document.querySelectorAll('.member-row-wrapper .member-row').forEach(r => {
-      if(r !== row){
-        r.style.transition = 'transform 0.2s ease';
-        r.style.transform = 'translateX(0)';
-      }
-    });
-
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    currentX = startX;
-    isDragging = true;
-    swipeActivated = false;
-  }, { passive: true });
-
-  wrapper.addEventListener('touchmove', e => {
-    if(!isDragging || isAnyModalOpen()) {
-      isDragging = false;
-      swipeActivated = false;
-      row.style.transition = 'transform 0.2s ease';
-      row.style.transform = 'translateX(0)';
-      return;
-    }
-
-    currentX = e.touches[0].clientX;
-    const currentY = e.touches[0].clientY;
-    const dx = currentX - startX;
-    const dy = currentY - startY;
-
-    // スワイプ閾値：水平方向30px以上かつ水平移動が垂直移動より大きい
-    if(!swipeActivated){
-      if(Math.abs(dx) >= 30 && Math.abs(dx) > Math.abs(dy)){
-        swipeActivated = true;
-        wrapper.classList.add('swiping');
-        row.style.transition = 'none';
-      } else {
-        return; // まだスワイプとして認識しない
-      }
-    }
-
-    e.preventDefault();
-
-    let diff = dx;
-    if(diff > 0) diff = 0;
-    if(diff < -80) diff = -80;
-
-    row.style.transform = `translateX(${diff}px)`;
-  }, { passive: false });
-
-  wrapper.addEventListener('touchend', () => {
-    if(!isDragging || isAnyModalOpen() || !swipeActivated) {
-      isDragging = false;
-      swipeActivated = false;
-      wrapper.classList.remove('swiping');
-      row.style.transition = 'transform 0.2s ease';
-      row.style.transform = 'translateX(0)';
-      return;
-    }
-
-    const diff = currentX - startX;
-
-    if(diff < -50){
-      wrapper.style.transition = 'all 0.3s ease';
-      wrapper.style.opacity = '0';
-      wrapper.style.height = '0';
-      wrapper.style.marginBottom = '0';
-      wrapper.style.overflow = 'hidden';
-
-      setTimeout(() => {
-        wrapper.remove();
-        generateCopyMessage();
-        saveSettings();
-        updateLandingTimeOptions();
-      }, 300);
-    } else {
-      wrapper.classList.remove('swiping');
-      row.style.transition = 'transform 0.2s ease';
-      row.style.transform = 'translateX(0)';
-    }
-
-    isDragging = false;
-    swipeActivated = false;
-  });
-
-  wrapper.addEventListener('touchcancel', () => {
-    wrapper.classList.remove('swiping');
-    row.style.transition = 'transform 0.2s ease';
-    row.style.transform = 'translateX(0)';
-    isDragging = false;
-    swipeActivated = false;
-  });
-}
-
-// 既存の行にスワイプを付与
+function attachSwipeToRow(row){ const wrapper = row.closest('.member-row-wrapper'); if(!wrapper) return; if(swipeBoundRows.has(wrapper)) return; swipeBoundRows.add(wrapper); let startX = 0; let startY = 0; let currentX = 0; let isDragging = false; let swipeActivated = false; wrapper.addEventListener('touchstart', e => { if(isAnyModalOpen()) return; if(e.target.closest('.app-toolbar')) return; document.querySelectorAll('.member-row-wrapper .member-row').forEach(r => { if(r !== row){ r.style.transition = 'transform 0.2s ease'; r.style.transform = 'translateX(0)'; } }); startX = e.touches[0].clientX; startY = e.touches[0].clientY; currentX = startX; isDragging = true; swipeActivated = false; }, { passive: true }); wrapper.addEventListener('touchmove', e => { if(!isDragging || isAnyModalOpen()) { isDragging = false; swipeActivated = false; row.style.transition = 'transform 0.2s ease'; row.style.transform = 'translateX(0)'; return; } currentX = e.touches[0].clientX; const currentY = e.touches[0].clientY; const dx = currentX - startX; const dy = currentY - startY; if(!swipeActivated){ if(Math.abs(dx) >= 30 && Math.abs(dx) > Math.abs(dy)){ swipeActivated = true; wrapper.classList.add('swiping'); row.style.transition = 'none'; } else { return; } } e.preventDefault(); let diff = dx; if(diff > 0) diff = 0; if(diff < -80) diff = -80; row.style.transform = `translateX(${diff}px)`; }, { passive: false }); wrapper.addEventListener('touchend', () => { if(!isDragging || isAnyModalOpen() || !swipeActivated) { isDragging = false; swipeActivated = false; wrapper.classList.remove('swiping'); row.style.transition = 'transform 0.2s ease'; row.style.transform = 'translateX(0)'; return; } const diff = currentX - startX; if(diff < -50){ wrapper.style.transition = 'all 0.3s ease'; wrapper.style.opacity = '0'; wrapper.style.height = '0'; wrapper.style.marginBottom = '0'; wrapper.style.overflow = 'hidden'; setTimeout(() => { wrapper.remove(); generateCopyMessage(); saveSettings(); updateLandingTimeOptions(); }, 300); } else { wrapper.classList.remove('swiping'); row.style.transition = 'transform 0.2s ease'; row.style.transform = 'translateX(0)'; } isDragging = false; swipeActivated = false; }); wrapper.addEventListener('touchcancel', () => { wrapper.classList.remove('swiping'); row.style.transition = 'transform 0.2s ease'; row.style.transform = 'translateX(0)'; isDragging = false; swipeActivated = false; }); }
 document.querySelectorAll('#players .member-row').forEach(attachSwipeToRow);
-
-/* ======= 行イベント（入力・選択用） ======= */
-function attachRowEvents(row){
-  if(row.dataset.eventsAttached) return;
-  row.dataset.eventsAttached = 'true';
-
-  const nameInput = row.querySelector('.name-text');
-
-  nameInput.addEventListener('input', function(){
-    saveSettings();
-    refreshMemberAutoMarch(row, {save:false});
-    const text = (this.textContent || '').trim();
-    showAutocomplete(this, getSuggestions(text));
-  });
-
-  nameInput.addEventListener('focus', function(){
-    showAutocomplete(this, getSuggestions((this.textContent || '').trim()));
-  });
-
-  nameInput.addEventListener('blur', function(){
-    refreshMemberAutoMarch(row, {save:false});
-    saveSettings();
-    setTimeout(hideAutocomplete, 120);
-  });
-
-  nameInput.addEventListener('keydown', function(ev){
-    if(!currentDropdown) return;
-    const items = currentDropdown.querySelectorAll('.autocomplete-item');
-    if(ev.key === 'ArrowDown'){
-      ev.preventDefault();
-      selectedIndex = Math.min(items.length - 1, selectedIndex + 1);
-      updateSelectedItem(currentDropdown);
-    }else if(ev.key === 'ArrowUp'){
-      ev.preventDefault();
-      selectedIndex = Math.max(0, selectedIndex - 1);
-      updateSelectedItem(currentDropdown);
-    }else if(ev.key === 'Enter'){
-      ev.preventDefault();
-      if(selectedIndex >= 0) items[selectedIndex].dispatchEvent(new MouseEvent('mousedown'));
-    }else if(ev.key === 'Escape'){
-      hideAutocomplete();
-    }
-  });
-
-  row.querySelector('.march-select').addEventListener('change', function(){
-    saveSettings();
-    updateLandingTimeOptions();
-  });
-
-  row.querySelectorAll('.coord-input').forEach(input => {
-    input.addEventListener('input', function(){
-      this.value = this.value.replace(/\D/g, '').slice(0, 4);
-      refreshMemberAutoMarch(row);
-    });
-    input.addEventListener('change', () => refreshMemberAutoMarch(row));
-  });
-
-  row.querySelector('.stat-boost-toggle').addEventListener('change', () => {
-    refreshMemberAutoMarch(row);
-  });
-
-  row.querySelector('.member-settings-pet-toggle').addEventListener('change', function(event){
-    event.stopPropagation();
-    const name = (row.querySelector('.name-text').textContent || '').trim();
-    if(!name){
-      showToast('先に集結主名を入力してください');
-      this.checked = false;
-      return;
-    }
-    if(this.checked){
-      activatePet(name);
-    }else{
-      resetPetForMember(name);
-    }
-    refreshMemberAutoMarch(row);
-  });
-
-  row.querySelector('.member-settings-toggle').addEventListener('click', function(event){
-    event.preventDefault();
-    event.stopPropagation();
-    const settings = row.querySelector('.member-auto-settings');
-    const willOpen = settings.hidden;
-    settings.hidden = !willOpen;
-    this.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
-    if(willOpen) refreshMemberAutoMarch(row, {save:false, updateTime:false});
-  });
-}
+function attachRowEvents(row){ if(row.dataset.eventsAttached) return; row.dataset.eventsAttached = 'true'; const nameInput = row.querySelector('.name-text'); nameInput.addEventListener('input', function(){ saveSettings(); refreshMemberAutoMarch(row, {save:false}); const text = (this.textContent || '').trim(); showAutocomplete(this, getSuggestions(text)); }); nameInput.addEventListener('focus', function(){ showAutocomplete(this, getSuggestions((this.textContent || '').trim())); }); nameInput.addEventListener('blur', function(){ refreshMemberAutoMarch(row, {save:false}); saveSettings(); setTimeout(hideAutocomplete, 120); }); nameInput.addEventListener('keydown', function(ev){ if(!currentDropdown) return; const items = currentDropdown.querySelectorAll('.autocomplete-item'); if(ev.key === 'ArrowDown'){ ev.preventDefault(); selectedIndex = Math.min(items.length - 1, selectedIndex + 1); updateSelectedItem(currentDropdown); }else if(ev.key === 'ArrowUp'){ ev.preventDefault(); selectedIndex = Math.max(0, selectedIndex - 1); updateSelectedItem(currentDropdown); }else if(ev.key === 'Enter'){ ev.preventDefault(); if(selectedIndex >= 0) items[selectedIndex].dispatchEvent(new MouseEvent('mousedown')); }else if(ev.key === 'Escape'){ hideAutocomplete(); } }); row.querySelector('.march-select').addEventListener('change', function(){ saveSettings(); updateLandingTimeOptions(); }); row.querySelectorAll('.coord-input').forEach(input => { input.addEventListener('input', function(){ this.value = this.value.replace(/\D/g, '').slice(0, 4); refreshMemberAutoMarch(row); }); input.addEventListener('change', () => refreshMemberAutoMarch(row)); }); row.querySelector('.stat-boost-toggle').addEventListener('change', () => { refreshMemberAutoMarch(row); }); row.querySelector('.member-settings-pet-toggle').addEventListener('change', function(event){ event.stopPropagation(); const name = (row.querySelector('.name-text').textContent || '').trim(); if(!name){ showToast('先に集結主名を入力してください'); this.checked = false; return; } if(this.checked){ activatePet(name); }else{ resetPetForMember(name); } refreshMemberAutoMarch(row); }); row.querySelector('.member-settings-toggle').addEventListener('click', function(event){ event.preventDefault(); event.stopPropagation(); const settings = row.querySelector('.member-auto-settings'); const willOpen = settings.hidden; settings.hidden = !willOpen; this.setAttribute('aria-expanded', willOpen ? 'true' : 'false'); if(willOpen) refreshMemberAutoMarch(row, {save:false, updateTime:false}); }); }
 document.querySelectorAll('#players .member-row').forEach(attachRowEvents);
-
-/* ======= メンバー追加 ======= */
-function escapeMemberText(value){
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-function buildMemberRowHtml(member = {}){
-  const name = escapeMemberText(member.name || '');
-  const coordX = escapeMemberText(member.coordX ?? '');
-  const coordY = escapeMemberText(member.coordY ?? '');
-  const boostChecked = member.statBoost ? ' checked' : '';
-  return `
+function escapeMemberText(value){ return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+function buildMemberRowHtml(member = {}){ const name = escapeMemberText(member.name || ''); const coordX = escapeMemberText(member.coordX ?? ''); const coordY = escapeMemberText(member.coordY ?? ''); const boostChecked = member.statBoost ? ' checked' : ''; return `
     <div class="delete-bg" onclick="deleteThisRow(this)">削除</div>
     <div class="member-row">
       <div class="member-identity-row">
@@ -6225,1406 +5676,82 @@ function buildMemberRowHtml(member = {}){
       <div class="member-auto-settings" hidden>
         <div class="member-setting-row"><span class="member-setting-label">座標</span><span class="member-setting-value member-coordinates"><span class="coord-axis">X</span><input class="coord-input coord-x" inputmode="numeric" pattern="[0-9]*" placeholder="—" aria-label="X座標" value="${coordX}"><span class="coord-axis">Y</span><input class="coord-input coord-y" inputmode="numeric" pattern="[0-9]*" placeholder="—" aria-label="Y座標" value="${coordY}"></span></div><div class="member-setting-row"><span class="member-setting-label">行軍時間</span><span class="member-setting-value march-control"><select class="march-select"></select><small class="march-auto-badge">手動</small></span></div><label class="member-setting-row stat-boost-control"><span class="member-setting-label">ステ強化</span><span class="member-setting-value"><input type="checkbox" class="stat-boost-toggle"${boostChecked}><span class="stat-boost-switch"></span></span></label><label class="member-setting-row member-settings-pet-control"><span class="member-setting-label">ペット</span><span class="member-setting-value"><span class="member-pet-remaining">未発動</span><input type="checkbox" class="member-settings-pet-toggle"><span class="stat-boost-switch"></span></span></label>
       </div>
-    </div>`;
-}
-
-function addMemberRow(name = '', marchSec = null, memberSettings = {}){
-  const container=document.querySelector('#players');
-  const wrapper=document.createElement('div');
-  wrapper.classList.add('member-row-wrapper');
-  wrapper.innerHTML=buildMemberRowHtml({name, ...memberSettings});
-  const row = wrapper.querySelector('.member-row');
-  container.appendChild(wrapper);
-  const minSec = 10;
-  const maxSec = 300;
-  const defaultMarch = marchSec !== null ? marchSec : minSec;
-  generateMarchOptions(row.querySelector('.march-select'), defaultMarch, minSec, maxSec);
-  attachRowEvents(row);
-  attachSwipeToRow(row);
-  refreshMemberAutoMarch(row, {save:false, updateTime:false});
-  saveSettings();
-  updateLandingTimeOptions();
-  return row;
-}
-
-document.getElementById('add-member').addEventListener('click',()=>{
-  addMemberRow();
-});
-
-/* ======= コピー用メッセージ生成 ======= */
-function generateCopyMessage(sortedRowData){
-  const rallyMin = rallyMinSel.value;
-  const commonImpactTime = document.getElementById('common-impact-time').textContent;
-
-  const lines=[];
-  lines.push(`${rallyMin}分集結お願いします！🙇‍♂️🙇‍♂️✨`);
-  lines.push('');
-
-  if(sortedRowData){
-    // ソート済みのデータを使用
-    sortedRowData.forEach(item=>{
-      const name=(item.row.querySelector('.name-text').textContent||'').trim()||'集結主';
-      const dep=item.row.querySelector('.dep').textContent.trim()||'-';
-      lines.push(`${name} → ${dep} UTC`);
-    });
-  }else{
-    // ソート前（通常の呼び出し）
-    document.querySelectorAll('#players .member-row').forEach(row=>{
-      const name=(row.querySelector('.name-text').textContent||'').trim()||'集結主';
-      const dep=row.querySelector('.dep').textContent.trim()||'-';
-      lines.push(`${name} → ${dep} UTC`);
-    });
-  }
-
-  lines.push('━━━━━━━━━━━');
-  lines.push(`着弾時刻：${commonImpactTime} UTC`);
-  const msg = lines.join('\n');
-  document.getElementById('copy').textContent = msg;
-  
-  // プレビュー更新
-  const previewText = document.getElementById('preview-text');
-  if(previewText){
-    previewText.textContent = msg;
-  }
-}
-
-/* ======= コピーボタン（トースト通知） ======= */
-const toast = document.getElementById('toast');
-function showToast(text='✓ コピーしました'){
-  toast.textContent = text;
-  toast.classList.add('show');
-  setTimeout(()=>toast.classList.remove('show'),1500);
-}
-
-/* ======= 出発時刻計算 ======= */
+    </div>`; }
+function addMemberRow(name = '', marchSec = null, memberSettings = {}){ const container=document.querySelector('#players'); const wrapper=document.createElement('div'); wrapper.classList.add('member-row-wrapper'); wrapper.innerHTML=buildMemberRowHtml({name, ...memberSettings}); const row = wrapper.querySelector('.member-row'); container.appendChild(wrapper); const minSec = 10; const maxSec = 300; const defaultMarch = marchSec !== null ? marchSec : minSec; generateMarchOptions(row.querySelector('.march-select'), defaultMarch, minSec, maxSec); attachRowEvents(row); attachSwipeToRow(row); refreshMemberAutoMarch(row, {save:false, updateTime:false}); saveSettings(); updateLandingTimeOptions(); return row; }
+document.getElementById('add-member').addEventListener('click',()=>{ addMemberRow(); });
+function generateCopyMessage(sortedRowData){ const rallyMin = rallyMinSel.value; const commonImpactTime = document.getElementById('common-impact-time').textContent; const lines=[]; lines.push(`${rallyMin}分集結お願いします！🙇‍♂️🙇‍♂️✨`); lines.push(''); if(sortedRowData){ sortedRowData.forEach(item=>{ const name=(item.row.querySelector('.name-text').textContent||'').trim()||'集結主'; const dep=item.row.querySelector('.dep').textContent.trim()||'-'; lines.push(`${name} → ${dep} UTC`); }); }else{ document.querySelectorAll('#players .member-row').forEach(row=>{ const name=(row.querySelector('.name-text').textContent||'').trim()||'集結主'; const dep=row.querySelector('.dep').textContent.trim()||'-'; lines.push(`${name} → ${dep} UTC`); }); } lines.push('━━━━━━━━━━━'); lines.push(`着弾時刻：${commonImpactTime} UTC`); const msg = lines.join('\n'); document.getElementById('copy').textContent = msg; const previewText = document.getElementById('preview-text'); if(previewText){ previewText.textContent = msg; } }
+const toast = document.getElementById('toast'); function showToast(text='✓ コピーしました'){ toast.textContent = text; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),1500); }
 const impactTime= document.getElementById('common-impact-time');
-
-actionBtn.addEventListener('click',()=>{
-  actionBtn.classList.add('calculating');
-  actionBtn.disabled = true;
-  document.getElementById('calculating-msg').style.display = 'block';
-
-  const now=new Date();
-  const rallyType = rallyTypeSel.value;
-
-  // 最長行軍（メンバー行から自動スキャン）
-  let maxMarch = 0;
-  document.querySelectorAll('#players .member-row').forEach(row=>{
-    const march = parseInt(row.querySelector('.march-select').value,10) || 0;
-    if(march > maxMarch) maxMarch = march;
-  });
-
-  let arriveUtc;
-  const prepSec = parseInt(prepTimeSel.value,10);
-
-  // 集結時間をモードに応じて取得
-  let rallyMin;
-  if(rallyType === 'now'){
-    rallyMin = parseInt(rallyMinSel.value,10);
-  }else{
-    rallyMin = parseInt(document.getElementById('rally-min-time').value,10);
-  }
-
-  if(rallyType === 'now'){
-    // 今から：現在時刻 + 準備時間 + 集結時間 + 最長行軍
-    arriveUtc=new Date(now.getTime() + prepSec*1000 + rallyMin*60*1000 + maxMarch*1000);
-  }else{
-    // 時刻指定：選択した時刻を使用
-    const hh = parseInt(document.getElementById('hh').value, 10);
-    const mm = parseInt(document.getElementById('mm').value, 10);
-    const ss = parseInt(document.getElementById('ss').value, 10);
-    arriveUtc = new Date();
-    arriveUtc.setUTCHours(hh, mm, ss, 0);
-
-    // 過去の時刻なら翌日にする
-    if(arriveUtc <= now){
-      arriveUtc.setUTCDate(arriveUtc.getUTCDate() + 1);
-    }
-  }
-
-  const arriveStr=`${pad2(arriveUtc.getUTCHours())}:${pad2(arriveUtc.getUTCMinutes())}:${pad2(arriveUtc.getUTCSeconds())}`;
-  impactTime.textContent=arriveStr;
-
-  // 着弾時刻は両モードで表示
-  impactDisplay.style.display='block';
-
-  // 各人の出発時刻
-  const rowData=[];
-  document.querySelectorAll('#players .member-row-wrapper').forEach(wrapper=>{
-    const row = wrapper.querySelector('.member-row');
-    const march=parseInt(row.querySelector('.march-select').value,10)||0;
-    let dep;
-
-    if(rallyType === 'now'){
-      // 今から：現在時刻 + 準備時間 + (最長行軍 - 個人行軍)
-      dep = new Date(now.getTime() + prepSec*1000 + (maxMarch - march)*1000);
-    }else{
-      // 時刻指定：着弾時刻 - 集結時間 - 個人行軍
-      dep = new Date(arriveUtc.getTime() - rallyMin*60*1000 - march*1000);
-    }
-
-    const depTime = dep.getTime();
-    row.dataset.departureTime = String(depTime);
-    row.querySelector('.dep').textContent =
-      `${pad2(dep.getUTCHours())}:${pad2(dep.getUTCMinutes())}:${pad2(dep.getUTCSeconds())}`;
-    row.classList.add('has-departure');
-    rowData.push({wrapper, row, depTime});
-  });
-  updateMemberDepartureCountdowns();
-  publishRosterDepartureTimes(rowData);
-
-  // 出発時刻が早い順にソート
-  rowData.sort((a, b) => a.depTime - b.depTime);
-
-  // ソートされた順序でテーブルを並び替え（wrapperごと移動）
-  const tbody = document.querySelector('#players');
-  rowData.forEach(item => {
-    tbody.appendChild(item.wrapper);
-  });
-
-  generateCopyMessage(rowData);
-
-  // 履歴に記録
-  document.querySelectorAll('#players .member-row').forEach(row=>{
-    const name = (row.querySelector('.name-text').textContent||'').trim();
-    const march = parseInt(row.querySelector('.march-select').value, 10);
-    if(name && march){
-      recordHistory(name, march);
-    }
-  });
-
-  // 最後に解除してコピー実行
-  setTimeout(async ()=>{
-    document.getElementById('calculating-msg').style.display='none';
-    actionBtn.classList.remove('calculating');
-    actionBtn.disabled=false;
-    
-    // 自動コピー
-    const txt = document.getElementById('copy').textContent;
-    const membersTable = document.querySelector('.members-table');
-    membersTable.classList.add('flash');
-    setTimeout(()=>membersTable.classList.remove('flash'),800);
-    
-    try{ await navigator.clipboard.writeText(txt); }
-    catch(e){
-      const ta=document.createElement('textarea');
-      ta.value=txt; document.body.appendChild(ta); ta.select();
-      document.execCommand('copy'); document.body.removeChild(ta);
-    }
-    showToast();
-  }, 500);
-});
-
-/* ======= 履歴管理 ======= */
+actionBtn.addEventListener('click',()=>{ actionBtn.classList.add('calculating'); actionBtn.disabled = true; document.getElementById('calculating-msg').style.display = 'block'; const now=new Date(); const rallyType = 'now'; let maxMarch = 0; document.querySelectorAll('#players .member-row').forEach(row=>{ const march = parseInt(row.querySelector('.march-select').value,10) || 0; if(march > maxMarch) maxMarch = march; }); let arriveUtc; const prepSec = parseInt(prepTimeSel.value,10); let rallyMin; if(rallyType === 'now'){ rallyMin = parseInt(rallyMinSel.value,10); }else{ rallyMin = parseInt(document.getElementById('rally-min-time').value,10); } if(rallyType === 'now'){ arriveUtc=new Date(now.getTime() + prepSec*1000 + rallyMin*60*1000 + maxMarch*1000); }else{ const hh = parseInt(document.getElementById('hh').value, 10); const mm = parseInt(document.getElementById('mm').value, 10); const ss = parseInt(document.getElementById('ss').value, 10); arriveUtc = new Date(); arriveUtc.setUTCHours(hh, mm, ss, 0); if(arriveUtc <= now){ arriveUtc.setUTCDate(arriveUtc.getUTCDate() + 1); } } const arriveStr=`${pad2(arriveUtc.getUTCHours())}:${pad2(arriveUtc.getUTCMinutes())}:${pad2(arriveUtc.getUTCSeconds())}`; impactTime.textContent=arriveStr; impactDisplay.style.display='block'; const rowData=[]; document.querySelectorAll('#players .member-row-wrapper').forEach(wrapper=>{ const row = wrapper.querySelector('.member-row'); const march=parseInt(row.querySelector('.march-select').value,10)||0; let dep; if(rallyType === 'now'){ dep = new Date(now.getTime() + prepSec*1000 + (maxMarch - march)*1000); }else{ dep = new Date(arriveUtc.getTime() - rallyMin*60*1000 - march*1000); } const depTime = dep.getTime(); row.dataset.departureTime = String(depTime); row.querySelector('.dep').textContent = `${pad2(dep.getUTCHours())}:${pad2(dep.getUTCMinutes())}:${pad2(dep.getUTCSeconds())}`; row.classList.add('has-departure'); rowData.push({wrapper, row, depTime}); }); updateMemberDepartureCountdowns(); publishRosterDepartureTimes(rowData); rowData.sort((a, b) => a.depTime - b.depTime); const tbody = document.querySelector('#players'); rowData.forEach(item => { tbody.appendChild(item.wrapper); }); generateCopyMessage(rowData); document.querySelectorAll('#players .member-row').forEach(row=>{ const name = (row.querySelector('.name-text').textContent||'').trim(); const march = parseInt(row.querySelector('.march-select').value, 10); if(name && march){ recordHistory(name, march); } }); setTimeout(async ()=>{ document.getElementById('calculating-msg').style.display='none'; actionBtn.classList.remove('calculating'); actionBtn.disabled=false; const txt = document.getElementById('copy').textContent; const membersTable = document.querySelector('.members-table'); membersTable.classList.add('flash'); setTimeout(()=>membersTable.classList.remove('flash'),800); try{ await navigator.clipboard.writeText(txt); } catch(e){ const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } showToast(); }, 500); });
 const MAX_HISTORY_PER_KEY = 50;
-
-function getHistoryKey(){
-  return 'all';
-}
-
-function loadHistory(){
-  try{
-    const raw = localStorage.getItem('memberHistory');
-    if(!raw) return {};
-    return JSON.parse(raw);
-  }catch(e){
-    return {};
-  }
-}
-
-function saveHistory(historyData){
-  try{
-    localStorage.setItem('memberHistory', JSON.stringify(historyData));
-  }catch(e){
-    console.error('履歴の保存に失敗しました', e);
-  }
-}
-
-function recordHistory(name, marchSec){
-  if(!name || !name.trim()) return;
-
-  const key = getHistoryKey();
-  const history = loadHistory();
-
-  if(!history[key]){
-    history[key] = [];
-  }
-
-  const normalizedName = name.trim().replace(/\s+/g, ' ');
-  const currentHasPet = isPetActiveForMember(normalizedName);
-
-  // 同じ名前・同じ秒数の重複チェック（ペット状態は無視）
-  const existingIndex = history[key].findIndex(item => 
-    item.name.toLowerCase() === normalizedName.toLowerCase() && 
-    item.marchSec === marchSec
-  );
-
-  const entry = {
-    name: normalizedName,
-    marchSec: marchSec,
-    lastUsed: Date.now(),
-    hasPet: currentHasPet
-  };
-
-  if(existingIndex >= 0){
-    // 既存エントリを更新
-    history[key][existingIndex] = entry;
-  }else{
-    history[key].push(entry);
-  }
-
-  history[key].sort((a, b) => b.lastUsed - a.lastUsed);
-
-  if(history[key].length > MAX_HISTORY_PER_KEY){
-    history[key] = history[key].slice(0, MAX_HISTORY_PER_KEY);
-  }
-
-  saveHistory(history);
-}
-
-function getSuggestions(inputText){
-  const normalizedInput = String(inputText || '').trim().toLocaleLowerCase('ja-JP');
-  const key = getHistoryKey();
-  const history = loadHistory();
-  const rosterItems = FIXED_MEMBER_ROSTER
-    .filter(name => name.toLocaleLowerCase('ja-JP').includes(normalizedInput))
-    .map(name => ({name, marchSec:null, roster:true}));
-  const rosterNames = new Set(FIXED_MEMBER_ROSTER.map(name => name.toLocaleLowerCase('ja-JP')));
-  const historyItems = (history[key] || [])
-    .filter(item => item.name.toLocaleLowerCase('ja-JP').includes(normalizedInput))
-    .filter(item => !rosterNames.has(item.name.toLocaleLowerCase('ja-JP')))
-    .map(item => ({...item, roster:false}));
-  return [...rosterItems, ...historyItems].slice(0, 24);
-}
-
-function findMemberRowByName(name){
-  if(!name || !name.trim()) return null;
-  const normalizedName = name.trim().toLowerCase();
-  const existingRows = document.querySelectorAll('#players .member-row');
-  for(const row of existingRows){
-    const existingName = (row.querySelector('.name-text').textContent || '').trim().toLowerCase();
-    if(existingName === normalizedName) return row;
-  }
-  return null;
-}
-
-/* ======= オートコンプリートドロップダウン ======= */
-let currentDropdown = null;
-let currentInput = null;
-let selectedIndex = -1;
-
-function formatMarchTime(seconds){
-  if(seconds < 60){
-    return `${seconds}秒`;
-  }else if(seconds === 60){
-    return '1分';
-  }else if(seconds === 120){
-    return '2分';
-  }else{
-    const min = Math.floor(seconds / 60);
-    const sec = seconds % 60;
-    if(sec === 0){
-      return `${min}分`;
-    }else{
-      return `${min}分${sec}秒`;
-    }
-  }
-}
-
-function showAutocomplete(inputElement, suggestions){
-  hideAutocomplete();
-
-  if(!suggestions || suggestions.length === 0) return;
-
-  const dropdown = document.createElement('div');
-  dropdown.className = 'autocomplete-dropdown show';
-
-  suggestions.forEach((item, index) => {
-    const div = document.createElement('div');
-    div.className = 'autocomplete-item';
-
-    const nameSpan = document.createElement('span');
-    nameSpan.className = 'autocomplete-name';
-    nameSpan.textContent = item.name;
-
-    const marchSpan = document.createElement('span');
-    marchSpan.className = 'autocomplete-march';
-    marchSpan.textContent = item.roster ? '名簿' : formatMarchTime(item.marchSec);
-
-    div.appendChild(nameSpan);
-    div.appendChild(marchSpan);
-
-    div.addEventListener('mousedown', (e) => {
-      e.preventDefault();
-      selectSuggestion(inputElement, item);
-    });
-
-    div.addEventListener('mouseenter', () => {
-      selectedIndex = index;
-      updateSelectedItem(dropdown);
-    });
-
-    dropdown.appendChild(div);
-  });
-
-  const rect = inputElement.getBoundingClientRect();
-  dropdown.style.top = (rect.bottom + window.scrollY) + 'px';
-  dropdown.style.left = rect.left + 'px';
-  dropdown.style.width = rect.width + 'px';
-
-  document.body.appendChild(dropdown);
-  currentDropdown = dropdown;
-  currentInput = inputElement;
-  selectedIndex = -1;
-}
-
-function hideAutocomplete(){
-  if(currentDropdown){
-    currentDropdown.remove();
-    currentDropdown = null;
-    currentInput = null;
-    selectedIndex = -1;
-  }
-}
-
-function updateSelectedItem(dropdown){
-  const items = dropdown.querySelectorAll('.autocomplete-item');
-  items.forEach((item, index) => {
-    if(index === selectedIndex){
-      item.classList.add('selected');
-    }else{
-      item.classList.remove('selected');
-    }
-  });
-}
-
-function selectSuggestion(inputElement, item){
-  const row = inputElement.closest('.member-row');
-  if(!row) return;
-
-  // 重複チェック（自分自身は除く）
-  const currentName = (inputElement.textContent || '').trim().toLowerCase();
-  const newName = item.name.trim().toLowerCase();
-  
-  if(currentName !== newName){
-    const existingRows = document.querySelectorAll('#players .member-row');
-    for(const r of existingRows){
-      if(r === row) continue;
-      const existingName = (r.querySelector('.name-text').textContent || '').trim().toLowerCase();
-      if(existingName === newName){
-        showToast('同じ名前が既に存在します');
-        hideAutocomplete();
-        return;
-      }
-    }
-  }
-
-  inputElement.textContent = item.name;
-
-  const marchSelect = row.querySelector('.march-select');
-  if(marchSelect && Number.isFinite(Number(item.marchSec))){
-    marchSelect.value = item.marchSec;
-  }
-
-  refreshMemberAutoMarch(row, {save:false});
-  hideAutocomplete();
-  saveSettings();
-}
-
-function renderHistoryList(searchText = ''){
-  const historyListEl = document.getElementById('history-list');
-  const history = loadHistory();
-
-  historyListEl.innerHTML = '';
-
-  const filteredKeys = Object.keys(history).filter(key => key === getHistoryKey());
-
-  if(filteredKeys.length === 0){
-    historyListEl.innerHTML = '<div class="history-empty">履歴が登録されていません</div>';
-    return;
-  }
-
-  const currentKey = getHistoryKey();
-
-  let hasResults = false;
-
-  filteredKeys.forEach(key => {
-    const items = history[key];
-
-    const filteredItems = items.filter(item => {
-      const searchLower = searchText.toLowerCase();
-      const nameLower = item.name.toLowerCase();
-      return nameLower.includes(searchLower);
-    });
-
-    if(filteredItems.length === 0) return;
-
-    // 行軍時間順にソート
-    filteredItems.sort((a, b) => {
-      return a.marchSec - b.marchSec;
-    });
-
-    hasResults = true;
-
-    const isActive = (key === currentKey);
-
-    const groupDiv = document.createElement('div');
-    groupDiv.className = 'history-group ' + (isActive ? 'history-group--active' : 'history-group--inactive');
-    groupDiv.dataset.active = isActive ? 'true' : 'false';
-
-    const titleDiv = document.createElement('div');
-    titleDiv.className = 'history-group-title';
-    titleDiv.textContent = '履歴';
-    groupDiv.appendChild(titleDiv);
-
-    filteredItems.forEach(item => {
-      const wrapperDiv = document.createElement('div');
-      wrapperDiv.className = 'history-item-wrapper';
-
-      const deleteBg = document.createElement('div');
-      deleteBg.className = 'history-delete-bg';
-      deleteBg.textContent = '削除';
-
-      const itemDiv = document.createElement('div');
-      itemDiv.className = 'history-item';
-
-      const infoDiv = document.createElement('div');
-      infoDiv.className = 'history-item-info';
-      infoDiv.style.cursor = 'pointer';
-
-      const nameSpan = document.createElement('span');
-      nameSpan.className = 'history-item-name';
-      nameSpan.textContent = item.name;
-
-      const marchSpan = document.createElement('span');
-      marchSpan.className = 'history-item-march';
-      marchSpan.textContent = formatMarchTime(item.marchSec);
-
-      infoDiv.appendChild(nameSpan);
-      infoDiv.appendChild(marchSpan);
-
-      if(item.hasPet === true){
-        const petLabel = document.createElement('span');
-        petLabel.className = 'history-pet-label';
-        petLabel.textContent = 'ペットあり';
-        infoDiv.appendChild(petLabel);
-      }
-
-      function applyHistoryItem(){
-        const currentKey = getHistoryKey();
-        const itemKey = key;
-        if(currentKey !== itemKey) return;
-        const existingRow = findMemberRowByName(item.name);
-        if(existingRow){
-          const sel = existingRow.querySelector('.march-select');
-          if(sel){
-            sel.value = item.marchSec;
-            sel.dispatchEvent(new Event('change'));
-          }
-          closeHistoryModal();
-          showToast(`${item.name} の行軍時間を更新しました`);
-          return;
-        }
-        addMemberRow(item.name, item.marchSec);
-        closeHistoryModal();
-        showToast(`${item.name} を追加しました`);
-      }
-
+function getHistoryKey(){ return 'all'; }
+function loadHistory(){ try{ const raw = localStorage.getItem('memberHistory'); if(!raw) return {}; return JSON.parse(raw); }catch(e){ return {}; } }
+function saveHistory(historyData){ try{ localStorage.setItem('memberHistory', JSON.stringify(historyData)); }catch(e){ console.error('履歴の保存に失敗しました', e); } }
+function recordHistory(name, marchSec){ if(!name || !name.trim()) return; const key = getHistoryKey(); const history = loadHistory(); if(!history[key]){ history[key] = []; } const normalizedName = name.trim().replace(/\s+/g, ' '); const currentHasPet = isPetActiveForMember(normalizedName); const existingIndex = history[key].findIndex(item => item.name.toLowerCase() === normalizedName.toLowerCase() && item.marchSec === marchSec); const entry = { name: normalizedName, marchSec: marchSec, lastUsed: Date.now(), hasPet: currentHasPet }; if(existingIndex >= 0){ history[key][existingIndex] = entry; }else{ history[key].push(entry); } history[key].sort((a, b) => b.lastUsed - a.lastUsed); if(history[key].length > MAX_HISTORY_PER_KEY){ history[key] = history[key].slice(0, MAX_HISTORY_PER_KEY); } saveHistory(history); }
+function getSuggestions(inputText){ const normalizedInput = String(inputText || '').trim().toLocaleLowerCase('ja-JP'); const key = getHistoryKey(); const history = loadHistory(); const rosterItems = FIXED_MEMBER_ROSTER.filter(name => name.toLocaleLowerCase('ja-JP').includes(normalizedInput)).map(name => ({name, marchSec:null, roster:true})); const rosterNames = new Set(FIXED_MEMBER_ROSTER.map(name => name.toLocaleLowerCase('ja-JP'))); const historyItems = (history[key] || []).filter(item => item.name.toLocaleLowerCase('ja-JP').includes(normalizedInput)).filter(item => !rosterNames.has(item.name.toLocaleLowerCase('ja-JP'))).map(item => ({...item, roster:false})); return [...rosterItems, ...historyItems].slice(0, 24); }
+function findMemberRowByName(name){ if(!name || !name.trim()) return null; const normalizedName = name.trim().toLowerCase(); const existingRows = document.querySelectorAll('#players .member-row'); for(const row of existingRows){ const existingName = (row.querySelector('.name-text').textContent || '').trim().toLowerCase(); if(existingName === normalizedName) return row; } return null; }
+let currentDropdown = null; let currentInput = null; let selectedIndex = -1;
+function formatMarchTime(seconds){ if(seconds < 60){ return `${seconds}秒`; }else if(seconds === 60){ return '1分'; }else if(seconds === 120){ return '2分'; }else{ const min = Math.floor(seconds / 60); const sec = seconds % 60; if(sec === 0){ return `${min}分`; }else{ return `${min}分${sec}秒`; } } }
+function showAutocomplete(inputElement, suggestions){ hideAutocomplete(); if(!suggestions || suggestions.length === 0) return; const dropdown = document.createElement('div'); dropdown.className = 'autocomplete-dropdown show'; suggestions.forEach((item, index) => { const div = document.createElement('div'); div.className = 'autocomplete-item'; const nameSpan = document.createElement('span'); nameSpan.className = 'autocomplete-name'; nameSpan.textContent = item.name; const marchSpan = document.createElement('span'); marchSpan.className = 'autocomplete-march'; marchSpan.textContent = item.roster ? '名簿' : formatMarchTime(item.marchSec); div.appendChild(nameSpan); div.appendChild(marchSpan); div.addEventListener('mousedown', (e) => { e.preventDefault(); selectSuggestion(inputElement, item); }); div.addEventListener('mouseenter', () => { selectedIndex = index; updateSelectedItem(dropdown); }); dropdown.appendChild(div); }); const rect = inputElement.getBoundingClientRect(); dropdown.style.top = (rect.bottom + window.scrollY) + 'px'; dropdown.style.left = rect.left + 'px'; dropdown.style.width = rect.width + 'px'; document.body.appendChild(dropdown); currentDropdown = dropdown; currentInput = inputElement; selectedIndex = -1; }
+function hideAutocomplete(){ if(currentDropdown){ currentDropdown.remove(); currentDropdown = null; currentInput = null; selectedIndex = -1; } }
+function updateSelectedItem(dropdown){ const items = dropdown.querySelectorAll('.autocomplete-item'); items.forEach((item, index) => { if(index === selectedIndex){ item.classList.add('selected'); }else{ item.classList.remove('selected'); } }); }
+function selectSuggestion(inputElement, item){ const row = inputElement.closest('.member-row'); if(!row) return; const currentName = (inputElement.textContent || '').trim().toLowerCase(); const newName = item.name.trim().toLowerCase(); if(currentName !== newName){ const existingRows = document.querySelectorAll('#players .member-row'); for(const r of existingRows){ if(r === row) continue; const existingName = (r.querySelector('.name-text').textContent || '').trim().toLowerCase(); if(existingName === newName){ showToast('同じ名前が既に存在します'); hideAutocomplete(); return; } } } inputElement.textContent = item.name; const marchSelect = row.querySelector('.march-select'); if(marchSelect && Number.isFinite(Number(item.marchSec))){ marchSelect.value = item.marchSec; } refreshMemberAutoMarch(row, {save:false}); hideAutocomplete(); saveSettings(); }
+function renderHistoryList(searchText = ''){ const historyListEl = document.getElementById('history-list'); const history = loadHistory(); historyListEl.innerHTML = ''; const filteredKeys = Object.keys(history).filter(key => key === getHistoryKey()); if(filteredKeys.length === 0){ historyListEl.innerHTML = '<div class="history-empty">履歴が登録されていません</div>'; return; } const currentKey = getHistoryKey(); let hasResults = false; filteredKeys.forEach(key => { const items = history[key]; const filteredItems = items.filter(item => { const searchLower = searchText.toLowerCase(); const nameLower = item.name.toLowerCase(); return nameLower.includes(searchLower); }); if(filteredItems.length === 0) return; filteredItems.sort((a, b) => { return a.marchSec - b.marchSec; }); hasResults = true; const isActive = (key === currentKey); const groupDiv = document.createElement('div'); groupDiv.className = 'history-group ' + (isActive ? 'history-group--active' : 'history-group--inactive'); groupDiv.dataset.active = isActive ? 'true' : 'false'; const titleDiv = document.createElement('div'); titleDiv.className = 'history-group-title'; titleDiv.textContent = '履歴'; groupDiv.appendChild(titleDiv); filteredItems.forEach(item => { const wrapperDiv = document.createElement('div'); wrapperDiv.className = 'history-item-wrapper'; const deleteBg = document.createElement('div'); deleteBg.className = 'history-delete-bg'; deleteBg.textContent = '削除'; const itemDiv = document.createElement('div'); itemDiv.className = 'history-item'; const infoDiv = document.createElement('div'); infoDiv.className = 'history-item-info'; infoDiv.style.cursor = 'pointer'; const nameSpan = document.createElement('span'); nameSpan.className = 'history-item-name'; nameSpan.textContent = item.name; const marchSpan = document.createElement('span'); marchSpan.className = 'history-item-march'; marchSpan.textContent = formatMarchTime(item.marchSec); infoDiv.appendChild(nameSpan); infoDiv.appendChild(marchSpan); if(item.hasPet === true){ const petLabel = document.createElement('span'); petLabel.className = 'history-pet-label'; petLabel.textContent = 'ペットあり'; infoDiv.appendChild(petLabel); } function applyHistoryItem(){ const currentKey = getHistoryKey(); const itemKey = key; if(currentKey !== itemKey) return; const existingRow = findMemberRowByName(item.name); if(existingRow){ const sel = existingRow.querySelector('.march-select'); if(sel){ sel.value = item.marchSec; sel.dispatchEvent(new Event('change')); } closeHistoryModal(); showToast(`${item.name} の行軍時間を更新しました`); return; } addMemberRow(item.name, item.marchSec); closeHistoryModal(); showToast(`${item.name} を追加しました`); }
       itemDiv._applyHistoryItem = applyHistoryItem;
-
-      // 削除ボタン
-      const deleteBtn = document.createElement('button');
-      deleteBtn.type = 'button';
-      deleteBtn.className = 'history-item-delete';
-      deleteBtn.textContent = '×';
-      deleteBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        wrapperDiv.style.transition = 'all 0.3s ease';
-        wrapperDiv.style.transform = 'translateX(-100%)';
-        wrapperDiv.style.opacity = '0';
-        wrapperDiv.style.height = '0';
-        wrapperDiv.style.overflow = 'hidden';
-        setTimeout(() => {
-          deleteHistoryItemFromModal(key, item);
-        }, 300);
-      });
-
-      itemDiv.appendChild(infoDiv);
-      itemDiv.appendChild(deleteBtn);
-
-      wrapperDiv.appendChild(deleteBg);
-      wrapperDiv.appendChild(itemDiv);
-
-      // スワイプ削除イベント
-      initHistorySwipe(wrapperDiv, itemDiv, deleteBg, key, item);
-
-      groupDiv.appendChild(wrapperDiv);
-    });
-
-    historyListEl.appendChild(groupDiv);
-  });
-
-  if(!hasResults){
-    historyListEl.innerHTML = '<div class="history-empty">検索結果がありません</div>';
-  }
-}
-
-function initHistorySwipe(wrapper, itemDiv, deleteBg, key, item){
-  let startX = 0;
-  let currentX = 0;
-  let isDragging = false;
-  let didSwipe = false;
-  let touchFired = false;
-
-  function doDelete(){
-    wrapper.style.transition = 'all 0.3s ease';
-    wrapper.style.transform = 'translateX(-100%)';
-    wrapper.style.opacity = '0';
-    wrapper.style.height = '0';
-    wrapper.style.marginBottom = '0';
-    wrapper.style.overflow = 'hidden';
-    setTimeout(() => {
-      deleteHistoryItemFromModal(key, item);
-    }, 300);
-  }
-
-  itemDiv.addEventListener('touchstart', (e) => {
-    startX = e.touches[0].clientX;
-    currentX = startX;
-    isDragging = true;
-    didSwipe = false;
-    touchFired = false;
-    itemDiv.style.transition = 'none';
-  }, { passive: true });
-  
-  itemDiv.addEventListener('touchmove', (e) => {
-    if(!isDragging) return;
-    currentX = e.touches[0].clientX;
-    const diff = currentX - startX;
-    if(Math.abs(diff) > 15){
-      didSwipe = true;
-      const clamped = Math.min(diff, 0);
-      itemDiv.style.transform = `translateX(${clamped}px)`;
-    }
-  }, { passive: true });
-  
-  function isGroupActive(){
-    return itemDiv.closest('.history-group')?.dataset.active === 'true';
-  }
-
-  itemDiv.addEventListener('touchend', () => {
-    isDragging = false;
-    const diff = currentX - startX;
-    if(didSwipe && diff < -100){
-      doDelete();
-    } else if(didSwipe){
-      itemDiv.style.transition = 'transform 0.2s ease';
-      itemDiv.style.transform = 'translateX(0)';
-      didSwipe = false;
-    } else {
-      if(!isGroupActive()) return;
-      touchFired = true;
-      if(itemDiv._applyHistoryItem) itemDiv._applyHistoryItem();
-    }
-  }, { passive: true });
-
-  itemDiv.addEventListener('click', () => {
-    if(touchFired){ touchFired = false; return; }
-    if(!isGroupActive()) return;
-    if(itemDiv._applyHistoryItem) itemDiv._applyHistoryItem();
-  });
-  
-  deleteBg.addEventListener('click', () => doDelete());
-}
-
-function deleteHistoryItemFromModal(key, item){
-  const history = loadHistory();
-
-  if(!history[key]) return;
-
-  history[key] = history[key].filter(h => 
-    !(h.name.toLowerCase() === item.name.toLowerCase() && h.marchSec === item.marchSec)
-  );
-
-  if(history[key].length === 0){
-    delete history[key];
-  }
-
-  saveHistory(history);
-  showToast(`${item.name} を削除`);
-
-  renderHistoryList(document.getElementById('history-search-input').value);
-}
-
-function openHistoryModal(){
-  resetAllSwipeStates();
-  document.body.classList.add('modal-open');
-  const modal = document.getElementById('history-modal');
-  modal.classList.add('show');
-  renderHistoryList();
-  document.getElementById('history-search-input').value = '';
-}
-
-function closeHistoryModal(){
-  const modal = document.getElementById('history-modal');
-  modal.classList.remove('show');
-  document.body.classList.remove('modal-open');
-}
-
-function clearAllHistory(){
-  if(confirm('全ての履歴をリセットをしますか？')){
-    localStorage.removeItem('memberHistory');
-    showToast('すべて履歴をリセットしました');
-    renderHistoryList();
-  }
-}
-
-/* ======= 設定の保存/復元 ======= */
-function saveSettings(){
-  const members=[];
-  document.querySelectorAll('#players .member-row').forEach(row=>{
-    members.push({
-      name: row.querySelector('.name-text').textContent||'',
-      march: row.querySelector('.march-select').value,
-      coordX: row.querySelector('.coord-x')?.value || '',
-      coordY: row.querySelector('.coord-y')?.value || '',
-      statBoost: !!row.querySelector('.stat-boost-toggle')?.checked
-    });
-  });
-
-  const data={
-    rallyType:rallyTypeSel.value,
-    rallyMin:rallyMinSel.value,
-    prepTime:prepTimeSel.value,
-    members: members
-  };
-  localStorage.setItem('arrivalMarineSettings', JSON.stringify(data));
-}
-function loadSettings(){
-  const raw=localStorage.getItem('arrivalMarineSettings'); if(!raw) return;
-  try{
-    const d=JSON.parse(raw);
-
-    // 後方互換性：旧UI形式の時刻指定を引き継ぐ
-    if(d.mode){
-      rallyTypeSel.value = d.mode === 'chakudan' ? 'time' : 'now';
-    }else{
-      if(d.rallyType) rallyTypeSel.value=d.rallyType;
-    }
-
-    updateRallyMinOptions();
-    updatePrepTimeOptions();
-    if(d.rallyMin){
-      const savedRally = ['5', '10'].includes(String(d.rallyMin)) ? String(d.rallyMin) : '5';
-      rallyMinSel.value=savedRally;
-      rallyMinTimeSel.value=savedRally;
-    }
-    if(d.prepTime !== undefined) prepTimeSel.value=String(d.prepTime);
-
-    if(d.members && d.members.length>0){
-      const container=document.querySelector('#players');
-      container.innerHTML='';
-      const minSec = 10, maxSec = 300;
-      d.members.forEach(m=>{
-        const wrapper=document.createElement('div');
-        wrapper.classList.add('member-row-wrapper');
-        wrapper.innerHTML=buildMemberRowHtml(m);
-        container.appendChild(wrapper);
-        const row = wrapper.querySelector('.member-row');
-        // 保存値を優先渡し（範囲外でも generateMarchOptions が保持する）
-        generateMarchOptions(row.querySelector('.march-select'), m.march, minSec, maxSec);
-        attachRowEvents(row);
-        attachSwipeToRow(row);
-        refreshMemberAutoMarch(row, {save:false, updateTime:false});
-      });
-    }
-    updateMode();
-  }catch(e){}
-}
-['rally-min','rally-type','prep-time']
-.forEach(id=>{
-  const el=document.getElementById(id);
-  if(el) ['change','input'].forEach(ev=>el.addEventListener(ev,saveSettings));
-});
-
-// rally-min と rally-min-time を同期
-document.getElementById('rally-min').addEventListener('change', function(){
-  rallyMinTimeSel.value = this.value;
-  updateLandingTimeOptions();
-});
-document.getElementById('rally-min-time').addEventListener('change', function(){
-  rallyMinSel.value = this.value;
-  updateLandingTimeOptions();
-  saveSettings();
-});
-
-// 旧形式で分かれていた履歴を1つに統合
-function migrateHistoryData(){
-  const history = loadHistory();
-  const mergedItems = [];
-
-  Object.entries(history).forEach(([key, items]) => {
-    if(Array.isArray(items)) mergedItems.push(...items);
-  });
-
-  const unique = new Map();
-  mergedItems.forEach(item => {
-    if(!item || !item.name) return;
-    const id = `${item.name.trim().toLowerCase()}|${item.marchSec}`;
-    const previous = unique.get(id);
-    if(!previous || (item.lastUsed || 0) > (previous.lastUsed || 0)) unique.set(id, item);
-  });
-
-  const unified = Array.from(unique.values())
-    .sort((a, b) => (b.lastUsed || 0) - (a.lastUsed || 0))
-    .slice(0, MAX_HISTORY_PER_KEY);
-  saveHistory({all: unified});
-}
-
-loadSettings();
-migrateHistoryData();
-updateMode(); // 初期表示（loadSettingsでデータがない場合のため）
-document.querySelectorAll('#players .member-row').forEach(attachRowEvents);
-updateMemberRowHighlights(); // ペット発動中の行ハイライト初期化
-
+      const deleteBtn = document.createElement('button'); deleteBtn.type = 'button'; deleteBtn.className = 'history-item-delete'; deleteBtn.textContent = '×'; deleteBtn.addEventListener('click', (e) => { e.stopPropagation(); wrapperDiv.style.transition = 'all 0.3s ease'; wrapperDiv.style.transform = 'translateX(-100%)'; wrapperDiv.style.opacity = '0'; wrapperDiv.style.height = '0'; wrapperDiv.style.overflow = 'hidden'; setTimeout(() => { deleteHistoryItemFromModal(key, item); }, 300); }); itemDiv.appendChild(infoDiv); itemDiv.appendChild(deleteBtn); wrapperDiv.appendChild(deleteBg); wrapperDiv.appendChild(itemDiv); initHistorySwipe(wrapperDiv, itemDiv, deleteBg, key, item); groupDiv.appendChild(wrapperDiv); }); historyListEl.appendChild(groupDiv); }); if(!hasResults){ historyListEl.innerHTML = '<div class="history-empty">検索結果がありません</div>'; } }
+function initHistorySwipe(wrapper, itemDiv, deleteBg, key, item){ let startX = 0; let currentX = 0; let isDragging = false; let didSwipe = false; let touchFired = false; function doDelete(){ wrapper.style.transition = 'all 0.3s ease'; wrapper.style.transform = 'translateX(-100%)'; wrapper.style.opacity = '0'; wrapper.style.height = '0'; wrapper.style.marginBottom = '0'; wrapper.style.overflow = 'hidden'; setTimeout(() => { deleteHistoryItemFromModal(key, item); }, 300); } itemDiv.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; currentX = startX; isDragging = true; didSwipe = false; touchFired = false; itemDiv.style.transition = 'none'; }, { passive: true }); itemDiv.addEventListener('touchmove', (e) => { if(!isDragging) return; currentX = e.touches[0].clientX; const diff = currentX - startX; if(Math.abs(diff) > 15){ didSwipe = true; const clamped = Math.min(diff, 0); itemDiv.style.transform = `translateX(${clamped}px)`; } }, { passive: true }); function isGroupActive(){ return itemDiv.closest('.history-group')?.dataset.active === 'true'; } itemDiv.addEventListener('touchend', () => { isDragging = false; const diff = currentX - startX; if(didSwipe && diff < -100){ doDelete(); } else if(didSwipe){ itemDiv.style.transition = 'transform 0.2s ease'; itemDiv.style.transform = 'translateX(0)'; didSwipe = false; } else { if(!isGroupActive()) return; touchFired = true; if(itemDiv._applyHistoryItem) itemDiv._applyHistoryItem(); } }, { passive: true }); itemDiv.addEventListener('click', () => { if(touchFired){ touchFired = false; return; } if(!isGroupActive()) return; if(itemDiv._applyHistoryItem) itemDiv._applyHistoryItem(); }); deleteBg.addEventListener('click', () => doDelete()); }
+function deleteHistoryItemFromModal(key, item){ const history = loadHistory(); if(!history[key]) return; history[key] = history[key].filter(h => !(h.name.toLowerCase() === item.name.toLowerCase() && h.marchSec === item.marchSec)); if(history[key].length === 0){ delete history[key]; } saveHistory(history); showToast(`${item.name} を削除`); renderHistoryList(document.getElementById('history-search-input').value); }
+function openHistoryModal(){ resetAllSwipeStates(); document.body.classList.add('modal-open'); const modal = document.getElementById('history-modal'); modal.classList.add('show'); renderHistoryList(); document.getElementById('history-search-input').value = ''; }
+function closeHistoryModal(){ const modal = document.getElementById('history-modal'); modal.classList.remove('show'); document.body.classList.remove('modal-open'); }
+function clearAllHistory(){ if(confirm('全ての履歴をリセットをしますか？')){ localStorage.removeItem('memberHistory'); showToast('すべて履歴をリセットしました'); renderHistoryList(); } }
+function saveSettings(){ const members=[]; document.querySelectorAll('#players .member-row').forEach(row=>{ members.push({ name: row.querySelector('.name-text').textContent||'', march: row.querySelector('.march-select').value, coordX: row.querySelector('.coord-x')?.value || '', coordY: row.querySelector('.coord-y')?.value || '', statBoost: !!row.querySelector('.stat-boost-toggle')?.checked }); }); const data={ rallyType:'now', rallyMin:rallyMinSel.value, prepTime:prepTimeSel.value, members: members }; localStorage.setItem('arrivalMarineSettings', JSON.stringify(data)); }
+function loadSettings(){ const raw=localStorage.getItem('arrivalMarineSettings'); if(!raw) return; try{ const d=JSON.parse(raw); rallyTypeSel.value='now'; updateRallyMinOptions(); updatePrepTimeOptions(); if(d.rallyMin){ const savedRally = ['5', '10'].includes(String(d.rallyMin)) ? String(d.rallyMin) : '5'; rallyMinSel.value=savedRally; rallyMinTimeSel.value=savedRally; } if(d.prepTime !== undefined) prepTimeSel.value=String(d.prepTime); if(d.members && d.members.length>0){ const container=document.querySelector('#players'); container.innerHTML=''; const minSec = 10, maxSec = 300; d.members.forEach(m=>{ const wrapper=document.createElement('div'); wrapper.classList.add('member-row-wrapper'); wrapper.innerHTML=buildMemberRowHtml(m); container.appendChild(wrapper); const row = wrapper.querySelector('.member-row'); generateMarchOptions(row.querySelector('.march-select'), m.march, minSec, maxSec); attachRowEvents(row); attachSwipeToRow(row); refreshMemberAutoMarch(row, {save:false, updateTime:false}); }); } updateMode(); }catch(e){} }
+['rally-min','rally-type','prep-time'].forEach(id=>{ const el=document.getElementById(id); if(el) ['change','input'].forEach(ev=>el.addEventListener(ev,saveSettings)); });
+document.getElementById('rally-min').addEventListener('change', function(){ rallyMinTimeSel.value = this.value; updateLandingTimeOptions(); }); document.getElementById('rally-min-time').addEventListener('change', function(){ rallyMinSel.value = this.value; updateLandingTimeOptions(); saveSettings(); });
+function migrateHistoryData(){ const history = loadHistory(); const mergedItems = []; Object.entries(history).forEach(([key, items]) => { if(Array.isArray(items)) mergedItems.push(...items); }); const unique = new Map(); mergedItems.forEach(item => { if(!item || !item.name) return; const id = `${item.name.trim().toLowerCase()}|${item.marchSec}`; const previous = unique.get(id); if(!previous || (item.lastUsed || 0) > (previous.lastUsed || 0)) unique.set(id, item); }); const unified = Array.from(unique.values()).sort((a, b) => (b.lastUsed || 0) - (a.lastUsed || 0)).slice(0, MAX_HISTORY_PER_KEY); saveHistory({all: unified}); }
+loadSettings(); migrateHistoryData(); updateMode(); document.querySelectorAll('#players .member-row').forEach(attachRowEvents); updateMemberRowHighlights();
 window.addEventListener('scroll', hideAutocomplete, {passive:true});
-
-// スワイプ状態をリセット（他の場所をタップした時）
-document.addEventListener('click', (e) => {
-  if(!e.target.closest('.autocomplete-dropdown') && !e.target.closest('.name-text')) hideAutocomplete();
-  if(!e.target.closest('.member-row-wrapper') && !e.target.closest('.delete-bg')){
-    document.querySelectorAll('#players .member-row').forEach(r => {
-      if(r.style.transform && r.style.transform !== 'translateX(0px)'){
-        r.style.transition = 'transform 0.2s ease';
-        r.style.transform = 'translateX(0)';
-      }
-    });
-  }
-});
-
-// 履歴モーダル
+document.addEventListener('click', (e) => { if(!e.target.closest('.autocomplete-dropdown') && !e.target.closest('.name-text')) hideAutocomplete(); if(!e.target.closest('.member-row-wrapper') && !e.target.closest('.delete-bg')){ document.querySelectorAll('#players .member-row').forEach(r => { if(r.style.transform && r.style.transform !== 'translateX(0px)'){ r.style.transition = 'transform 0.2s ease'; r.style.transform = 'translateX(0)'; } }); } });
 document.getElementById('clear-all-history-modal').addEventListener('click', clearAllHistory);
-
-// 履歴検索
-document.getElementById('history-search-input').addEventListener('input', function(){
-  renderHistoryList(this.value);
-});
-
-/* ======= プレビュー折りたたみ ======= */
-const previewToggle = document.getElementById('preview-toggle');
-const previewContent = document.getElementById('preview-content');
-const previewArrow = document.getElementById('preview-arrow');
-let previewExpanded = false;
-
-previewContent.addEventListener('transitionend', function(){
-  if(previewExpanded){
-    previewContent.style.height = 'auto';
-  }
-});
-
-previewToggle.addEventListener('click', function(){
-  if(previewExpanded){
-    // 閉じる
-    const currentHeight = previewContent.scrollHeight;
-    previewContent.style.height = currentHeight + 'px';
-    previewContent.offsetHeight; // 強制リフロー
-    previewContent.style.height = '0';
-    previewArrow.style.transform = 'rotate(0deg)';
-    previewToggle.style.background = 'var(--bg-light)';
-  }else{
-    // 開く
-    generateCopyMessage();
-    const targetHeight = previewContent.scrollHeight;
-    previewContent.style.height = targetHeight + 'px';
-    previewArrow.style.transform = 'rotate(-180deg)';
-    previewToggle.style.background = 'linear-gradient(135deg, #e8eef4 0%, #dde5ed 100%)';
-  }
-  previewExpanded = !previewExpanded;
-});
-
-/* ======= 集結主セクションの折りたたみ ======= */
-const membersHeader = document.getElementById('members-header');
-const membersContent = document.getElementById('members-content');
-const membersArrow = document.getElementById('members-arrow');
-let membersExpanded = true;
-
-// 初期状態で開いておく（Safari対策: 最初はautoで設定）
-membersContent.style.height = 'auto';
-membersArrow.style.transform = 'rotate(-180deg)';
-membersHeader.style.background = 'linear-gradient(135deg, #e8eef4 0%, #dde5ed 100%)';
-
-// トランジション終了後にheightをautoに戻す（Safari対策）
-membersContent.addEventListener('transitionend', function(){
-  if(membersExpanded){
-    membersContent.style.height = 'auto';
-  }
-});
-
-membersHeader.addEventListener('click', function(){
-  membersExpanded = !membersExpanded;
-
-  if(membersExpanded){
-    const currentHeight = membersContent.scrollHeight;
-    membersContent.style.height = '0';
-    setTimeout(()=>{
-      membersContent.style.height = currentHeight + 'px';
-    }, 10);
-    membersArrow.style.transform = 'rotate(-180deg)';
-    membersHeader.style.background = 'linear-gradient(135deg, #e8eef4 0%, #dde5ed 100%)';
-  }else{
-    membersContent.style.height = membersContent.scrollHeight + 'px';
-    setTimeout(()=>{
-      membersContent.style.height = '0';
-    }, 10);
-    membersArrow.style.transform = 'rotate(0deg)';
-    membersHeader.style.background = 'linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%)';
-  }
-});
-
-// メンバー追加時にheightを更新（Safari対策）
-document.getElementById('add-member').addEventListener('click', function(){
-  setTimeout(()=>{
-    if(membersExpanded){
-      membersContent.style.height = membersContent.scrollHeight + 'px';
-      setTimeout(()=>{ membersContent.style.height = 'auto'; }, 350);
-    }
-  }, 10);
-});
-
-/* ======= ペット管理 ======= */
-// ペットデータの構造: { name: string, status: 'waiting'|'active'|'ended', endTime?: timestamp }
-function loadPets(){
-  const data = localStorage.getItem('pets');
-  return data ? JSON.parse(data) : {};
-}
-
-function savePets(pets){
-  localStorage.setItem('pets', JSON.stringify(pets));
-}
-
-function openPetModal(){
-  resetAllSwipeStates();
-  document.body.classList.add('modal-open');
-  renderPetList();
-  document.getElementById('pet-modal').classList.add('show');
-}
-
-function closePetModal(){
-  document.getElementById('pet-modal').classList.remove('show');
-  document.body.classList.remove('modal-open');
-}
-
-function getPetIconForName(name){
-  // スペースを無視して正規化
-  const normalizedName = name.replace(/\s/g, '');
-  
-  // マリー系の判定（さん、ちゃん等の敬称付きも対応）
-  const marieBases = ['マリー', 'まりー', 'マリィ', 'まりぃ', 'marie', 'Marie'];
-  for(const base of marieBases){
-    if(normalizedName.startsWith(base) || normalizedName.toLowerCase().startsWith(base.toLowerCase())){
-      return 'marie-icon.png';
-    }
-  }
-  if(marieBases.some(b => normalizedName.includes(b))){
-    return 'marie-icon.png';
-  }
-  
-  // ごったん、ゴツオ、ごったんさん、ごっちゃん の判定
-  const gottanNames = ['ごったん', 'ごったんさん', 'ごっちゃん', 'ゴツオ', 'ごつお'];
-  if(gottanNames.includes(normalizedName)){
-    return 'gottan-icon.png';
-  }
-  
-  // デフォルトはブルドック
-  return 'dog-icon.png';
-}
-
-function renderPetList(){
-  const pets = loadPets();
-  const petListEl = document.getElementById('pet-list');
-
-  // 現在のメンバーリストを取得
-  const currentMembers = [];
-  document.querySelectorAll('.name-text').forEach(input => {
-    const name = (input.textContent||'').trim();
-    if(name) currentMembers.push(name);
-  });
-
-  // 発動中のペット（ホームで削除されても表示）
-  const now = Date.now();
-  const activePetNames = [];
-  for(const name in pets){
-    const pet = pets[name];
-    if(pet.status === 'active' && pet.endTime && pet.endTime > now){
-      if(!currentMembers.includes(name)){
-        activePetNames.push(name);
-      }
-    }
-  }
-
-  // 表示するメンバー = 現在のメンバー + 発動中の削除済みメンバー
-  const displayMembers = [...currentMembers, ...activePetNames];
-
-  if(displayMembers.length === 0){
-    petListEl.innerHTML = '<div class="pet-empty">集結主が登録されていません</div>';
-    return;
-  }
-
-  let html = '';
-
-  displayMembers.forEach(name => {
-    const pet = pets[name] || { status: 'waiting' };
-    let statusText = '';
-    let statusClass = '';
-
-    if(pet.status === 'active' && pet.endTime){
-      if(now < pet.endTime){
-        const endDate = new Date(pet.endTime);
-        const remaining = pet.endTime - now;
-        const remainMin = Math.floor(remaining / 60000);
-        const remainHour = Math.floor(remainMin / 60);
-        const remainMinOnly = remainMin % 60;
-        const remainText = remainHour > 0 ? `${remainHour}:${pad2(remainMinOnly)}` : `0:${pad2(remainMinOnly)}`;
-        statusText = `残り${remainText}<br><span class="pet-end-time">${pad2(endDate.getUTCHours())}:${pad2(endDate.getUTCMinutes())} UTC</span>`;
-        statusClass = 'active';
-      }else{
-        statusText = '終了';
-        statusClass = 'ended';
-        pet.status = 'ended';
-        pets[name] = pet;
-        savePets(pets);
-      }
-    }else if(pet.status === 'ended'){
-      statusText = '終了';
-      statusClass = 'ended';
-    }else{
-      statusText = '▶ 発動';
-      statusClass = 'waiting';
-    }
-
-    // 名前に基づいてアイコンを選択
-    const petIcon = getPetIconForName(name);
-    
-    // アイコン（状態によって表示を変える）
-    let iconButton = '';
-    if(statusClass === 'waiting'){
-      // 待機中：普通のアイコン
-      iconButton = `<div class="pet-icon-wrapper"><img src="${petIcon}" class="pet-item-icon" alt="pet"></div>`;
-    }else if(statusClass === 'active'){
-      // 発動中：光る（クリックでリセット）
-      iconButton = `<div class="pet-icon-wrapper active" data-name="${name}"><img src="${petIcon}" class="pet-item-icon" alt="pet"></div>`;
-    }else if(statusClass === 'ended'){
-      // 終了：薄く＋💤
-      iconButton = `<div class="pet-icon-wrapper ended"><img src="${petIcon}" class="pet-item-icon" alt="pet"></div>`;
-    }else{
-      iconButton = `<div class="pet-icon-wrapper"><img src="${petIcon}" class="pet-item-icon" alt="pet"></div>`;
-    }
-    
-    // ステータス表示
-    let statusDisplay = `<span class="pet-item-status ${statusClass}">${statusText}</span>`;
-    
-    html += `
+document.getElementById('history-search-input').addEventListener('input', function(){ renderHistoryList(this.value); });
+const previewToggle = document.getElementById('preview-toggle'); const previewContent = document.getElementById('preview-content'); const previewArrow = document.getElementById('preview-arrow'); let previewExpanded = false;
+previewContent.addEventListener('transitionend', function(){ if(previewExpanded){ previewContent.style.height = 'auto'; } });
+previewToggle.addEventListener('click', function(){ if(previewExpanded){ const currentHeight = previewContent.scrollHeight; previewContent.style.height = currentHeight + 'px'; previewContent.offsetHeight; previewContent.style.height = '0'; previewArrow.style.transform = 'rotate(0deg)'; previewToggle.style.background = 'var(--bg-light)'; }else{ generateCopyMessage(); const targetHeight = previewContent.scrollHeight; previewContent.style.height = targetHeight + 'px'; previewArrow.style.transform = 'rotate(-180deg)'; previewToggle.style.background = 'linear-gradient(135deg, #e8eef4 0%, #dde5ed 100%)'; } previewExpanded = !previewExpanded; });
+const membersHeader = document.getElementById('members-header'); const membersContent = document.getElementById('members-content'); const membersArrow = document.getElementById('members-arrow'); let membersExpanded = true; membersContent.style.height = 'auto'; membersArrow.style.transform = 'rotate(-180deg)'; membersHeader.style.background = 'linear-gradient(135deg, #e8eef4 0%, #dde5ed 100%)'; membersContent.addEventListener('transitionend', function(){ if(membersExpanded){ membersContent.style.height = 'auto'; } }); membersHeader.addEventListener('click', function(){ membersExpanded = !membersExpanded; if(membersExpanded){ const currentHeight = membersContent.scrollHeight; membersContent.style.height = '0'; setTimeout(()=>{ membersContent.style.height = currentHeight + 'px'; }, 10); membersArrow.style.transform = 'rotate(-180deg)'; membersHeader.style.background = 'linear-gradient(135deg, #e8eef4 0%, #dde5ed 100%)'; }else{ membersContent.style.height = membersContent.scrollHeight + 'px'; setTimeout(()=>{ membersContent.style.height = '0'; }, 10); membersArrow.style.transform = 'rotate(0deg)'; membersHeader.style.background = 'linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%)'; } }); document.getElementById('add-member').addEventListener('click', function(){ setTimeout(()=>{ if(membersExpanded){ membersContent.style.height = membersContent.scrollHeight + 'px'; setTimeout(()=>{ membersContent.style.height = 'auto'; }, 350); } }, 10); });
+function loadPets(){ const data = localStorage.getItem('pets'); return data ? JSON.parse(data) : {}; }
+function savePets(pets){ localStorage.setItem('pets', JSON.stringify(pets)); }
+function openPetModal(){ resetAllSwipeStates(); document.body.classList.add('modal-open'); renderPetList(); document.getElementById('pet-modal').classList.add('show'); }
+function closePetModal(){ document.getElementById('pet-modal').classList.remove('show'); document.body.classList.remove('modal-open'); }
+function getPetIconForName(name){ const normalizedName = name.replace(/\s/g, ''); const marieBases = ['マリー', 'まりー', 'マリィ', 'まりぃ', 'marie', 'Marie']; for(const base of marieBases){ if(normalizedName.startsWith(base) || normalizedName.toLowerCase().startsWith(base.toLowerCase())){ return 'marie-icon.png'; } } if(marieBases.some(b => normalizedName.includes(b))){ return 'marie-icon.png'; } const gottanNames = ['ごったん', 'ごったんさん', 'ごっちゃん', 'ゴツオ', 'ごつお']; if(gottanNames.includes(normalizedName)){ return 'gottan-icon.png'; } return 'dog-icon.png'; }
+function renderPetList(){ const pets = loadPets(); const petListEl = document.getElementById('pet-list'); const currentMembers = []; document.querySelectorAll('.name-text').forEach(input => { const name = (input.textContent||'').trim(); if(name) currentMembers.push(name); }); const now = Date.now(); const activePetNames = []; for(const name in pets){ const pet = pets[name]; if(pet.status === 'active' && pet.endTime && pet.endTime > now){ if(!currentMembers.includes(name)){ activePetNames.push(name); } } } const displayMembers = [...currentMembers, ...activePetNames]; if(displayMembers.length === 0){ petListEl.innerHTML = '<div class="pet-empty">集結主が登録されていません</div>'; return; } let html = ''; displayMembers.forEach(name => { const pet = pets[name] || { status: 'waiting' }; let statusText = ''; let statusClass = ''; if(pet.status === 'active' && pet.endTime){ if(now < pet.endTime){ const endDate = new Date(pet.endTime); const remaining = pet.endTime - now; const remainMin = Math.floor(remaining / 60000); const remainHour = Math.floor(remainMin / 60); const remainMinOnly = remainMin % 60; const remainText = remainHour > 0 ? `${remainHour}:${pad2(remainMinOnly)}` : `0:${pad2(remainMinOnly)}`; statusText = `残り${remainText}<br><span class="pet-end-time">${pad2(endDate.getUTCHours())}:${pad2(endDate.getUTCMinutes())} UTC</span>`; statusClass = 'active'; }else{ statusText = '終了'; statusClass = 'ended'; pet.status = 'ended'; pets[name] = pet; savePets(pets); } }else if(pet.status === 'ended'){ statusText = '終了'; statusClass = 'ended'; }else{ statusText = '▶ 発動'; statusClass = 'waiting'; } const petIcon = getPetIconForName(name); let iconButton = ''; if(statusClass === 'waiting'){ iconButton = `<div class="pet-icon-wrapper"><img src="${petIcon}" class="pet-item-icon" alt="pet"></div>`; }else if(statusClass === 'active'){ iconButton = `<div class="pet-icon-wrapper active" data-name="${name}"><img src="${petIcon}" class="pet-item-icon" alt="pet"></div>`; }else if(statusClass === 'ended'){ iconButton = `<div class="pet-icon-wrapper ended"><img src="${petIcon}" class="pet-item-icon" alt="pet"></div>`; }else{ iconButton = `<div class="pet-icon-wrapper"><img src="${petIcon}" class="pet-item-icon" alt="pet"></div>`; } let statusDisplay = `<span class="pet-item-status ${statusClass}">${statusText}</span>`; html += `
       <div class="pet-item" data-name="${name}" data-status="${pet.status}">
         ${iconButton}
         <span class="pet-item-name">${name}</span>
         ${statusDisplay}
       </div>
-    `;
-  });
-
-  petListEl.innerHTML = html;
-
-  // アイコンボタンのクリックイベント（待機中のみ）
-  petListEl.querySelectorAll('.pet-icon-btn').forEach(btn => {
-    btn.addEventListener('click', function(e){
-      e.stopPropagation();
-      const name = this.getAttribute('data-name');
-      activatePet(name);
-    });
-  });
-  
-  // 待機中のONボタンクリックで発動
-  petListEl.querySelectorAll('.pet-item-status.waiting').forEach(btn => {
-    btn.addEventListener('click', function(e){
-      e.stopPropagation();
-      const parentItem = this.closest('.pet-item');
-      const name = parentItem.getAttribute('data-name');
-      activatePet(name);
-    });
-  });
-  
-  // 発動中のアイコンクリックでリセット
-  petListEl.querySelectorAll('.pet-icon-wrapper.active').forEach(icon => {
-    icon.addEventListener('click', function(e){
-      e.stopPropagation();
-      const name = this.getAttribute('data-name');
-      resetPetForMember(name);
-    });
-  });
-  
-  // 発動中のステータスクリックでもリセット
-  petListEl.querySelectorAll('.pet-item-status.active').forEach(btn => {
-    btn.addEventListener('click', function(e){
-      e.stopPropagation();
-      const parentItem = this.closest('.pet-item');
-      const name = parentItem.getAttribute('data-name');
-      resetPetForMember(name);
-    });
-  });
-  
-}
-
-function activatePet(name){
-  resetAllSwipeStates();
-  const pets = loadPets();
-  const now = Date.now();
-  const duration = 2 * 60 * 60 * 1000; // 2時間
-  const endTime = now + duration;
-
-  pets[name] = {
-    status: 'active',
-    endTime: endTime
-  };
-  
-  savePets(pets);
-  renderPetList();
-  refreshAllMemberAutoMarchTimes();
-  resetAllSwipeStates();
-  showToast(`${name} ペット発動`);
-}
-
-function resetPetForMember(name){
-  resetAllSwipeStates();
-  const pets = loadPets();
-  pets[name] = { status: 'waiting' };
-  savePets(pets);
-  renderPetList();
-  refreshAllMemberAutoMarchTimes();
-  resetAllSwipeStates();
-  showToast(`${name} リセット`);
-}
-
-function resetAllPets(){
-  if(!confirm('全員のペットスキルをリセットしますか？')){
-    return;
-  }
-
-  const pets = loadPets();
-  const currentMembers = [];
-  document.querySelectorAll('.name-text').forEach(input => {
-    const name = (input.textContent||'').trim();
-    if(name) currentMembers.push(name);
-  });
-
-  currentMembers.forEach(name => {
-    pets[name] = { status: 'waiting' };
-  });
-
-  savePets(pets);
-  renderPetList();
-  refreshAllMemberAutoMarchTimes();
-}
-
-// ペットモーダルのイベント
+    `; }); petListEl.innerHTML = html; petListEl.querySelectorAll('.pet-icon-btn').forEach(btn => { btn.addEventListener('click', function(e){ e.stopPropagation(); const name = this.getAttribute('data-name'); activatePet(name); }); }); petListEl.querySelectorAll('.pet-item-status.waiting').forEach(btn => { btn.addEventListener('click', function(e){ e.stopPropagation(); const parentItem = this.closest('.pet-item'); const name = parentItem.getAttribute('data-name'); activatePet(name); }); }); petListEl.querySelectorAll('.pet-icon-wrapper.active').forEach(icon => { icon.addEventListener('click', function(e){ e.stopPropagation(); const name = this.getAttribute('data-name'); resetPetForMember(name); }); }); petListEl.querySelectorAll('.pet-item-status.active').forEach(btn => { btn.addEventListener('click', function(e){ e.stopPropagation(); const parentItem = this.closest('.pet-item'); const name = parentItem.getAttribute('data-name'); resetPetForMember(name); }); }); }
+function activatePet(name){ resetAllSwipeStates(); const pets = loadPets(); const now = Date.now(); const duration = 2 * 60 * 60 * 1000; const endTime = now + duration; pets[name] = { status: 'active', endTime: endTime }; savePets(pets); renderPetList(); refreshAllMemberAutoMarchTimes(); resetAllSwipeStates(); showToast(`${name} ペット発動`); }
+function resetPetForMember(name){ resetAllSwipeStates(); const pets = loadPets(); pets[name] = { status: 'waiting' }; savePets(pets); renderPetList(); refreshAllMemberAutoMarchTimes(); resetAllSwipeStates(); showToast(`${name} リセット`); }
+function resetAllPets(){ if(!confirm('全員のペットスキルをリセットしますか？')){ return; } const pets = loadPets(); const currentMembers = []; document.querySelectorAll('.name-text').forEach(input => { const name = (input.textContent||'').trim(); if(name) currentMembers.push(name); }); currentMembers.forEach(name => { pets[name] = { status: 'waiting' }; }); savePets(pets); renderPetList(); refreshAllMemberAutoMarchTimes(); }
 document.getElementById('reset-all-pets').addEventListener('click', resetAllPets);
-
-// モーダル内のタッチイベントがホーム画面に伝播しないようにする
-document.querySelectorAll('.history-modal-content').forEach(content => {
-  content.addEventListener('touchstart', function(e){
-    e.stopPropagation();
-  }, { passive: true });
-  content.addEventListener('touchmove', function(e){
-    e.stopPropagation();
-  }, { passive: true });
-  content.addEventListener('touchend', function(e){
-    e.stopPropagation();
-  }, { passive: true });
-});
-
-/* ======= 下部ツールバー ======= */
-function toggleHistoryModal(){
-  const modal = document.getElementById('history-modal');
-  if(modal.classList.contains('show')){
-    closeHistoryModal();
-  }else{
-    openHistoryModal();
-  }
-}
-
-function togglePetModal(){
-  const modal = document.getElementById('pet-modal');
-  if(modal.classList.contains('show')){
-    closePetModal();
-  }else{
-    openPetModal();
-  }
-}
-
-// ツールバーのイベント（要素が存在する場合のみ）
-const tabHome = document.getElementById('tab-home');
-if(tabHome) tabHome.addEventListener('click', function(){
-  resetAllSwipeStates();
-  closeHistoryModal();
-  closePetModal();
-});
-const tabHistory = document.getElementById('tab-history');
-if(tabHistory) tabHistory.addEventListener('click', function(){
-  resetAllSwipeStates();
-  closePetModal();
-  toggleHistoryModal();
-});
-const tabPet = document.getElementById('tab-pet');
-if(tabPet) tabPet.addEventListener('click', function(){
-  resetAllSwipeStates();
-  closeHistoryModal();
-  togglePetModal();
-});
-
-
-/* ======= 集結主の見出しからモーダルを開く ======= */
-const openPetButton = document.getElementById('open-pet-btn');
-if(openPetButton) openPetButton.addEventListener('click', function(e){
-  e.stopPropagation();
-  openPetModal();
-});
-const openHistoryButton = document.getElementById('open-history-btn');
-if(openHistoryButton) openHistoryButton.addEventListener('click', function(e){
-  e.stopPropagation();
-  openHistoryModal();
-});
-
-/* ======= ページ切り替え ======= */
-function switchPage(pageId){
-  document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.page-tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(pageId).classList.add('active');
-  const btn = document.querySelector(`.page-tab-btn[data-page="${pageId}"]`);
-  if(btn) btn.classList.add('active');
-  document.body.classList.toggle('landing-active', pageId === 'page-landing');
-  window.scrollTo(0, 0);
-}
-
-document.querySelectorAll('.page-tab-btn').forEach(btn => {
-  btn.addEventListener('click', function(){
-    switchPage(this.dataset.page);
-  });
-});
-
-/* ======= 着弾時刻発行ページ ======= */
-(function(){
-  const savedLandingRally = parseInt(localStorage.getItem('landingRallyMin'));
-  const savedLandingPrep = parseInt(localStorage.getItem('landingPrepTime'));
-  const savedLandingDiff = parseInt(localStorage.getItem('landingDiffSeconds'));
-  if(Number.isFinite(savedLandingRally)){
-    ensureSelectOption(landingRallyMinSel, savedLandingRally, `${savedLandingRally}分`);
-  }
-  if(Number.isFinite(savedLandingPrep)){
-    ensureSelectOption(landingPrepTimeSel, savedLandingPrep, marchLabel(savedLandingPrep));
-  }
-  if(Number.isFinite(savedLandingDiff)){
-    const diffMinutes = Math.floor(savedLandingDiff / 60);
-    const diffSeconds = savedLandingDiff % 60;
-    ensureSelectOption(landingDiffMinSel, diffMinutes, `${diffMinutes}分`);
-    ensureSelectOption(landingDiffSecSel, diffSeconds, `${diffSeconds}秒`);
-  }
-  landingRallyMinSel.addEventListener('change', () => localStorage.setItem('landingRallyMin', landingRallyMinSel.value));
-  landingPrepTimeSel.addEventListener('change', () => localStorage.setItem('landingPrepTime', landingPrepTimeSel.value));
-  const saveLandingDiff = () => {
-    const totalSeconds = (parseInt(landingDiffMinSel.value) || 0) * 60 + (parseInt(landingDiffSecSel.value) || 0);
-    localStorage.setItem('landingDiffSeconds', String(totalSeconds));
-  };
-  landingDiffMinSel.addEventListener('change', saveLandingDiff);
-  landingDiffSecSel.addEventListener('change', saveLandingDiff);
-
-  // 二段階集結トグル
-  document.getElementById('l-two-wave').addEventListener('change', function(){
-    document.getElementById('l-two-wave-section').style.display = this.checked ? 'flex' : 'none';
-  });
-
-  // コピー共通処理
-  function doCopy(timeStr, timeStr2){
-    const rallyMin = parseInt(document.getElementById('l-rally-min').value) || 1;
-    let text;
-    if(timeStr2){
-      text = `${rallyMin}分集結お願いします。🙇‍♂️\n①【${timeStr} UTC】着弾\n②【${timeStr2} UTC】着弾`;
-    } else {
-      text = `${rallyMin}分集結お願いします。🙇‍♂️\n【${timeStr} UTC】着弾\u3000`;
-    }
-    const inner = document.getElementById('l-result-inner');
-
-    function flash(){
-      inner.classList.remove('flash');
-      void inner.offsetWidth;
-      inner.classList.add('flash');
-      setTimeout(()=>inner.classList.remove('flash'), 800);
-    }
-
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(()=>{ flash(); showToast('✓ コピーしました'); });
-    } else {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      flash();
-      showToast('✓ コピーしました');
-    }
-  }
-
-  // 計算ボタン：計算＋自動コピー
-  document.getElementById('l-action-btn').addEventListener('click', function(){
-    const btn = this;
-    btn.textContent = '計算中...';
-    btn.disabled = true;
-
-    setTimeout(function(){
-      const fromNow  = parseInt(document.getElementById('l-from-now').value)  || 30;
-      const rallyMin = parseInt(document.getElementById('l-rally-min').value) || 1;
-      const twoWave  = document.getElementById('l-two-wave').checked;
-
-      const now    = new Date();
-      const target = new Date(now.getTime() + (fromNow + rallyMin * 60) * 1000);
-      const timeStr = `${pad2(target.getUTCHours())}:${pad2(target.getUTCMinutes())}:${pad2(target.getUTCSeconds())}`;
-
-      // 1発目ラベル切替
-      document.getElementById('l-result-label').textContent = twoWave ? '① 着弾' : '着弾時刻';
-      document.getElementById('l-result-time').textContent = timeStr;
-      document.getElementById('l-result').style.display = 'block';
-
-      // 2発目
-      let timeStr2 = null;
-      if(twoWave){
-        const diffMin = parseInt(document.getElementById('l-diff-min').value) || 0;
-        const diffSec = parseInt(document.getElementById('l-diff-sec').value) || 0;
-        const target2 = new Date(target.getTime() + (diffMin * 60 + diffSec) * 1000);
-        timeStr2 = `${pad2(target2.getUTCHours())}:${pad2(target2.getUTCMinutes())}:${pad2(target2.getUTCSeconds())}`;
-        document.getElementById('l-result-time2').textContent = timeStr2;
-        document.getElementById('l-result2-row').style.display = 'block';
-      } else {
-        document.getElementById('l-result2-row').style.display = 'none';
-      }
-
-      btn.textContent = '計算開始';
-      btn.disabled = false;
-
-      doCopy(timeStr, timeStr2);
-    }, 600);
-  });
-
-})();
-
-/* ======= PWA: Service Worker登録 ======= */
-if('serviceWorker' in navigator){
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => {
-        console.log('Service Worker登録成功:', reg.scope);
-        // 定期的に更新をチェック
-        setInterval(() => reg.update(), 60000);
-      })
-      .catch(err => console.log('Service Worker登録失敗:', err));
-  });
-  
-  // 新しいサービスワーカーがアクティブになったら自動リロード
-  let refreshing = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if(refreshing) return;
-    refreshing = true;
-    window.location.reload();
-  });
-}
-
-/* ======= ペット通知システム ======= */
+document.querySelectorAll('.history-modal-content').forEach(content => { content.addEventListener('touchstart', function(e){ e.stopPropagation(); }, { passive: true }); content.addEventListener('touchmove', function(e){ e.stopPropagation(); }, { passive: true }); content.addEventListener('touchend', function(e){ e.stopPropagation(); }, { passive: true }); });
+function toggleHistoryModal(){ const modal = document.getElementById('history-modal'); if(modal.classList.contains('show')){ closeHistoryModal(); }else{ openHistoryModal(); } }
+function togglePetModal(){ const modal = document.getElementById('pet-modal'); if(modal.classList.contains('show')){ closePetModal(); }else{ openPetModal(); } }
+const tabHome = document.getElementById('tab-home'); if(tabHome) tabHome.addEventListener('click', function(){ resetAllSwipeStates(); closeHistoryModal(); closePetModal(); }); const tabHistory = document.getElementById('tab-history'); if(tabHistory) tabHistory.addEventListener('click', function(){ resetAllSwipeStates(); closePetModal(); toggleHistoryModal(); }); const tabPet = document.getElementById('tab-pet'); if(tabPet) tabPet.addEventListener('click', function(){ resetAllSwipeStates(); closeHistoryModal(); togglePetModal(); });
+const openPetButton = document.getElementById('open-pet-btn'); if(openPetButton) openPetButton.addEventListener('click', function(e){ e.stopPropagation(); openPetModal(); }); const openHistoryButton = document.getElementById('open-history-btn'); if(openHistoryButton) openHistoryButton.addEventListener('click', function(e){ e.stopPropagation(); openHistoryModal(); });
+function switchPage(pageId){ document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active')); document.querySelectorAll('.page-tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(pageId).classList.add('active'); const btn = document.querySelector(`.page-tab-btn[data-page="${pageId}"]`); if(btn) btn.classList.add('active'); document.body.classList.toggle('landing-active', pageId === 'page-landing'); window.scrollTo(0, 0); }
+document.querySelectorAll('.page-tab-btn').forEach(btn => { btn.addEventListener('click', function(){ switchPage(this.dataset.page); }); });
+(function(){ const savedLandingRally = parseInt(localStorage.getItem('landingRallyMin')); const savedLandingPrep = parseInt(localStorage.getItem('landingPrepTime')); const savedLandingDiff = parseInt(localStorage.getItem('landingDiffSeconds')); if(Number.isFinite(savedLandingRally)){ ensureSelectOption(landingRallyMinSel, savedLandingRally, `${savedLandingRally}分`); } if(Number.isFinite(savedLandingPrep)){ ensureSelectOption(landingPrepTimeSel, savedLandingPrep, marchLabel(savedLandingPrep)); } if(Number.isFinite(savedLandingDiff)){ const diffMinutes = Math.floor(savedLandingDiff / 60); const diffSeconds = savedLandingDiff % 60; ensureSelectOption(landingDiffMinSel, diffMinutes, `${diffMinutes}分`); ensureSelectOption(landingDiffSecSel, diffSeconds, `${diffSeconds}秒`); } landingRallyMinSel.addEventListener('change', () => localStorage.setItem('landingRallyMin', landingRallyMinSel.value)); landingPrepTimeSel.addEventListener('change', () => localStorage.setItem('landingPrepTime', landingPrepTimeSel.value)); const saveLandingDiff = () => { const totalSeconds = (parseInt(landingDiffMinSel.value) || 0) * 60 + (parseInt(landingDiffSecSel.value) || 0); localStorage.setItem('landingDiffSeconds', String(totalSeconds)); }; landingDiffMinSel.addEventListener('change', saveLandingDiff); landingDiffSecSel.addEventListener('change', saveLandingDiff); document.getElementById('l-two-wave').addEventListener('change', function(){ document.getElementById('l-two-wave-section').style.display = this.checked ? 'flex' : 'none'; }); function doCopy(timeStr, timeStr2){ const rallyMin = parseInt(document.getElementById('l-rally-min').value) || 1; let text; if(timeStr2){ text = `${rallyMin}分集結お願いします。🙇‍♂️\n①【${timeStr} UTC】着弾\n②【${timeStr2} UTC】着弾`; } else { text = `${rallyMin}分集結お願いします。🙇‍♂️\n【${timeStr} UTC】着弾　`; } const inner = document.getElementById('l-result-inner'); function flash(){ inner.classList.remove('flash'); void inner.offsetWidth; inner.classList.add('flash'); setTimeout(()=>inner.classList.remove('flash'), 800); } if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(()=>{ flash(); showToast('✓ コピーしました'); }); } else { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); flash(); showToast('✓ コピーしました'); } }
+  document.getElementById('l-action-btn').addEventListener('click', function(){ const btn = this; btn.textContent = '計算中...'; btn.disabled = true; setTimeout(function(){ const fromNow  = parseInt(document.getElementById('l-from-now').value)  || 30; const rallyMin = parseInt(document.getElementById('l-rally-min').value) || 1; const twoWave  = document.getElementById('l-two-wave').checked; const now    = new Date(); const target = new Date(now.getTime() + (fromNow + rallyMin * 60) * 1000); const timeStr = `${pad2(target.getUTCHours())}:${pad2(target.getUTCMinutes())}:${pad2(target.getUTCSeconds())}`; document.getElementById('l-result-label').textContent = twoWave ? '① 着弾' : '着弾時刻'; document.getElementById('l-result-time').textContent = timeStr; document.getElementById('l-result').style.display = 'block'; let timeStr2 = null; if(twoWave){ const diffMin = parseInt(document.getElementById('l-diff-min').value) || 0; const diffSec = parseInt(document.getElementById('l-diff-sec').value) || 0; const target2 = new Date(target.getTime() + (diffMin * 60 + diffSec) * 1000); timeStr2 = `${pad2(target2.getUTCHours())}:${pad2(target2.getUTCMinutes())}:${pad2(target2.getUTCSeconds())}`; document.getElementById('l-result-time2').textContent = timeStr2; document.getElementById('l-result2-row').style.display = 'block'; } else { document.getElementById('l-result2-row').style.display = 'none'; } btn.textContent = '計算開始'; btn.disabled = false; doCopy(timeStr, timeStr2); }, 600); });})();
+if('serviceWorker' in navigator){ window.addEventListener('load', () => { navigator.serviceWorker.register('/service-worker.js').then(reg => { console.log('Service Worker登録成功:', reg.scope); setInterval(() => reg.update(), 60000); }).catch(err => console.log('Service Worker登録失敗:', err)); }); let refreshing = false; navigator.serviceWorker.addEventListener('controllerchange', () => { if(refreshing) return; refreshing = true; window.location.reload(); }); }
 const petNotificationTimers = {};
-
-
-function sendPetNotification(title, body) {
-  if (!('Notification' in window)) return;
-  if (Notification.permission !== 'granted') return;
-  
-  try {
-    new Notification(title, {
-      body: body,
-      icon: '/dog-icon.png',
-      badge: '/icon.png',
-      tag: 'pet-timer-' + Date.now(),
-      requireInteraction: false
-    });
-  } catch(e) {
-    console.log('通知エラー:', e);
-  }
-}
-
-function schedulePetNotifications(name, endTime) {
-  cancelPetNotifications(name);
-  
-  const now = Date.now();
-  const fiveMinBefore = endTime - (5 * 60 * 1000);
-  
-  petNotificationTimers[name] = [];
-  
-  if (fiveMinBefore > now) {
-    const timer5min = setTimeout(() => {
-      sendPetNotification(
-        'ペット終了まであと5分',
-        `${name} のペットスキルが5分後に終了します`
-      );
-    }, fiveMinBefore - now);
-    petNotificationTimers[name].push(timer5min);
-  }
-  
-  if (endTime > now) {
-    const timerEnd = setTimeout(() => {
-      sendPetNotification(
-        'ペットスキル終了',
-        `${name} のペットスキルが終了しました`
-      );
-    }, endTime - now);
-    petNotificationTimers[name].push(timerEnd);
-  }
-}
-
-function cancelPetNotifications(name) {
-  if (petNotificationTimers[name]) {
-    petNotificationTimers[name].forEach(timer => clearTimeout(timer));
-    delete petNotificationTimers[name];
-  }
-}
-
-function restoreNotificationsOnLoad() {
-  const pets = loadPets();
-  const now = Date.now();
-  
-  for (const name in pets) {
-    const pet = pets[name];
-    if (pet.status === 'active' && pet.endTime && pet.endTime > now) {
-      schedulePetNotifications(name, pet.endTime);
-    }
-  }
-}
-
-const originalActivatePet = activatePet;
-activatePet = function(name){
-  if(!confirm(`${name}\nペット発動しますか？`)) return;
-  originalActivatePet(name);
-  const pets = loadPets();
-  if(pets[name] && pets[name].endTime){
-    schedulePetNotifications(name, pets[name].endTime);
-  }
-};
-
-const originalResetPetForMember = resetPetForMember;
-resetPetForMember = function(name){
-  if(!confirm(`${name}\nリセットしますか？`)) return;
-  cancelPetNotifications(name);
-  originalResetPetForMember(name);
-};
-
-window.addEventListener('load', function() {
-  restoreNotificationsOnLoad();
-});
+function sendPetNotification(title, body) { if (!('Notification' in window)) return; if (Notification.permission !== 'granted') return; try { new Notification(title, { body: body, icon: '/dog-icon.png', badge: '/icon.png', tag: 'pet-timer-' + Date.now(), requireInteraction: false }); } catch(e) { console.log('通知エラー:', e); } }
+function schedulePetNotifications(name, endTime) { cancelPetNotifications(name); const now = Date.now(); const fiveMinBefore = endTime - (5 * 60 * 1000); petNotificationTimers[name] = []; if (fiveMinBefore > now) { const timer5min = setTimeout(() => { sendPetNotification('ペット終了まであと5分', `${name} のペットスキルが5分後に終了します`); }, fiveMinBefore - now); petNotificationTimers[name].push(timer5min); } if (endTime > now) { const timerEnd = setTimeout(() => { sendPetNotification('ペットスキル終了', `${name} のペットスキルが終了しました`); }, endTime - now); petNotificationTimers[name].push(timerEnd); } }
+function cancelPetNotifications(name) { if (petNotificationTimers[name]) { petNotificationTimers[name].forEach(timer => clearTimeout(timer)); delete petNotificationTimers[name]; } }
+function restoreNotificationsOnLoad() { const pets = loadPets(); const now = Date.now(); for (const name in pets) { const pet = pets[name]; if (pet.status === 'active' && pet.endTime && pet.endTime > now) { schedulePetNotifications(name, pet.endTime); } } }
+const originalActivatePet = activatePet; activatePet = function(name){ if(!confirm(`${name}\nペット発動しますか？`)) return; originalActivatePet(name); const pets = loadPets(); if(pets[name] && pets[name].endTime){ schedulePetNotifications(name, pets[name].endTime); } };
+const originalResetPetForMember = resetPetForMember; resetPetForMember = function(name){ if(!confirm(`${name}\nリセットしますか？`)) return; cancelPetNotifications(name); originalResetPetForMember(name); };
+window.addEventListener('load', function() { restoreNotificationsOnLoad(); });
 </script>
 </body>
 </html>
