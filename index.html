@@ -3243,6 +3243,127 @@ body.departure-edit-open{
   }
 }
 
+/* ===== スマホ：共通の縦レイアウトグリッド ===== */
+@media (max-width:600px){
+  .container{
+    --layout-section-gap:18px;
+  }
+
+  /* 時計以外の外側ラインをコンテナ幅へ統一 */
+  .header,
+  body.landing-active .header{
+    padding-top:44px;
+    margin-right:0;
+    margin-bottom:var(--layout-section-gap);
+    margin-left:0;
+  }
+
+  .device-countdown-card{
+    width:100%;
+    max-width:none;
+    margin:var(--layout-section-gap) 0 0;
+  }
+
+  .page-tabs,
+  body.landing-active .page-tabs{
+    width:100%;
+    margin:0 0 var(--layout-section-gap);
+  }
+
+  #page-calc,
+  #page-landing,
+  #page-calc > .mode-card,
+  #page-calc > .departure-action,
+  #page-calc > .departure-result,
+  #page-calc > .collapsible-card,
+  #page-landing > .mode-card,
+  #page-landing > .landing-action,
+  #page-landing > #l-result{
+    width:100%;
+    max-width:none;
+    margin-right:0;
+    margin-left:0;
+    box-sizing:border-box;
+  }
+
+  /* 各主要セクションの外側間隔を18pxに統一 */
+  #page-calc > .mode-card{
+    margin:0 0 var(--layout-section-gap) !important;
+  }
+
+  #page-calc > .departure-action{
+    margin:0 0 var(--layout-section-gap);
+  }
+
+  #page-calc > .departure-result{
+    margin:0 0 var(--layout-section-gap);
+  }
+
+  #page-calc > .collapsible-card,
+  #page-calc > .collapsible-card + .collapsible-card{
+    margin:0 0 var(--layout-section-gap) !important;
+  }
+
+  #page-landing > .landing-settings-card{
+    margin:0 0 var(--layout-section-gap) !important;
+  }
+
+  #page-landing > .landing-action{
+    margin:0 0 var(--layout-section-gap);
+  }
+
+  #page-landing > #l-result{
+    margin:0 0 var(--layout-section-gap) !important;
+  }
+
+  #page-landing #l-result-inner,
+  #page-calc .collapsible-content,
+  #page-calc .collapsible-content-inner,
+  #page-calc #sec-members,
+  #page-calc .members-list{
+    width:100%;
+    box-sizing:border-box;
+  }
+
+  /* 集結一覧：ヘッダー・行・追加ボタンを1枚のカード内に収める */
+  #page-calc .collapsible-card{
+    overflow:hidden;
+  }
+
+  #page-calc .button-controls{
+    width:100%;
+    margin:0;
+    padding:8px 14px 10px;
+    border-top:1px solid #eeeeef;
+    box-sizing:border-box;
+  }
+
+  #page-calc .button-controls .control-btn{
+    width:100%;
+    margin:0;
+  }
+
+  #page-calc .member-row-wrapper,
+  #page-calc .member-row,
+  #page-calc .member-identity-row{
+    width:100%;
+    box-sizing:border-box;
+  }
+
+  /* 補助テキストとフッターはグリッドを乱さない */
+  #page-calc .calculating-msg{
+    width:100%;
+    margin:-12px 0 var(--layout-section-gap);
+  }
+
+  #page-calc .footer,
+  #page-landing .footer,
+  body.landing-active #page-landing .footer{
+    width:100%;
+    margin:0;
+  }
+}
+
 </style>
 </head>
 <body class="landing-active">
