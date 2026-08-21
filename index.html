@@ -4244,10 +4244,10 @@ body .departure-preset-heading{
   <!-- ヘッダー（UTC時計） -->
   <div class="header">
     <button type="button" id="app-settings-button" class="app-settings-button" aria-label="設定を開く">…</button>
-    <div class="clock aligned-box" id="utc-clock-trigger" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="utc-clock-overlay" aria-label="UTC時計をオーバーレイ表示">
+    <div class="clock aligned-box" id="utc-clock-trigger" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="utc-clock-overlay" aria-label="UTC時計をPiP小窓で表示">
       <span class="clock-heading">現在時刻</span>
       <div class="clock-time-line"><span class="clock-time-value"><span id="utc-now">--:--:--</span><span id="utc-millis">:00</span></span><span class="utc-label">UTC</span></div>
-      <span class="clock-tap-hint">タップでオーバーレイ表示</span>
+      <span class="clock-tap-hint">タップでPiP小窓</span>
     </div>
   </div>
 
@@ -4930,16 +4930,9 @@ function initializeUtcVideoPipSource(){
 
 async function openUtcVideoPip(){
   if(!initializeUtcVideoPipSource()) return false;
-  try{
-    await utcPipVideo.play();
-    if(document.pictureInPictureElement === utcPipVideo) return true;
-    if(typeof utcPipVideo.requestPictureInPicture === 'function' && document.pictureInPictureEnabled !== false){
-      await utcPipVideo.requestPictureInPicture();
-      return true;
-    }
-  }catch(error){
-    // WebKit固有方式を続けて試す
-  }
+  const playPromise = utcPipVideo.play().catch(()=>{});
+
+  /* iPhone Safariはタップ直後の同期呼び出しでないとPiPを拒否することがある */
   try{
     if(typeof utcPipVideo.webkitSetPresentationMode === 'function'){
       const supportsPip = typeof utcPipVideo.webkitSupportsPresentationMode !== 'function'
@@ -4948,6 +4941,17 @@ async function openUtcVideoPip(){
         utcPipVideo.webkitSetPresentationMode('picture-in-picture');
         return true;
       }
+    }
+  }catch(error){
+    // 標準PiP方式を続けて試す
+  }
+
+  try{
+    await playPromise;
+    if(document.pictureInPictureElement === utcPipVideo) return true;
+    if(typeof utcPipVideo.requestPictureInPicture === 'function' && document.pictureInPictureEnabled !== false){
+      await utcPipVideo.requestPictureInPicture();
+      return true;
     }
   }catch(error){
     // 呼び出し元で通常オーバーレイへ切り替える
@@ -4996,7 +5000,7 @@ async function openUtcPipWindow(){
   return openUtcVideoPip();
 }
 
-/* タップ：まずオーバーレイ表示を試し、非対応の端末では画面内表示に切り替える */
+/* タップ：まずPiPを試し、非対応の端末では画面内表示に切り替える */
 async function handleUtcClockTap(){
   if(await openUtcPipWindow()) return;
   openUtcClockOverlay();
