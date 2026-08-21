@@ -1987,15 +1987,34 @@ body.landing-active{ background:var(--bg); }
    かつ元の大きなUTC時計と同じ見た目の枠(.aligned-box)の中に置いている。
    canvasは描画バッファのみなので画面外でよい。 */
 .clock-card{
+  position:relative;
   background:var(--card-bg);
   border-radius:var(--radius);
   box-shadow:0 1px 2px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.05);
   padding:14px 16px 10px;
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
+  text-align:center;
 }
 .clock-card:active{
   opacity:0.7;
+}
+.clock-card-label{
+  font-size:12px;
+  font-weight:600;
+  color:var(--text-muted);
+  text-align:left;
+}
+.clock-card-main{
+  font-size:34px;
+  font-weight:700;
+  font-family:"Roboto Mono",Consolas,Monaco,monospace;
+  font-variant-numeric:tabular-nums;
+  color:var(--text-primary);
+  line-height:1.3;
+}
+.clock-card-frac{
+  color:var(--blue-text);
 }
 .clock-card-hint{
   font-size:12px;
@@ -2003,12 +2022,20 @@ body.landing-active{ background:var(--bg); }
   text-align:center;
   margin-top:2px;
 }
+/* PiPソースのvideoは目立たない小さいサイズで右上に配置する。
+   画面外(position:absoluteでtop:-99999px等)にするとオートプレイが始まらない
+   ブラウザがあるため、画面内に置きつつ視覚的な存在感を最小限にする。 */
 .pip-preview{
-  width:100%;
-  aspect-ratio:3/1;
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:28px;
+  height:9px;
   display:block;
   object-fit:contain;
   background:transparent;
+  opacity:0.35;
+  border-radius:2px;
 }
 .pip-source{
   position:absolute;
@@ -2053,13 +2080,21 @@ body.landing-active{ background:var(--bg); }
 
 <div class="container">
 
-  <!-- ヘッダー（UTC時計。canvas描画をvideo化したものをそのままPiPソースにする） -->
+  <!-- ヘッダー（UTC時計）。
+       表示はプレーンテキストで行い、PiPソースのvideoは目立たない小さいサイズにする。
+       video を大きく表示するとフローティング開始時にSafariが元の位置へ
+       「このビデオはピクチャ・イン・ピクチャで再生中です」という黒いプレースホルダを
+       重ねて表示するため、その面積を最小限にするための構成。 -->
   <div class="header">
     <div id="pip-clock-tap" class="clock-card">
+      <div class="clock-card-label" id="clock-label">UTC</div>
+      <div class="clock-card-main">
+        <span id="clock-main-text">--:--:--</span><span id="clock-frac-text" class="clock-card-frac">.0</span>
+      </div>
+      <div class="clock-card-hint" id="clock-hint-text">タップでフローティング表示</div>
       <video id="pip-preview" class="pip-preview" playsinline webkit-playsinline muted autoplay loop></video>
-      <div class="clock-card-hint">タップでフローティング表示</div>
     </div>
-    <!-- tickUTC()が参照する既存要素。表示上は上のvideoに置き換わるため隠す(ロジックは維持) -->
+    <!-- tickUTC()が参照する既存要素。表示上は上のカードに置き換わるため隠す(ロジックは維持) -->
     <span id="utc-now" style="display:none">--:--:--</span><span class="utc-label" style="display:none">UTC</span>
   </div>
 
@@ -3024,6 +3059,20 @@ renderRallyMemberList();
     ctx.fillRect(0, 0, W, H);
   }
 
+  // カード表示は通常のHTML要素で行う(videoは目立たない小サイズのPiPソース専用)。
+  // canvas描画と常に同じ内容を反映させる。
+  var clockLabelEl = document.getElementById('clock-label');
+  var clockMainEl = document.getElementById('clock-main-text');
+  var clockFracEl = document.getElementById('clock-frac-text');
+  var clockHintEl = document.getElementById('clock-hint-text');
+
+  function updateClockCard(label, main, frac, mainColor, fracColor, hint){
+    if(clockLabelEl) clockLabelEl.textContent = label;
+    if(clockMainEl){ clockMainEl.textContent = main; clockMainEl.style.color = mainColor; }
+    if(clockFracEl){ clockFracEl.textContent = frac; clockFracEl.style.color = fracColor; }
+    if(clockHintEl) clockHintEl.textContent = hint;
+  }
+
   function drawClock(){
     var now = new Date(serverNow());
     var hh = pad2(now.getUTCHours());
@@ -3033,6 +3082,8 @@ renderRallyMemberList();
 
     var main = hh + ':' + mm + ':' + ss;
     var frac = '.' + deci;
+
+    updateClockCard('UTC', main, frac, '#1C1C1E', 'var(--blue-text)', 'タップでフローティング表示');
 
     ctx.fillStyle = '#8E8E93';
     ctx.font = '600 12px -apple-system, "Helvetica Neue", Arial, sans-serif';
@@ -3076,6 +3127,7 @@ renderRallyMemberList();
         goStartedAt = null;
         return true;
       }
+      updateClockCard('出発まで', 'GO', '', '#ff3b30', '#ff3b30', 'タップでフローティング表示');
       ctx.font = "700 40px Menlo, Consolas, 'SF Mono', monospace";
       ctx.textBaseline = 'middle';
       ctx.textAlign = 'center';
@@ -3092,6 +3144,8 @@ renderRallyMemberList();
 
     var main = mm + ':' + ss;
     var frac = '.' + deci;
+
+    updateClockCard('出発まで', main, frac, '#1C1C1E', '#ff3b30', 'タップでフローティング表示');
 
     ctx.font = "700 34px Menlo, Consolas, 'SF Mono', monospace";
     ctx.textBaseline = 'middle';
