@@ -9,16 +9,13 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
-<meta name="theme-color" content="#1976D2" />
+<meta name="theme-color" content="#f2f2f7" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="apple-mobile-web-app-title" content="集結計算機" />
 <link rel="apple-touch-icon" href="/icon.png" />
 <link rel="manifest" href="/manifest.json" />
 <link rel="icon" type="image/png" href="/icon.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
 <title>集結計算機</title>
 <meta property="og:title" content="集結計算機">
 <meta property="og:site_name" content="集結計算機">
@@ -27,6 +24,8 @@
 /* ===== デザインシステム: 実用的で整然としたUI ===== */
 /* 色階層: 背景#FAFAFA / セクション#FFFFFF / 見出し帯#E3F2FD / 強調#1976D2 */
 :root{
+  --font-ui:-apple-system,BlinkMacSystemFont,"SF Pro Text","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  --font-num:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;
   --blue-primary:#1976D2;
   --blue-hover:#1565C0;
   --blue-active:#0D47A1;
@@ -56,7 +55,7 @@
 
 body{
   background:var(--bg);
-  font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-family:var(--font-ui);
   color:var(--text-primary);
   font-size:16px;
   line-height:1.6;
@@ -182,7 +181,7 @@ button.secondary:hover{
     0 8px 28px rgba(0,0,0,0.42),
     0 4px 10px rgba(0,0,0,0.24);
   font-variant-numeric:tabular-nums;
-  font-family:"Roboto Mono",Consolas,Monaco,monospace;
+  font-family:var(--font-num);
 }
 
 #utc-now{
@@ -236,7 +235,7 @@ button.secondary:hover{
   font-weight:700;
   color:var(--blue-text);
   font-variant-numeric:tabular-nums;
-  font-family:"Roboto Mono",Consolas,Monaco,monospace;
+  font-family:var(--font-num);
 }
 
 .collapsible-card{
@@ -496,7 +495,7 @@ body.modal-open .member-row-wrapper {
 }
 
 .member-departure-countdown-value{
-  font-family:"Roboto Mono",monospace;
+  font-family:var(--font-num);
   font-size:14px;
   font-weight:800;
   letter-spacing:0;
@@ -569,28 +568,6 @@ body.modal-open .member-row-wrapper {
   display:none !important;
 }
 
-.member-settings-primary,
-.member-settings-options{
-  display:grid;
-  align-items:center;
-  gap:10px;
-  min-width:0;
-  min-height:50px;
-  padding:7px 10px;
-  border:1px solid #e5e5ea;
-  background:#fff;
-}
-
-.member-settings-primary{
-  grid-template-columns:auto minmax(0,1fr);
-  border-radius:12px 12px 0 0;
-}
-
-.member-settings-options{
-  grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);
-  border-top:0;
-  border-radius:0 0 12px 12px;
-}
 
 .member-coordinates{
   display:flex;
@@ -634,7 +611,7 @@ body.modal-open .member-row-wrapper {
 
 .member-pet-remaining{
   color:#8e8e93;
-  font-family:"Roboto Mono",monospace;
+  font-family:var(--font-num);
   font-size:14px;
   font-weight:800;
   letter-spacing:-.02em;
@@ -650,7 +627,7 @@ body.modal-open .member-row-wrapper {
   border-radius:7px;
   background:#f7f7f8;
   color:#333;
-  font-family:"Roboto Mono",monospace;
+  font-family:var(--font-num);
   font-size:15px;
   font-weight:700;
   text-align:center;
@@ -750,7 +727,7 @@ body.modal-open .member-row-wrapper {
 
 /* 名前：入力枠なし、テキストだけ */
 .name-text {
-  font-family: "Noto Sans JP", sans-serif;
+  font-family:var(--font-ui);
   font-size: 16px;
   font-weight: 600;
   color: #555;
@@ -780,7 +757,7 @@ body.modal-open .member-row-wrapper {
   border: none;
   border-radius: 0;
   background: transparent;
-  font-family: "Noto Sans JP", sans-serif;
+  font-family:var(--font-ui);
   font-size: 15px !important;
   font-weight: 600;
   color: #333;
@@ -825,12 +802,6 @@ body.modal-open .member-row-wrapper {
   .member-settings-pet-control{
     font-size:12px;
   }
-  .member-settings-primary,
-  .member-settings-options{
-    gap:7px;
-    padding-left:8px;
-    padding-right:8px;
-  }
   .march-select{
     width:64px;
     font-size:14px !important;
@@ -842,7 +813,7 @@ body.modal-open .member-row-wrapper {
 
 /* 時刻（自動） */
 .time-text {
-  font-family: "Roboto Mono", monospace;
+  font-family:var(--font-num);
   font-size: 24px;
   font-weight: 700;
   color: #1e88e5;
@@ -902,7 +873,7 @@ body.modal-open .member-row-wrapper {
 /* プレビューテキストボックス */
 .preview-text-box{
   margin:0;
-  font-family:"Noto Sans JP", sans-serif;
+  font-family:var(--font-ui);
   font-size:13px;
   line-height:1.6;
   color:#333;
@@ -1352,7 +1323,7 @@ body.landing-active .page-tabs{ background:var(--card-bg); }
 .copy{white-space:pre-line;background:var(--card-bg);border:1px solid var(--border);padding:8px;min-height:40px;font-size:14px;line-height:1.4;margin-top:8px;border-radius:var(--radius);color:var(--text-secondary);font-weight:500}
 .copy-btn-container{display:flex;gap:8px;margin-top:8px}
 .footer{text-align:center;color:var(--text-tertiary);font-size:12px;margin-top:20px;user-select:none}
-.time-select{width:85px;padding:12px 10px;font-size:1.3rem;font-weight:700;border:1px solid var(--border);color:var(--blue-text);text-align:center;border-radius:var(--radius);background:var(--card-bg);min-height:var(--touch-target);font-family:"Roboto Mono",Consolas,Monaco,monospace}
+.time-select{width:85px;padding:12px 10px;font-size:1.3rem;font-weight:700;border:1px solid var(--border);color:var(--blue-text);text-align:center;border-radius:var(--radius);background:var(--card-bg);min-height:var(--touch-target);font-family:var(--font-num)}
 #action-btn.calculating{background:var(--btn-disabled);cursor:not-allowed;box-shadow:none}
 .calculating-msg{font-size:13px;color:var(--text-muted);margin-top:6px;font-style:italic;line-height:1.5}
 
@@ -1409,7 +1380,7 @@ body.landing-active .page-tabs{ background:var(--card-bg); }
   font-size:16px;
   font-weight:600;
   font-variant-numeric:tabular-nums;
-  font-family:"Roboto Mono",Consolas,Monaco,monospace;
+  font-family:var(--font-num);
   color:var(--text-secondary);
   cursor:pointer;
   text-align:center;
@@ -1853,14 +1824,14 @@ body.landing-active .clock{
   border:none;
   border-radius:0;
   box-shadow:none;
-  font-family:"Roboto Mono",Consolas,Monaco,monospace;
+  font-family:var(--font-num);
 }
 
 body.landing-active .clock-heading{
   display:block;
   margin:0 0 2px;
   color:#929296;
-  font-family:"Noto Sans JP",sans-serif;
+  font-family:var(--font-ui);
   font-size:15px;
   font-weight:700;
   letter-spacing:.02em;
@@ -1882,7 +1853,7 @@ body.landing-active #utc-now{
 body.landing-active .utc-label{
   margin-left:12px;
   color:#929296;
-  font-family:"Noto Sans JP",sans-serif;
+  font-family:var(--font-ui);
   font-size:20px;
   font-weight:700;
 }
@@ -1891,7 +1862,7 @@ body.landing-active .clock-status{
   display:block;
   margin-top:10px;
   color:#c3c3c6;
-  font-family:"Noto Sans JP",sans-serif;
+  font-family:var(--font-ui);
   font-size:13px;
   font-weight:700;
 }
@@ -2168,30 +2139,32 @@ body.landing-active .header{
   z-index:2;
   align-items:center;
   justify-content:center;
-  width:40px;
-  min-width:40px;
-  min-height:40px;
+  width:26px;
+  min-width:26px;
+  height:26px;
+  min-height:26px;
   margin:0;
-  padding:0 0 8px;
+  padding:0 0 5px;
   border:0;
   border-radius:50%;
-  background:#e9e9eb;
-  color:#3a3a3c;
-  font-size:24px;
-  font-weight:800;
-  letter-spacing:2px;
+  background:rgba(120,120,128,.12);
+  color:#8e8e93;
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:1px;
   line-height:1;
   box-shadow:none;
+  opacity:.85;
 }
 
 .app-settings-button.registered::after{
   content:'';
   position:absolute;
-  right:2px;
-  bottom:2px;
-  width:9px;
-  height:9px;
-  border:2px solid #f7f7f5;
+  right:0;
+  bottom:0;
+  width:7px;
+  height:7px;
+  border:1.5px solid #f7f7f5;
   border-radius:50%;
   background:#34c759;
 }
@@ -2210,7 +2183,7 @@ body.landing-active .clock{
   border:none !important;
   border-radius:18px;
   box-shadow:0 10px 46px rgba(0,0,0,.13), 0 2px 12px rgba(0,0,0,.08);
-  font-family:"Roboto Mono",Consolas,Monaco,monospace;
+  font-family:var(--font-num);
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
 }
@@ -2224,7 +2197,7 @@ body.landing-active .clock-heading{
   display:block;
   margin:0 0 2px;
   color:#929296;
-  font-family:"Noto Sans JP",sans-serif;
+  font-family:var(--font-ui);
   font-size:15px;
   font-weight:700;
   letter-spacing:.02em;
@@ -2234,34 +2207,12 @@ body.landing-active .clock-heading{
   display:block;
   margin-top:7px;
   color:#a4a4a9;
-  font-family:"Noto Sans JP",sans-serif;
+  font-family:var(--font-ui);
   font-size:10px;
   font-weight:500;
   letter-spacing:.02em;
   line-height:1.2;
 }
-
-.device-countdown-card{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  width:min(100%, 360px);
-  min-height:46px;
-  margin:12px auto 0;
-  padding:8px 12px;
-  border:1px solid rgba(0,110,219,.12);
-  border-radius:13px;
-  background:#e6f2ff;
-  color:#006edb;
-  font-size:12px;
-  font-weight:800;
-  box-shadow:0 7px 18px rgba(0,90,180,.1);
-}
-
-.device-countdown-card[hidden]{display:none !important}
-.device-countdown-name{color:#3a3a3c;white-space:nowrap}
-.device-countdown-time{font-family:"Roboto Mono",monospace;font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
 
 .device-settings-modal{
   display:flex;
@@ -2315,7 +2266,7 @@ body.landing-active #utc-now{
 body.landing-active #utc-millis{
   margin-left:2px;
   color:#4d4d50;
-  font-family:"Roboto Mono",Consolas,Monaco,monospace;
+  font-family:var(--font-num);
   font-size:clamp(18px, 5.5vw, 26px);
   font-weight:800;
   letter-spacing:-.06em;
@@ -2326,7 +2277,7 @@ body.landing-active #utc-millis{
 body.landing-active .utc-label{
   margin-left:12px;
   color:#929296;
-  font-family:"Noto Sans JP",sans-serif;
+  font-family:var(--font-ui);
   font-size:20px;
   font-weight:700;
 }
@@ -2393,7 +2344,7 @@ body.utc-overlay-open{
 }
 
 #utc-overlay-time{
-  font-family:"Roboto Mono",Consolas,Monaco,monospace;
+  font-family:var(--font-num);
   font-size:clamp(34px, 11vw, 44px);
   font-weight:800;
   letter-spacing:-.07em;
@@ -2403,9 +2354,45 @@ body.utc-overlay-open{
 #utc-overlay-millis{
   margin-left:-3px;
   color:#d0d0d4;
-  font-family:"Roboto Mono",Consolas,Monaco,monospace;
+  font-family:var(--font-num);
   font-size:clamp(18px, 5.5vw, 24px);
   font-weight:800;
+  font-variant-numeric:tabular-nums;
+}
+
+.utc-clock-overlay-countdown{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+  margin-top:14px;
+  color:#e6e6ea;
+  font-family:var(--font-ui);
+  font-size:13px;
+  font-weight:700;
+  line-height:1.3;
+}
+
+.utc-clock-overlay-countdown[hidden]{display:none !important}
+
+.utc-clock-overlay-countdown-name{
+  color:#8ec8ff;
+  font-size:13px;
+  font-weight:800;
+}
+
+.utc-clock-overlay-countdown-line{
+  display:inline-flex;
+  align-items:baseline;
+  gap:6px;
+  white-space:nowrap;
+}
+
+.utc-clock-overlay-countdown-value{
+  font-family:var(--font-num);
+  font-size:17px;
+  font-weight:800;
+  letter-spacing:-.02em;
   font-variant-numeric:tabular-nums;
 }
 
@@ -2608,7 +2595,7 @@ body.landing-active .page-tab-btn.active{
 
 #page-calc .departure-time-control select{
   width:30px;
-  font-family:"Roboto Mono",Consolas,Monaco,monospace;
+  font-family:var(--font-num);
   font-size:15px;
 }
 
@@ -3005,7 +2992,7 @@ body.departure-edit-open{
   border-radius:0;
   background:transparent;
   color:#8e8e93;
-  font-family:"Roboto Mono",Consolas,Monaco,monospace;
+  font-family:var(--font-num);
   font-size:20px;
   font-weight:500;
   line-height:44px;
@@ -3195,12 +3182,6 @@ body.departure-edit-open{
     padding:8px 10px 10px;
   }
 
-  .member-settings-primary,
-  .member-settings-options{
-    min-height:44px;
-    padding-top:5px;
-    padding-bottom:5px;
-  }
 
   .button-controls{
     margin-top:8px;
@@ -3252,16 +3233,10 @@ body.departure-edit-open{
   /* 時計以外の外側ラインをコンテナ幅へ統一 */
   .header,
   body.landing-active .header{
-    padding-top:44px;
+    padding-top:34px;
     margin-right:0;
     margin-bottom:var(--layout-section-gap);
     margin-left:0;
-  }
-
-  .device-countdown-card{
-    width:100%;
-    max-width:none;
-    margin:var(--layout-section-gap) 0 0;
   }
 
   .page-tabs,
@@ -3364,6 +3339,901 @@ body.departure-edit-open{
   }
 }
 
+/* ===== iOS仕上げ：スマホ表示の統一レイヤー ===== */
+:root{
+  --ios-bg:#f2f2f7;
+  --ios-card:#ffffff;
+  --ios-separator:rgba(60,60,67,.18);
+  --ios-label:#000000;
+  --ios-secondary:#8e8e93;
+  --ios-tertiary:#c7c7cc;
+  --ios-tint:#007aff;
+  --ios-fill:rgba(120,120,128,.12);
+  --ios-radius:12px;
+}
+
+html{
+  -webkit-text-size-adjust:100%;
+  background:var(--ios-bg);
+}
+
+body,
+body.landing-active{
+  padding:max(10px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+  background:var(--ios-bg);
+  color:var(--ios-label);
+  font-family:var(--font-ui);
+  font-size:17px;
+  font-weight:400;
+  line-height:1.45;
+  letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+body .container,
+body.landing-active .container{
+  max-width:430px;
+}
+
+/* --- ヘッダーのUTC時計 --- */
+body .header,
+body.landing-active .header{
+  margin:0 0 18px;
+  padding-top:32px;
+}
+
+body .clock,
+body.landing-active .clock{
+  width:100%;
+  padding:13px 18px 9px;
+  border-radius:var(--ios-radius);
+  background:var(--ios-card);
+  box-shadow:0 1px 2px rgba(0,0,0,.05);
+  font-family:var(--font-ui);
+}
+
+body .clock-heading,
+body.landing-active .clock-heading{
+  margin:0 0 1px;
+  color:var(--ios-secondary);
+  font-family:var(--font-ui);
+  font-size:13px;
+  font-weight:400;
+  letter-spacing:0;
+}
+
+body .clock-time-line,
+body.landing-active .clock-time-line{
+  gap:0;
+}
+
+body #utc-now,
+body.landing-active #utc-now{
+  color:var(--ios-label);
+  font-family:var(--font-num);
+  font-size:clamp(36px, 10.4vw, 44px);
+  font-weight:600;
+  letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+}
+
+body #utc-millis,
+body.landing-active #utc-millis{
+  margin-left:1px;
+  color:var(--ios-secondary);
+  font-family:var(--font-num);
+  font-size:clamp(17px, 4.8vw, 20px);
+  font-weight:600;
+  letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+}
+
+body .utc-label,
+body.landing-active .utc-label{
+  margin-left:8px;
+  color:var(--ios-secondary);
+  font-family:var(--font-ui);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.01em;
+}
+
+body .clock-tap-hint{
+  margin-top:5px;
+  color:var(--ios-tertiary);
+  font-family:var(--font-ui);
+  font-size:11px;
+  font-weight:400;
+}
+
+body .app-settings-button{
+  top:2px;
+  background:var(--ios-fill);
+  color:var(--ios-secondary);
+  font-size:14px;
+}
+
+/* --- セグメンテッドコントロール --- */
+body .page-tabs,
+body.landing-active .page-tabs{
+  gap:2px;
+  margin:0 0 18px;
+  padding:2px;
+  border-radius:9px;
+  background:var(--ios-fill);
+}
+
+body .page-tab-btn,
+body.landing-active .page-tab-btn{
+  min-height:30px;
+  padding:4px 8px;
+  border-radius:7px;
+  color:var(--ios-label);
+  font-family:var(--font-ui);
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:-.01em;
+}
+
+body .page-tab-btn.active,
+body.landing-active .page-tab-btn.active{
+  background:var(--ios-card);
+  box-shadow:0 3px 8px rgba(0,0,0,.12), 0 1px 1px rgba(0,0,0,.04);
+}
+
+/* --- カード（設定グループ） --- */
+body .mode-card,
+body .collapsible-card,
+body #page-calc .mode-card,
+body #page-calc .collapsible-card,
+body #page-calc .departure-settings-card,
+body .landing-settings-card{
+  border:0;
+  border-radius:var(--ios-radius);
+  background:var(--ios-card);
+  box-shadow:none;
+  overflow:hidden;
+}
+
+/* --- 設定行（集結時間・準備時間など） --- */
+body #page-calc .departure-setting-row,
+body #page-landing .l-setting-row,
+body #page-landing .l-wave-options{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:50px;
+  margin:0 16px;
+  padding:0;
+  border-bottom:1px solid var(--ios-separator);
+}
+
+body #page-calc .departure-setting-row:last-of-type,
+body #page-landing .l-setting-row:last-of-type{
+  border-bottom:0;
+}
+
+body #page-landing .l-wave-options{
+  min-height:50px;
+  border-top:1px solid var(--ios-separator);
+  border-bottom:0;
+}
+
+body #page-calc .departure-setting-name,
+body #page-calc .departure-mode-select,
+body #page-landing .l-setting-name{
+  color:var(--ios-label);
+  font-family:var(--font-ui);
+  font-size:17px;
+  font-weight:400;
+  letter-spacing:-.01em;
+}
+
+body #page-calc .departure-setting-control select,
+body #page-calc .departure-after-text,
+body #page-landing .l-setting-control select,
+body #page-landing .l-setting-control .l-setting-value{
+  color:var(--ios-secondary);
+  font-family:var(--font-ui);
+  font-size:17px;
+  font-weight:400;
+  letter-spacing:-.01em;
+}
+
+body #page-calc .departure-time-control select,
+body #page-landing .l-setting-control select[class*="time"]{
+  font-family:var(--font-num);
+  font-size:17px;
+  font-variant-numeric:tabular-nums;
+}
+
+/* --- シェブロン（iOS標準の細い「>」） --- */
+body #page-calc .departure-chevron,
+body #page-landing .l-chevron{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:20px;
+  min-width:20px;
+  min-height:44px;
+  color:var(--ios-tertiary);
+  font-size:0;
+  background:transparent;
+}
+
+body #page-calc .departure-chevron::after,
+body #page-landing .l-chevron::after{
+  content:"";
+  display:block;
+  width:7px;
+  height:7px;
+  border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;
+  border-radius:1px;
+  transform:rotate(-45deg);
+}
+
+body #page-calc .departure-chevron:hover,
+body #page-calc .departure-chevron:focus,
+body #page-calc .departure-chevron:active,
+body #page-landing .l-chevron:hover,
+body #page-landing .l-chevron:focus,
+body #page-landing .l-chevron:active{
+  color:var(--ios-tint);
+  background:transparent;
+}
+
+/* --- 主ボタン（計算開始） --- */
+body #page-calc .departure-action,
+body #page-landing .landing-action{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:50px;
+  margin:20px 0 18px;
+  border:0;
+  border-radius:var(--ios-radius);
+  background:var(--ios-tint);
+  color:#fff;
+  font-family:var(--font-ui);
+  font-size:17px;
+  font-weight:600;
+  letter-spacing:-.01em;
+  box-shadow:none;
+}
+
+body #page-calc .departure-action:hover,
+body #page-landing .landing-action:hover{
+  background:#0071eb;
+}
+
+body #page-calc .departure-action:active,
+body #page-landing .landing-action:active{
+  background:var(--ios-tint);
+  opacity:.75;
+  transform:none;
+}
+
+/* --- 折りたたみヘッダー --- */
+body .collapsible-card,
+body #page-calc .collapsible-card{
+  margin-bottom:16px !important;
+}
+
+body .collapsible-header,
+body #page-calc .collapsible-header{
+  position:relative;
+  min-height:50px;
+  padding:0 16px !important;
+  border:0;
+  background:var(--ios-card) !important;
+}
+
+/* 区切り線は一覧側の先頭行が持つ（閉じているときに線が残らないように） */
+body #players .member-row-wrapper:first-child .member-row::before{
+  content:"";
+  position:absolute;
+  top:0;
+  right:0;
+  left:16px;
+  height:1px;
+  background:var(--ios-separator);
+}
+
+body .collapsible-header-title{
+  color:var(--ios-label);
+  font-family:var(--font-ui);
+  font-size:17px;
+  font-weight:400;
+  letter-spacing:-.01em;
+}
+
+body .collapsible-arrow{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:20px;
+  height:20px;
+  color:var(--ios-tertiary);
+  font-size:0;
+  transition:transform .25s ease;
+}
+
+body .collapsible-arrow::after{
+  content:"";
+  display:block;
+  width:7px;
+  height:7px;
+  margin-bottom:3px;
+  border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;
+  border-radius:1px;
+  transform:rotate(45deg);
+}
+
+body .collapsible-content-inner{
+  border:0;
+  background:var(--ios-card);
+}
+
+/* --- 集結一覧：iOSのリストセル（名前／残り時間／設定）--- */
+body .member-row{
+  position:relative;
+  border-bottom:0;
+}
+
+/* 区切り線は本文の開始位置に合わせて左を16px空ける */
+body .member-row::after{
+  content:"";
+  position:absolute;
+  right:0;
+  bottom:0;
+  left:16px;
+  height:1px;
+  background:var(--ios-separator);
+}
+
+body .member-identity-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-height:48px;
+  padding:0 16px;
+}
+
+body .member-identity-row .name-text{
+  flex:1 1 auto;
+  min-width:0;
+  max-width:none;
+  overflow:hidden;
+  color:var(--ios-label);
+  font-family:var(--font-ui);
+  font-size:17px;
+  font-weight:400;
+  line-height:1.3;
+  letter-spacing:-.01em;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+body .name-text:empty:before{
+  color:var(--ios-tertiary);
+}
+
+body .name-text:focus{
+  background:transparent;
+}
+
+body .member-departure-inline{
+  flex:0 0 auto;
+  margin-left:auto;
+  text-align:right;
+}
+
+body .member-departure-status{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-end;
+  min-height:0;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  color:var(--ios-secondary);
+  font-family:var(--font-ui);
+  font-size:15px;
+  font-weight:400;
+  letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+  white-space:nowrap;
+  box-shadow:none;
+}
+
+body .member-departure-status.counting{
+  background:transparent;
+  color:var(--ios-tint);
+  box-shadow:none;
+}
+
+body .member-departure-status.departed{
+  background:transparent;
+  color:var(--ios-tertiary);
+}
+
+/* --- 集結主の詳細設定：1項目1行の設定リスト --- */
+body .member-auto-settings{
+  display:block;
+  gap:0;
+  min-height:0;
+  padding:0;
+  border-top:0;
+  background:var(--ios-bg);
+  color:var(--ios-label);
+  font-family:var(--font-ui);
+  font-size:17px;
+}
+
+body .member-setting-row{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-height:48px;
+  margin:0;
+  padding:0 16px;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+}
+
+body .member-setting-row::after{
+  content:"";
+  position:absolute;
+  right:0;
+  bottom:0;
+  left:16px;
+  height:1px;
+  background:var(--ios-separator);
+}
+
+body .member-setting-row:last-child::after{
+  display:none;
+}
+
+body .member-setting-label{
+  flex:0 0 auto;
+  color:var(--ios-label);
+  font-family:var(--font-ui);
+  font-size:17px;
+  font-weight:400;
+  letter-spacing:-.01em;
+  white-space:nowrap;
+}
+
+body .member-setting-value{
+  display:inline-flex;
+  flex:1 1 auto;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  min-width:0;
+  margin-left:auto;
+  color:var(--ios-secondary);
+  font-family:var(--font-ui);
+  font-size:17px;
+  font-weight:400;
+  letter-spacing:-.01em;
+  white-space:nowrap;
+}
+
+body .member-coordinates{
+  gap:6px;
+  color:var(--ios-secondary);
+  font-size:17px;
+  font-weight:400;
+}
+
+body .coord-axis{
+  color:var(--ios-tertiary);
+  font-size:15px;
+}
+
+body .coord-input{
+  width:56px;
+  min-width:56px;
+  height:32px;
+  min-height:32px;
+  padding:0 8px;
+  border:0;
+  border-radius:8px;
+  background:var(--ios-fill);
+  color:var(--ios-label);
+  font-family:var(--font-num);
+  font-size:17px;
+  font-weight:400;
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+
+body .coord-input:focus{
+  border:0;
+  background:var(--ios-fill);
+  box-shadow:0 0 0 2px rgba(0,122,255,.3);
+}
+
+body .march-control{
+  gap:2px;
+}
+
+body #page-calc .march-select,
+body .march-select{
+  width:auto;
+  min-width:0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  background-image:none;
+  color:var(--ios-secondary);
+  font-family:var(--font-ui);
+  font-size:17px !important;
+  font-weight:400;
+  text-align:right;
+  justify-self:end;
+  font-variant-numeric:tabular-nums;
+}
+
+body .march-select:focus,
+body #page-calc .march-select:focus{
+  background-color:transparent;
+}
+
+body .march-select:disabled{
+  color:var(--ios-tint);
+  -webkit-text-fill-color:var(--ios-tint);
+}
+
+body .march-auto-badge{
+  color:var(--ios-secondary);
+  font-family:var(--font-ui);
+  font-size:17px;
+  font-weight:400;
+}
+
+body .march-auto-badge::before{content:"（"}
+body .march-auto-badge::after{content:"）"}
+
+body .stat-boost-control,
+body .member-settings-pet-control{
+  display:flex;
+  color:var(--ios-label);
+  font-size:17px;
+  font-weight:400;
+}
+
+/* --- ステ強化・ペットはiOS標準のトグルスイッチ --- */
+body .stat-boost-switch{
+  position:relative;
+  flex:0 0 51px;
+  width:51px;
+  height:31px;
+  min-width:51px;
+  border:0;
+  border-radius:16px;
+  background:rgba(120,120,128,.16);
+  transition:background .2s ease;
+}
+
+body .stat-boost-switch::after{
+  content:'';
+  display:block;
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:27px;
+  height:27px;
+  border:0;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 3px 8px rgba(0,0,0,.15), 0 1px 1px rgba(0,0,0,.16);
+  transform:none;
+  transition:transform .2s ease;
+}
+
+body .stat-boost-toggle:checked + .stat-boost-switch,
+body .member-settings-pet-toggle:checked + .stat-boost-switch{
+  border:0;
+  background:var(--ios-tint);
+}
+
+body .stat-boost-toggle:checked + .stat-boost-switch::after,
+body .member-settings-pet-toggle:checked + .stat-boost-switch::after{
+  display:block;
+  border:0;
+  transform:translateX(20px);
+}
+
+body .member-pet-remaining{
+  color:var(--ios-secondary);
+  font-family:var(--font-ui);
+  font-size:15px;
+  font-weight:400;
+  letter-spacing:-.01em;
+}
+
+/* --- 「＋ 集結主」も同じリスト内のセルとして扱う --- */
+body #page-calc .button-controls{
+  width:100%;
+  margin:0;
+  padding:0;
+  border-top:0;
+}
+
+body .button-controls .control-btn,
+body #page-calc .button-controls .control-btn,
+body #add-member{
+  width:100%;
+  min-height:48px;
+  margin:0;
+  padding:0 16px;
+}
+
+body .member-settings-toggle{
+  flex:0 0 auto;
+  width:20px;
+  min-width:20px;
+  min-height:48px;
+  border-radius:0;
+  background:transparent;
+  color:var(--ios-tertiary);
+  transition:transform .25s ease;
+}
+
+body .member-settings-toggle::before{
+  content:"";
+  width:7px;
+  height:7px;
+  margin-bottom:3px;
+  border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;
+  border-radius:1px;
+  background-color:transparent;
+  -webkit-mask:none;
+  mask:none;
+  transform:rotate(45deg);
+}
+
+body .member-settings-toggle[aria-expanded="true"]{
+  transform:rotate(180deg);
+}
+
+body .member-settings-toggle:hover,
+body .member-settings-toggle:focus,
+body .member-settings-toggle:active,
+body .member-settings-toggle[aria-expanded="true"]{
+  background:transparent;
+  color:var(--ios-tint);
+}
+
+/* --- 追加ボタンはiOSの「青文字の行」に --- */
+body .button-controls{
+  margin:0;
+  padding:0;
+}
+
+body .button-controls .control-btn,
+body #add-member{
+  flex:1;
+  min-height:50px;
+  margin:0;
+  padding:0 16px;
+  text-align:left;
+  border:0;
+  border-radius:0;
+  background:var(--ios-card);
+  color:var(--ios-tint);
+  font-family:var(--font-ui);
+  font-size:17px;
+  font-weight:400;
+  letter-spacing:-.01em;
+  box-shadow:none;
+}
+
+body .button-controls .control-btn:hover,
+body .button-controls .control-btn:active,
+body #add-member:hover,
+body #add-member:active{
+  background:#f2f2f7;
+  color:var(--ios-tint);
+  border:0;
+  transform:none;
+}
+
+/* --- 結果表示 --- */
+body .impact-display,
+body #page-calc .impact-display{
+  border-radius:10px;
+  background:rgba(0,122,255,.08);
+}
+
+body .impact-display-inner{
+  margin-left:0;
+  gap:8px;
+}
+
+body .impact-label{
+  color:var(--ios-secondary);
+  font-family:var(--font-ui);
+  font-size:13px;
+  font-weight:400;
+}
+
+body .impact-time,
+body #page-calc .departure-result .impact-time{
+  color:var(--ios-tint);
+  font-family:var(--font-num);
+  font-size:28px;
+  font-weight:600;
+  letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+}
+
+body #page-calc .departure-result{
+  margin-top:16px;
+  border-radius:var(--ios-radius);
+}
+
+/* --- フッター --- */
+body .footer,
+body #page-calc .footer,
+body #page-landing .footer,
+body.landing-active #page-landing .footer{
+  margin-top:24px;
+  color:var(--ios-tertiary);
+  font-family:var(--font-ui);
+  font-size:13px;
+  font-weight:400;
+}
+
+/* --- トースト・モーダルの文字 --- */
+body .toast{
+  border-radius:14px;
+  font-family:var(--font-ui);
+  font-size:15px;
+  font-weight:400;
+  letter-spacing:-.01em;
+}
+
+body .departure-edit-sheet,
+body .departure-edit-header h3,
+body .departure-preset-option,
+body .departure-preset-add,
+body .departure-wheel-option{
+  font-family:var(--font-ui);
+  letter-spacing:-.01em;
+}
+
+/* --- 数字が動いても幅が変わらないようにする --- */
+body select,
+body input,
+body button,
+body pre,
+body .members-table{
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+}
+
+body .preview-text-box{
+  font-family:var(--font-num);
+  font-size:14px;
+  line-height:1.6;
+}
+
+/* --- 時計オーバーレイ --- */
+body .utc-clock-overlay-card{
+  width:min(88vw, 340px);
+  padding:30px 20px 24px;
+  border:0;
+  border-radius:16px;
+  background:#1c1c1e;
+  box-shadow:0 20px 60px rgba(0,0,0,.45);
+}
+
+body .utc-clock-overlay-time-line{
+  gap:0;
+}
+
+body .utc-clock-overlay-label{
+  margin-bottom:6px;
+  color:var(--ios-secondary);
+  font-family:var(--font-ui);
+  font-size:13px;
+  font-weight:400;
+}
+
+body #utc-overlay-time{
+  font-family:var(--font-num);
+  font-size:clamp(38px, 11vw, 46px);
+  font-weight:600;
+  letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+}
+
+body #utc-overlay-millis{
+  margin-left:1px;
+  color:var(--ios-secondary);
+  font-family:var(--font-num);
+  font-size:clamp(18px, 5vw, 21px);
+  font-weight:600;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+}
+
+body .utc-clock-overlay-unit{
+  margin-left:8px;
+  color:var(--ios-secondary);
+  font-family:var(--font-ui);
+  font-size:13px;
+  font-weight:600;
+}
+
+body .utc-clock-overlay-countdown{
+  margin-top:12px;
+  font-family:var(--font-ui);
+  font-size:13px;
+}
+
+body .utc-clock-overlay-countdown-name{
+  color:#ffffff;
+  font-family:var(--font-ui);
+  font-size:13px;
+  font-weight:600;
+}
+
+body .utc-clock-overlay-countdown-value{
+  color:#0a84ff;
+  font-family:var(--font-num);
+  font-size:19px;
+  font-weight:600;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+}
+
+body .utc-clock-overlay-close{
+  top:10px;
+  right:10px;
+  width:30px;
+  min-width:30px;
+  min-height:30px;
+  background:rgba(120,120,128,.32);
+  color:#fff;
+  font-size:19px;
+  box-shadow:none;
+}
+
+
+/* --- 編集シート：区切り線をiOS流に左インセット --- */
+body .departure-preset-row + .departure-preset-row{
+  border-top:1px solid var(--ios-separator);
+}
+
+body .departure-preset-title,
+body .departure-custom-title,
+body .departure-preset-heading{
+  font-family:var(--font-ui);
+  font-size:13px;
+  font-weight:400;
+  color:var(--ios-secondary);
+}
+
 </style>
 </head>
 <body class="landing-active">
@@ -3374,12 +4244,11 @@ body.departure-edit-open{
   <!-- ヘッダー（UTC時計） -->
   <div class="header">
     <button type="button" id="app-settings-button" class="app-settings-button" aria-label="設定を開く">…</button>
-    <div class="clock aligned-box" id="utc-clock-trigger" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="utc-clock-overlay" aria-label="UTC時計を拡大表示">
+    <div class="clock aligned-box" id="utc-clock-trigger" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="utc-clock-overlay" aria-label="UTC時計をオーバーレイ表示">
       <span class="clock-heading">現在時刻</span>
       <div class="clock-time-line"><span class="clock-time-value"><span id="utc-now">--:--:--</span><span id="utc-millis">:00</span></span><span class="utc-label">UTC</span></div>
-      <span class="clock-tap-hint">タップでPiP小窓</span>
+      <span class="clock-tap-hint">タップでオーバーレイ表示</span>
     </div>
-    <div id="device-countdown-card" class="device-countdown-card" hidden><span id="device-countdown-name" class="device-countdown-name"></span><span>出発まで残り</span><span id="device-countdown-time" class="device-countdown-time">--:--:--</span></div>
   </div>
 
   <!-- ページタブ -->
@@ -3447,13 +4316,12 @@ body.departure-edit-open{
               <div class="delete-bg" onclick="deleteThisRow(this)">削除</div>
               <div class="member-row">
                 <div class="member-identity-row">
-                  <span class="name-text" contenteditable="true" data-placeholder="マリン"></span>
-                  <span class="member-departure-inline"><span class="member-departure-status">出発時刻未設定</span><span class="dep" hidden>-</span></span>
+                  <span class="name-text" contenteditable="true" data-placeholder="名前"></span>
+                  <span class="member-departure-inline"><span class="member-departure-status">未設定</span><span class="dep" hidden>-</span></span>
                   <button type="button" class="member-settings-toggle" aria-expanded="false" aria-label="集結主設定"></button>
                 </div>
                 <div class="member-auto-settings" hidden>
-                  <div class="member-settings-primary"><span class="member-coordinates"><span>座標X：</span><input class="coord-input coord-x" inputmode="numeric" pattern="[0-9]*" placeholder="X" aria-label="X座標"><span>Y：</span><input class="coord-input coord-y" inputmode="numeric" pattern="[0-9]*" placeholder="Y" aria-label="Y座標"></span><span class="march-control"><select class="march-select"></select><small class="march-auto-badge">手動</small></span></div>
-                  <div class="member-settings-options"><label class="stat-boost-control"><input type="checkbox" class="stat-boost-toggle"><span class="stat-boost-switch"></span><span>ステ強化</span></label><label class="member-settings-pet-control"><input type="checkbox" class="member-settings-pet-toggle"><span class="stat-boost-switch"></span><span>ペット</span><span class="member-pet-remaining">未発動</span></label></div>
+                  <div class="member-setting-row"><span class="member-setting-label">座標</span><span class="member-setting-value member-coordinates"><span class="coord-axis">X</span><input class="coord-input coord-x" inputmode="numeric" pattern="[0-9]*" placeholder="—" aria-label="X座標"><span class="coord-axis">Y</span><input class="coord-input coord-y" inputmode="numeric" pattern="[0-9]*" placeholder="—" aria-label="Y座標"></span></div><div class="member-setting-row"><span class="member-setting-label">行軍時間</span><span class="member-setting-value march-control"><select class="march-select"></select><small class="march-auto-badge">手動</small></span></div><label class="member-setting-row stat-boost-control"><span class="member-setting-label">ステ強化</span><span class="member-setting-value"><input type="checkbox" class="stat-boost-toggle"><span class="stat-boost-switch"></span></span></label><label class="member-setting-row member-settings-pet-control"><span class="member-setting-label">ペット</span><span class="member-setting-value"><span class="member-pet-remaining">未発動</span><input type="checkbox" class="member-settings-pet-toggle"><span class="stat-boost-switch"></span></span></label>
                 </div>
               </div>
             </div>
@@ -3461,13 +4329,12 @@ body.departure-edit-open{
               <div class="delete-bg" onclick="deleteThisRow(this)">削除</div>
               <div class="member-row">
                 <div class="member-identity-row">
-                  <span class="name-text" contenteditable="true" data-placeholder=""></span>
-                  <span class="member-departure-inline"><span class="member-departure-status">出発時刻未設定</span><span class="dep" hidden>-</span></span>
+                  <span class="name-text" contenteditable="true" data-placeholder="名前"></span>
+                  <span class="member-departure-inline"><span class="member-departure-status">未設定</span><span class="dep" hidden>-</span></span>
                   <button type="button" class="member-settings-toggle" aria-expanded="false" aria-label="集結主設定"></button>
                 </div>
                 <div class="member-auto-settings" hidden>
-                  <div class="member-settings-primary"><span class="member-coordinates"><span>座標X：</span><input class="coord-input coord-x" inputmode="numeric" pattern="[0-9]*" placeholder="X" aria-label="X座標"><span>Y：</span><input class="coord-input coord-y" inputmode="numeric" pattern="[0-9]*" placeholder="Y" aria-label="Y座標"></span><span class="march-control"><select class="march-select"></select><small class="march-auto-badge">手動</small></span></div>
-                  <div class="member-settings-options"><label class="stat-boost-control"><input type="checkbox" class="stat-boost-toggle"><span class="stat-boost-switch"></span><span>ステ強化</span></label><label class="member-settings-pet-control"><input type="checkbox" class="member-settings-pet-toggle"><span class="stat-boost-switch"></span><span>ペット</span><span class="member-pet-remaining">未発動</span></label></div>
+                  <div class="member-setting-row"><span class="member-setting-label">座標</span><span class="member-setting-value member-coordinates"><span class="coord-axis">X</span><input class="coord-input coord-x" inputmode="numeric" pattern="[0-9]*" placeholder="—" aria-label="X座標"><span class="coord-axis">Y</span><input class="coord-input coord-y" inputmode="numeric" pattern="[0-9]*" placeholder="—" aria-label="Y座標"></span></div><div class="member-setting-row"><span class="member-setting-label">行軍時間</span><span class="member-setting-value march-control"><select class="march-select"></select><small class="march-auto-badge">手動</small></span></div><label class="member-setting-row stat-boost-control"><span class="member-setting-label">ステ強化</span><span class="member-setting-value"><input type="checkbox" class="stat-boost-toggle"><span class="stat-boost-switch"></span></span></label><label class="member-setting-row member-settings-pet-control"><span class="member-setting-label">ペット</span><span class="member-setting-value"><span class="member-pet-remaining">未発動</span><input type="checkbox" class="member-settings-pet-toggle"><span class="stat-boost-switch"></span></span></label>
                 </div>
               </div>
             </div>
@@ -3605,10 +4472,14 @@ body.departure-edit-open{
     <button type="button" id="utc-clock-overlay-close" class="utc-clock-overlay-close" aria-label="閉じる">×</button>
     <div class="utc-clock-overlay-label">現在時刻</div>
     <div class="utc-clock-overlay-time-line"><span id="utc-overlay-time">--:--:--</span><span id="utc-overlay-millis">:00</span><span class="utc-clock-overlay-unit">UTC</span></div>
+    <div id="utc-overlay-countdown" class="utc-clock-overlay-countdown" hidden>
+      <span id="utc-overlay-countdown-name" class="utc-clock-overlay-countdown-name"></span>
+      <span class="utc-clock-overlay-countdown-line">出発まで <span id="utc-overlay-countdown-value" class="utc-clock-overlay-countdown-value">0.00</span>秒</span>
+    </div>
   </div>
 </div>
 
-<!-- iPhoneを含む動画PiP用の描画ソース -->
+<!-- iPhoneを含むオーバーレイ描画用のソース -->
 <canvas id="utc-pip-canvas" width="640" height="360" hidden></canvas>
 <video id="utc-pip-video" class="utc-pip-media" muted autoplay playsinline webkit-playsinline aria-hidden="true"></video>
 
@@ -3708,6 +4579,7 @@ const FIREBASE_CONFIG = window.ARRIVAL_FIREBASE_CONFIG || {
 let firebaseSync = null;
 let firebaseMemberUnsubscribe = null;
 let currentRemoteDeparture = null;
+let utcPipLastDeparture = null;
 let firebaseServerOffsetMs = 0;
 
 function firebaseNow(){
@@ -3743,27 +4615,21 @@ function updateDeviceRegistrationUi(){
   }
 }
 
-function clearDeviceCountdown(){
+function clearDeviceCountdown(options = {}){
   currentRemoteDeparture = null;
-  const card = document.getElementById('device-countdown-card');
-  if(card) card.hidden = true;
+  /* 時間切れのときだけ、0.00秒の残り表示をしばらく残す */
+  if(!options.keepPipHold) utcPipLastDeparture = null;
 }
 
 function updateDeviceCountdown(){
   if(!currentRemoteDeparture) return;
   const remainingMs = currentRemoteDeparture.departureTime - firebaseNow();
-  if(remainingMs <= 0){
-    const expiredKey = currentRemoteDeparture.key;
-    clearDeviceCountdown();
-    if(firebaseSync && expiredKey){
-      firebaseSync.remove(firebaseSync.ref(firebaseSync.database, `activeRally/members/${expiredKey}`)).catch(()=>{});
-    }
-    return;
+  if(remainingMs > 0) return;
+  const expiredKey = currentRemoteDeparture.key;
+  clearDeviceCountdown({keepPipHold:true});
+  if(firebaseSync && expiredKey){
+    firebaseSync.remove(firebaseSync.ref(firebaseSync.database, `activeRally/members/${expiredKey}`)).catch(()=>{});
   }
-  const card = document.getElementById('device-countdown-card');
-  document.getElementById('device-countdown-name').textContent = currentRemoteDeparture.name;
-  document.getElementById('device-countdown-time').textContent = formatCountdown(remainingMs / 1000);
-  card.hidden = false;
 }
 
 function subscribeRegisteredMember(){
@@ -3893,42 +4759,115 @@ const utcPipContext = utcPipCanvas?.getContext('2d');
 let utcPipWindow = null;
 let utcVideoPipStream = null;
 
+/* PiPの比率。3 = 3:1。もっと平たくしたい場合は 4 などに変える */
+const UTC_PIP_ASPECT = 3;
+const UTC_PIP_BASE_HEIGHT = 300;
+const UTC_PIP_HOLD_MS = 700;
+const UTC_PIP_FONT = '-apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif';
+
+if(utcPipCanvas){
+  utcPipCanvas.width = Math.round(UTC_PIP_BASE_HEIGHT * UTC_PIP_ASPECT);
+  utcPipCanvas.height = UTC_PIP_BASE_HEIGHT;
+}
+
+/* 「21.38秒」のように秒＋小数2桁で表す */
+function formatRemainingSeconds(totalMs){
+  return (Math.max(0, totalMs) / 1000).toFixed(2);
+}
+
 function getUtcPipDepartureData(){
-  if(!currentRemoteDeparture) return null;
-  const remainingMs = currentRemoteDeparture.departureTime - firebaseNow();
-  if(remainingMs <= 0) return null;
+  if(currentRemoteDeparture){
+    utcPipLastDeparture = {
+      name:currentRemoteDeparture.name,
+      departureTime:currentRemoteDeparture.departureTime
+    };
+  }
+  if(!utcPipLastDeparture) return null;
+  const remainingMs = utcPipLastDeparture.departureTime - firebaseNow();
+  /* 0秒になっても少しの間は 0.00秒 を出したままにする */
+  if(remainingMs <= -UTC_PIP_HOLD_MS){
+    utcPipLastDeparture = null;
+    return null;
+  }
   return {
-    countdown:formatCountdown(remainingMs / 1000)
+    name:utcPipLastDeparture.name,
+    countdown:formatRemainingSeconds(remainingMs)
   };
 }
 
-function drawUtcVideoFrame(timeText, millisText, departureData){
+/* 与えた幅に収まるまでフォントを縮める */
+function fitPipFont(ctx, parts, maxWidth){
+  let scale = 1;
+  for(let i = 0; i < 8; i++){
+    let total = 0;
+    for(const part of parts){
+      ctx.font = `${part.weight} ${Math.round(part.size * scale)}px ${UTC_PIP_FONT}`;
+      total += ctx.measureText(part.text).width;
+    }
+    if(total <= maxWidth) break;
+    scale *= maxWidth / total;
+  }
+  return scale;
+}
+
+/* 中央に横並びで描く */
+function drawPipLine(ctx, parts, centerX, centerY, maxWidth){
+  const scale = fitPipFont(ctx, parts, maxWidth);
+  let total = 0;
+  for(const part of parts){
+    ctx.font = `${part.weight} ${Math.round(part.size * scale)}px ${UTC_PIP_FONT}`;
+    part.width = ctx.measureText(part.text).width;
+    total += part.width;
+  }
+  let x = centerX - total / 2;
+  ctx.textAlign = 'left';
+  for(const part of parts){
+    ctx.font = `${part.weight} ${Math.round(part.size * scale)}px ${UTC_PIP_FONT}`;
+    ctx.fillStyle = part.color;
+    ctx.fillText(part.text, x, centerY);
+    x += part.width;
+  }
+  ctx.textAlign = 'center';
+}
+
+/* 各サイズ・位置はキャンバスの高さ(H)に対する比率。比率を変えれば全体が追従する */
+const UTC_PIP_LAYOUT = {
+  sideMargin:0.05,      // 左右の余白（Hに対する比率）
+  timeSize:0.62,        // 通常時の時刻
+  unitSize:0.24,        // 通常時のUTC
+  timeY:0.53,
+  labelSize:0.14,       // カウントダウン1行目
+  labelY:0.23,
+  valueSize:0.54,       // カウントダウンの数字
+  secondSize:0.24,      // 「秒」
+  valueY:0.68
+};
+
+function drawUtcVideoFrame(timeText, departureData){
   if(!utcPipContext || !utcPipCanvas) return;
   const ctx = utcPipContext;
-  const width = utcPipCanvas.width;
-  const height = utcPipCanvas.height;
-  ctx.fillStyle = '#141416';
-  ctx.fillRect(0, 0, width, height);
-  ctx.textAlign = 'center';
+  const W = utcPipCanvas.width;
+  const H = utcPipCanvas.height;
+  const L = UTC_PIP_LAYOUT;
+  const inner = W - H * L.sideMargin * 2;
+  ctx.fillStyle = '#101012';
+  ctx.fillRect(0, 0, W, H);
   ctx.textBaseline = 'middle';
   if(departureData){
-    ctx.fillStyle = '#8ec8ff';
-    ctx.font = '800 34px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText('出発まで', width / 2, 103);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '800 78px ui-monospace, SFMono-Regular, Menlo, monospace';
-    ctx.fillText(departureData.countdown, width / 2, 191);
-    ctx.fillStyle = '#aeb0b5';
-    ctx.font = '700 26px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText('カウントダウン', width / 2, 273);
-  }else{
-    ctx.fillStyle = '#aeb0b5';
-    ctx.font = '700 30px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText('現在時刻 UTC', width / 2, 92);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '800 76px ui-monospace, SFMono-Regular, Menlo, monospace';
-    ctx.fillText(`${timeText}:${millisText}`, width / 2, 202);
+    drawPipLine(ctx, [
+      {text:departureData.name || '', size:H * L.labelSize, weight:500, color:'#9a9aa0'},
+      {text:'　出発まで', size:H * L.labelSize, weight:400, color:'#9a9aa0'}
+    ], W / 2, H * L.labelY, inner);
+    drawPipLine(ctx, [
+      {text:departureData.countdown, size:H * L.valueSize, weight:600, color:'#0a84ff'},
+      {text:'秒', size:H * L.secondSize, weight:600, color:'#0a84ff'}
+    ], W / 2, H * L.valueY, inner);
+    return;
   }
+  drawPipLine(ctx, [
+    {text:timeText, size:H * L.timeSize, weight:600, color:'#ffffff'},
+    {text:' UTC', size:H * L.unitSize, weight:600, color:'#9a9aa0'}
+  ], W / 2, H * L.timeY, inner);
 }
 
 function tickUTC(){
@@ -3942,26 +4881,37 @@ function tickUTC(){
   if(overlayTime) overlayTime.textContent = utcText;
   if(overlayMillis) overlayMillis.textContent = `:${millisText}`;
   const departureData = getUtcPipDepartureData();
+  const overlayCountdown = document.getElementById('utc-overlay-countdown');
+  if(overlayCountdown){
+    overlayCountdown.hidden = !departureData;
+    if(departureData){
+      const overlayCountdownName = document.getElementById('utc-overlay-countdown-name');
+      const overlayCountdownValue = document.getElementById('utc-overlay-countdown-value');
+      if(overlayCountdownName) overlayCountdownName.textContent = departureData.name || '';
+      if(overlayCountdownValue) overlayCountdownValue.textContent = departureData.countdown;
+    }
+  }
   if(utcPipWindow && !utcPipWindow.closed){
-    const pipTime = utcPipWindow.document.getElementById('utc-pip-time');
-    const pipMillis = utcPipWindow.document.getElementById('utc-pip-millis');
-    const pipNormal = utcPipWindow.document.getElementById('utc-pip-normal');
-    const pipCountdown = utcPipWindow.document.getElementById('utc-pip-countdown');
-    const pipCountdownValue = utcPipWindow.document.getElementById('utc-pip-countdown-value');
+    const pipDoc = utcPipWindow.document;
+    const pipNormal = pipDoc.getElementById('utc-pip-normal');
+    const pipTime = pipDoc.getElementById('utc-pip-time');
+    const pipCountdown = pipDoc.getElementById('utc-pip-countdown');
+    const pipCountdownName = pipDoc.getElementById('utc-pip-countdown-name');
+    const pipCountdownValue = pipDoc.getElementById('utc-pip-countdown-value');
     if(pipTime) pipTime.textContent = utcText;
-    if(pipMillis) pipMillis.textContent = `:${millisText}`;
+    if(pipNormal) pipNormal.hidden = Boolean(departureData);
     if(pipCountdown){
       pipCountdown.hidden = !departureData;
-      if(pipNormal) pipNormal.hidden = Boolean(departureData);
       if(departureData){
+        if(pipCountdownName) pipCountdownName.textContent = departureData.name || '';
         if(pipCountdownValue) pipCountdownValue.textContent = departureData.countdown;
       }
     }
   }
-  drawUtcVideoFrame(utcText, millisText, departureData);
+  drawUtcVideoFrame(utcText, departureData);
 }
 
-setInterval(tickUTC,40); tickUTC();
+setInterval(tickUTC,33); tickUTC();
 
 function initializeUtcVideoPipSource(){
   if(utcVideoPipStream) return true;
@@ -4007,33 +4957,49 @@ async function openUtcVideoPip(){
 
 initializeUtcVideoPipSource();
 
-async function openUtcClockOverlay(){
+function openUtcClockOverlay(){
+  utcClockOverlay.classList.add('show');
+  utcClockOverlay.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('utc-overlay-open');
+  tickUTC();
+  utcClockOverlayClose.focus();
+}
+
+async function openUtcPipWindow(){
   if(window.documentPictureInPicture?.requestWindow){
     try{
       if(utcPipWindow && !utcPipWindow.closed){
         utcPipWindow.focus();
-        return;
+        return true;
       }
-      utcPipWindow = await window.documentPictureInPicture.requestWindow({width:320, height:180});
+      utcPipWindow = await window.documentPictureInPicture.requestWindow({width:280, height:Math.round(280 / UTC_PIP_ASPECT)});
       utcPipWindow.document.head.innerHTML = `<meta charset="UTF-8"><style>
-        *{box-sizing:border-box} body{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh;margin:0;background:#141416;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden}
-        .pip-clock{text-align:center}.pip-label{margin-bottom:5px;color:#aeb0b5;font-size:12px;font-weight:700}.pip-line{display:flex;align-items:baseline;justify-content:center;gap:8px;white-space:nowrap}
-        [hidden]{display:none!important}#utc-pip-time{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:32px;font-weight:800;letter-spacing:-.06em;font-variant-numeric:tabular-nums}#utc-pip-millis{color:#d0d0d4;font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:18px;font-weight:800}.pip-unit{color:#aeb0b5;font-size:13px;font-weight:700}.pip-countdown{min-width:250px}.pip-countdown-label{color:#8ec8ff;font-size:15px;font-weight:800}.pip-countdown-value{margin:5px 0;color:#fff;font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:37px;font-weight:800;line-height:1.05}.pip-countdown-caption{color:#aeb0b5;font-size:11px;font-weight:700}
+        *{box-sizing:border-box} body{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh;margin:0;background:#101012;color:#fff;font-family:${UTC_PIP_FONT};overflow:hidden;font-variant-numeric:tabular-nums}
+        [hidden]{display:none!important}
+        .pip-line{display:flex;align-items:baseline;justify-content:center;gap:6px;white-space:nowrap}
+        #utc-pip-time{font-size:9.5vh;font-weight:600;letter-spacing:-.02em}
+        .pip-unit{color:#9a9aa0;font-size:4vh;font-weight:600}
+        .pip-cd{text-align:center;line-height:1.15}
+        .pip-cd-head{color:#9a9aa0;font-size:3.4vh;font-weight:400;white-space:nowrap}
+        .pip-cd-head b{margin-right:.5em;color:#fff;font-weight:600}
+        .pip-cd-value{color:#0a84ff;font-size:9vh;font-weight:600;letter-spacing:-.02em;white-space:nowrap}
+        .pip-cd-value small{font-size:.5em;font-weight:600}
       </style>`;
-      utcPipWindow.document.body.innerHTML = '<div class="pip-clock"><div id="utc-pip-normal"><div class="pip-label">現在時刻</div><div class="pip-line"><span id="utc-pip-time">--:--:--</span><span id="utc-pip-millis">:00</span><span class="pip-unit">UTC</span></div></div><div id="utc-pip-countdown" class="pip-countdown" hidden><div class="pip-countdown-label">出発まで</div><div id="utc-pip-countdown-value" class="pip-countdown-value">00:00:00</div><div class="pip-countdown-caption">カウントダウン</div></div></div>';
+      utcPipWindow.document.body.innerHTML = '<div><div id="utc-pip-normal" class="pip-line"><span id="utc-pip-time">--:--:--</span><span class="pip-unit">UTC</span></div><div id="utc-pip-countdown" class="pip-cd" hidden><div class="pip-cd-head"><b id="utc-pip-countdown-name"></b>出発まで</div><div class="pip-cd-value"><span id="utc-pip-countdown-value">0.00</span><small>秒</small></div></div></div>';
       utcPipWindow.addEventListener('pagehide', () => { utcPipWindow = null; });
       tickUTC();
-      return;
+      return true;
     }catch(e){
       utcPipWindow = null;
     }
   }
-  if(await openUtcVideoPip()) return;
-  showToast('PiPを利用できません。Safariで開いてください');
-  utcClockOverlay.classList.add('show');
-  utcClockOverlay.setAttribute('aria-hidden', 'false');
-  document.body.classList.add('utc-overlay-open');
-  utcClockOverlayClose.focus();
+  return openUtcVideoPip();
+}
+
+/* タップ：まずオーバーレイ表示を試し、非対応の端末では画面内表示に切り替える */
+async function handleUtcClockTap(){
+  if(await openUtcPipWindow()) return;
+  openUtcClockOverlay();
 }
 
 function closeUtcClockOverlay(){
@@ -4043,11 +5009,11 @@ function closeUtcClockOverlay(){
   utcClockTrigger.focus();
 }
 
-utcClockTrigger.addEventListener('click', openUtcClockOverlay);
+utcClockTrigger.addEventListener('click', handleUtcClockTap);
 utcClockTrigger.addEventListener('keydown', event => {
   if(event.key === 'Enter' || event.key === ' '){
     event.preventDefault();
-    openUtcClockOverlay();
+    handleUtcClockTap();
   }
 });
 utcClockOverlayClose.addEventListener('click', closeUtcClockOverlay);
@@ -4123,7 +5089,7 @@ function updateMemberDepartureCountdowns(){
     const departureTime = Number(row.dataset.departureTime || 0);
     status.classList.remove('counting', 'departed');
     if(!departureTime){
-      status.textContent = '出発時刻未設定';
+      status.textContent = '未設定';
       return;
     }
     const remainingMs = departureTime - now;
@@ -4132,14 +5098,14 @@ function updateMemberDepartureCountdowns(){
       status.classList.add('departed');
       return;
     }
-    status.innerHTML = `<span>出発まで残り</span><span class="member-departure-countdown-value">${formatCountdown(remainingMs / 1000)}</span>`;
+    status.textContent = `${formatRemainingSeconds(remainingMs)}秒`;
     status.classList.add('counting');
   });
 }
 
 setInterval(checkPetExpiry, 1000);
 setInterval(updateMemberRowHighlights, 1000);
-setInterval(updateMemberDepartureCountdowns, 1000);
+setInterval(updateMemberDepartureCountdowns, 50);
 
 /* ======= 行軍時間オプション生成 ======= */
 function marchLabel(i){
@@ -5234,12 +6200,11 @@ function buildMemberRowHtml(member = {}){
     <div class="member-row">
       <div class="member-identity-row">
         <span class="name-text" contenteditable="true" data-placeholder="名前">${name}</span>
-        <span class="member-departure-inline"><span class="member-departure-status">出発時刻未設定</span><span class="dep" hidden>-</span></span>
+        <span class="member-departure-inline"><span class="member-departure-status">未設定</span><span class="dep" hidden>-</span></span>
         <button type="button" class="member-settings-toggle" aria-expanded="false" aria-label="集結主設定"></button>
       </div>
       <div class="member-auto-settings" hidden>
-        <div class="member-settings-primary"><span class="member-coordinates"><span>座標X：</span><input class="coord-input coord-x" inputmode="numeric" pattern="[0-9]*" placeholder="X" aria-label="X座標" value="${coordX}"><span>Y：</span><input class="coord-input coord-y" inputmode="numeric" pattern="[0-9]*" placeholder="Y" aria-label="Y座標" value="${coordY}"></span><span class="march-control"><select class="march-select"></select><small class="march-auto-badge">手動</small></span></div>
-        <div class="member-settings-options"><label class="stat-boost-control"><input type="checkbox" class="stat-boost-toggle"${boostChecked}><span class="stat-boost-switch"></span><span>ステ強化</span></label><label class="member-settings-pet-control"><input type="checkbox" class="member-settings-pet-toggle"><span class="stat-boost-switch"></span><span>ペット</span><span class="member-pet-remaining">未発動</span></label></div>
+        <div class="member-setting-row"><span class="member-setting-label">座標</span><span class="member-setting-value member-coordinates"><span class="coord-axis">X</span><input class="coord-input coord-x" inputmode="numeric" pattern="[0-9]*" placeholder="—" aria-label="X座標" value="${coordX}"><span class="coord-axis">Y</span><input class="coord-input coord-y" inputmode="numeric" pattern="[0-9]*" placeholder="—" aria-label="Y座標" value="${coordY}"></span></div><div class="member-setting-row"><span class="member-setting-label">行軍時間</span><span class="member-setting-value march-control"><select class="march-select"></select><small class="march-auto-badge">手動</small></span></div><label class="member-setting-row stat-boost-control"><span class="member-setting-label">ステ強化</span><span class="member-setting-value"><input type="checkbox" class="stat-boost-toggle"${boostChecked}><span class="stat-boost-switch"></span></span></label><label class="member-setting-row member-settings-pet-control"><span class="member-setting-label">ペット</span><span class="member-setting-value"><span class="member-pet-remaining">未発動</span><input type="checkbox" class="member-settings-pet-toggle"><span class="stat-boost-switch"></span></span></label>
       </div>
     </div>`;
 }
