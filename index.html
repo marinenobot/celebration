@@ -3777,7 +3777,6 @@ function getUtcPipDepartureData(){
   const remainingMs = currentRemoteDeparture.departureTime - firebaseNow();
   if(remainingMs <= 0) return null;
   return {
-    name:currentRemoteDeparture.name,
     countdown:formatCountdown(remainingMs / 1000)
   };
 }
@@ -3792,24 +3791,15 @@ function drawUtcVideoFrame(timeText, millisText, departureData){
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   if(departureData){
-    ctx.fillStyle = '#aeb0b5';
-    ctx.font = '700 24px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText('現在時刻 UTC', width / 2, 42);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '800 58px ui-monospace, SFMono-Regular, Menlo, monospace';
-    ctx.fillText(`${timeText}:${millisText}`, width / 2, 108);
-    ctx.fillStyle = '#0d2b49';
-    ctx.fillRect(44, 162, width - 88, 154);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '800 27px -apple-system, BlinkMacSystemFont, sans-serif';
-    const displayName = departureData.name.length > 15 ? `${departureData.name.slice(0, 15)}…` : departureData.name;
-    ctx.fillText(displayName, width / 2, 201);
     ctx.fillStyle = '#8ec8ff';
-    ctx.font = '700 21px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText('出発まで残り', width / 2, 238);
+    ctx.font = '800 34px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillText('出発まで', width / 2, 103);
     ctx.fillStyle = '#ffffff';
-    ctx.font = '800 48px ui-monospace, SFMono-Regular, Menlo, monospace';
-    ctx.fillText(departureData.countdown, width / 2, 282);
+    ctx.font = '800 78px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.fillText(departureData.countdown, width / 2, 191);
+    ctx.fillStyle = '#aeb0b5';
+    ctx.font = '700 26px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillText('カウントダウン', width / 2, 273);
   }else{
     ctx.fillStyle = '#aeb0b5';
     ctx.font = '700 30px -apple-system, BlinkMacSystemFont, sans-serif';
@@ -3837,15 +3827,15 @@ function tickUTC(){
   if(utcPipWindow && !utcPipWindow.closed){
     const pipTime = utcPipWindow.document.getElementById('utc-pip-time');
     const pipMillis = utcPipWindow.document.getElementById('utc-pip-millis');
+    const pipNormal = utcPipWindow.document.getElementById('utc-pip-normal');
     const pipCountdown = utcPipWindow.document.getElementById('utc-pip-countdown');
-    const pipCountdownName = utcPipWindow.document.getElementById('utc-pip-countdown-name');
     const pipCountdownValue = utcPipWindow.document.getElementById('utc-pip-countdown-value');
     if(pipTime) pipTime.textContent = utcText;
     if(pipMillis) pipMillis.textContent = `:${millisText}`;
     if(pipCountdown){
       pipCountdown.hidden = !departureData;
+      if(pipNormal) pipNormal.hidden = Boolean(departureData);
       if(departureData){
-        if(pipCountdownName) pipCountdownName.textContent = departureData.name;
         if(pipCountdownValue) pipCountdownValue.textContent = departureData.countdown;
       }
     }
@@ -3910,9 +3900,9 @@ async function openUtcClockOverlay(){
       utcPipWindow.document.head.innerHTML = `<meta charset="UTF-8"><style>
         *{box-sizing:border-box} body{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh;margin:0;background:#141416;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden}
         .pip-clock{text-align:center}.pip-label{margin-bottom:5px;color:#aeb0b5;font-size:12px;font-weight:700}.pip-line{display:flex;align-items:baseline;justify-content:center;gap:8px;white-space:nowrap}
-        #utc-pip-time{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:32px;font-weight:800;letter-spacing:-.06em;font-variant-numeric:tabular-nums}#utc-pip-millis{color:#d0d0d4;font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:18px;font-weight:800}.pip-unit{color:#aeb0b5;font-size:13px;font-weight:700}.pip-countdown{min-width:240px;margin:9px auto 0;padding:6px 10px;border-radius:10px;background:#0d2b49}.pip-countdown[hidden]{display:none}.pip-countdown-name{overflow:hidden;color:#fff;font-size:11px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}.pip-countdown-label{color:#8ec8ff;font-size:9px;font-weight:700}.pip-countdown-value{color:#fff;font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:19px;font-weight:800;line-height:1.1}
+        [hidden]{display:none!important}#utc-pip-time{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:32px;font-weight:800;letter-spacing:-.06em;font-variant-numeric:tabular-nums}#utc-pip-millis{color:#d0d0d4;font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:18px;font-weight:800}.pip-unit{color:#aeb0b5;font-size:13px;font-weight:700}.pip-countdown{min-width:250px}.pip-countdown-label{color:#8ec8ff;font-size:15px;font-weight:800}.pip-countdown-value{margin:5px 0;color:#fff;font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:37px;font-weight:800;line-height:1.05}.pip-countdown-caption{color:#aeb0b5;font-size:11px;font-weight:700}
       </style>`;
-      utcPipWindow.document.body.innerHTML = '<div class="pip-clock"><div class="pip-label">現在時刻</div><div class="pip-line"><span id="utc-pip-time">--:--:--</span><span id="utc-pip-millis">:00</span><span class="pip-unit">UTC</span></div><div id="utc-pip-countdown" class="pip-countdown" hidden><div id="utc-pip-countdown-name" class="pip-countdown-name"></div><div class="pip-countdown-label">出発まで残り</div><div id="utc-pip-countdown-value" class="pip-countdown-value">00:00:00</div></div></div>';
+      utcPipWindow.document.body.innerHTML = '<div class="pip-clock"><div id="utc-pip-normal"><div class="pip-label">現在時刻</div><div class="pip-line"><span id="utc-pip-time">--:--:--</span><span id="utc-pip-millis">:00</span><span class="pip-unit">UTC</span></div></div><div id="utc-pip-countdown" class="pip-countdown" hidden><div class="pip-countdown-label">出発まで</div><div id="utc-pip-countdown-value" class="pip-countdown-value">00:00:00</div><div class="pip-countdown-caption">カウントダウン</div></div></div>';
       utcPipWindow.addEventListener('pagehide', () => { utcPipWindow = null; });
       tickUTC();
       return;
