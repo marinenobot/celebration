@@ -47,6 +47,7 @@
   --text-tertiary:rgba(0,0,0,0.08);
   --radius:0;
   --shadow:0 1px 3px rgba(0,0,0,0.08);
+  --member-settings-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='3' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.14.38.36.72.66 1 .3.27.68.41 1.08.4H21v4h-.09A1.7 1.7 0 0 0 19.4 15Z' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   --spacing:12px;
   --touch-target:44px;
 }
@@ -526,10 +527,19 @@ body.modal-open .member-row-wrapper {
   border-radius:9px;
   background:#eeeeef;
   color:#6f6f73;
-  font-size:17px;
+  font-size:0;
   line-height:1;
   box-shadow:none;
   transform:none;
+}
+
+.member-settings-toggle::before{
+  content:"";
+  width:20px;
+  height:20px;
+  background-color:currentColor;
+  -webkit-mask:var(--member-settings-icon) center / contain no-repeat;
+  mask:var(--member-settings-icon) center / contain no-repeat;
 }
 
 .member-settings-toggle:hover,
@@ -625,7 +635,9 @@ body.modal-open .member-row-wrapper {
 .member-pet-remaining{
   color:#8e8e93;
   font-family:"Roboto Mono",monospace;
-  font-size:11px;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:-.02em;
 }
 
 .coord-input{
@@ -824,7 +836,7 @@ body.modal-open .member-row-wrapper {
     font-size:14px !important;
   }
   .member-pet-remaining{
-    font-size:10px;
+    font-size:12px;
   }
 }
 
@@ -2189,15 +2201,15 @@ body.landing-active .clock{
   display:inline-flex;
   flex-direction:column;
   align-items:center;
-  width:auto;
+  width:min(92%, 360px);
   max-width:100%;
   margin:0 auto;
-  padding:12px 20px 10px;
+  padding:12px 26px 10px;
   color:#050505;
   background:rgba(255,255,255,.94);
   border:none !important;
   border-radius:18px;
-  box-shadow:0 10px 30px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.08);
+  box-shadow:0 10px 36px rgba(0,0,0,.13), 0 2px 10px rgba(0,0,0,.08);
   font-family:"Roboto Mono",Consolas,Monaco,monospace;
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
@@ -2280,7 +2292,15 @@ body.landing-active .clock-heading{
 body.landing-active .clock-time-line{
   display:flex;
   align-items:baseline;
+  justify-content:center;
+  width:100%;
   line-height:1;
+}
+
+.clock-time-value{
+  display:inline-flex;
+  align-items:baseline;
+  white-space:nowrap;
 }
 
 #utc-now,
@@ -2289,6 +2309,17 @@ body.landing-active #utc-now{
   font-size:clamp(36px, 11vw, 52px);
   font-weight:800;
   letter-spacing:-.08em;
+}
+
+#utc-millis,
+body.landing-active #utc-millis{
+  margin-left:2px;
+  color:#4d4d50;
+  font-family:"Roboto Mono",Consolas,Monaco,monospace;
+  font-size:clamp(18px, 5.5vw, 26px);
+  font-weight:800;
+  letter-spacing:-.06em;
+  font-variant-numeric:tabular-nums;
 }
 
 .utc-label,
@@ -2330,8 +2361,8 @@ body.utc-overlay-open{
 
 .utc-clock-overlay-card{
   position:relative;
-  width:min(88vw, 330px);
-  padding:38px 18px 30px;
+  width:min(94vw, 380px);
+  padding:38px 12px 30px;
   border:1px solid rgba(255,255,255,.16);
   border-radius:22px;
   background:rgba(20,20,22,.92);
@@ -2357,21 +2388,41 @@ body.utc-overlay-open{
   display:flex;
   align-items:baseline;
   justify-content:center;
-  gap:10px;
+  gap:6px;
   white-space:nowrap;
 }
 
 #utc-overlay-time{
   font-family:"Roboto Mono",Consolas,Monaco,monospace;
-  font-size:clamp(36px, 12vw, 52px);
+  font-size:clamp(34px, 11vw, 44px);
   font-weight:800;
   letter-spacing:-.07em;
   font-variant-numeric:tabular-nums;
 }
 
+#utc-overlay-millis{
+  margin-left:-3px;
+  color:#d0d0d4;
+  font-family:"Roboto Mono",Consolas,Monaco,monospace;
+  font-size:clamp(18px, 5.5vw, 24px);
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+}
+
+.utc-pip-media{
+  position:fixed;
+  left:0;
+  bottom:0;
+  width:2px;
+  height:2px;
+  opacity:.01;
+  pointer-events:none;
+  z-index:-1;
+}
+
 .utc-clock-overlay-unit{
   color:#aeb0b5;
-  font-size:18px;
+  font-size:16px;
   font-weight:700;
 }
 
@@ -3050,8 +3101,8 @@ body.departure-edit-open{
     <button type="button" id="app-settings-button" class="app-settings-button" aria-label="設定を開く">…</button>
     <div class="clock aligned-box" id="utc-clock-trigger" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="utc-clock-overlay" aria-label="UTC時計を拡大表示">
       <span class="clock-heading">現在時刻</span>
-      <div class="clock-time-line"><span id="utc-now">--:--:--</span><span class="utc-label">UTC</span></div>
-      <span class="clock-tap-hint">タップでオーバーレイ</span>
+      <div class="clock-time-line"><span class="clock-time-value"><span id="utc-now">--:--:--</span><span id="utc-millis">.000</span></span><span class="utc-label">UTC</span></div>
+      <span class="clock-tap-hint">タップでPiP小窓</span>
     </div>
     <div id="device-countdown-card" class="device-countdown-card" hidden><span id="device-countdown-name" class="device-countdown-name"></span><span>出発まで残り</span><span id="device-countdown-time" class="device-countdown-time">--:--:--</span></div>
   </div>
@@ -3123,7 +3174,7 @@ body.departure-edit-open{
                 <div class="member-identity-row">
                   <span class="name-text" contenteditable="true" data-placeholder="マリン"></span>
                   <span class="member-departure-inline"><span class="member-departure-status">出発時刻未設定</span><span class="dep" hidden>-</span></span>
-                  <button type="button" class="member-settings-toggle" aria-expanded="false" aria-label="集結主設定">⚙</button>
+                  <button type="button" class="member-settings-toggle" aria-expanded="false" aria-label="集結主設定"></button>
                 </div>
                 <div class="member-auto-settings" hidden>
                   <div class="member-settings-primary"><span class="member-coordinates"><span>座標X：</span><input class="coord-input coord-x" inputmode="numeric" pattern="[0-9]*" placeholder="X" aria-label="X座標"><span>Y：</span><input class="coord-input coord-y" inputmode="numeric" pattern="[0-9]*" placeholder="Y" aria-label="Y座標"></span><span class="march-control"><select class="march-select"></select><small class="march-auto-badge">手動</small></span></div>
@@ -3137,7 +3188,7 @@ body.departure-edit-open{
                 <div class="member-identity-row">
                   <span class="name-text" contenteditable="true" data-placeholder=""></span>
                   <span class="member-departure-inline"><span class="member-departure-status">出発時刻未設定</span><span class="dep" hidden>-</span></span>
-                  <button type="button" class="member-settings-toggle" aria-expanded="false" aria-label="集結主設定">⚙</button>
+                  <button type="button" class="member-settings-toggle" aria-expanded="false" aria-label="集結主設定"></button>
                 </div>
                 <div class="member-auto-settings" hidden>
                   <div class="member-settings-primary"><span class="member-coordinates"><span>座標X：</span><input class="coord-input coord-x" inputmode="numeric" pattern="[0-9]*" placeholder="X" aria-label="X座標"><span>Y：</span><input class="coord-input coord-y" inputmode="numeric" pattern="[0-9]*" placeholder="Y" aria-label="Y座標"></span><span class="march-control"><select class="march-select"></select><small class="march-auto-badge">手動</small></span></div>
@@ -3278,9 +3329,13 @@ body.departure-edit-open{
   <div class="utc-clock-overlay-card" role="dialog" aria-modal="true" aria-label="UTC時計">
     <button type="button" id="utc-clock-overlay-close" class="utc-clock-overlay-close" aria-label="閉じる">×</button>
     <div class="utc-clock-overlay-label">現在時刻</div>
-    <div class="utc-clock-overlay-time-line"><span id="utc-overlay-time">--:--:--</span><span class="utc-clock-overlay-unit">UTC</span></div>
+    <div class="utc-clock-overlay-time-line"><span id="utc-overlay-time">--:--:--</span><span id="utc-overlay-millis">.000</span><span class="utc-clock-overlay-unit">UTC</span></div>
   </div>
 </div>
+
+<!-- iPhoneを含む動画PiP用の描画ソース -->
+<canvas id="utc-pip-canvas" width="640" height="360" hidden></canvas>
+<video id="utc-pip-video" class="utc-pip-media" muted autoplay playsinline webkit-playsinline aria-hidden="true"></video>
 
 <!-- 端末登録設定 -->
 <div id="device-settings-modal" class="device-settings-modal" aria-hidden="true">
@@ -3554,23 +3609,99 @@ setInterval(updateDeviceCountdown, 1000);
 initializeFirebaseSync();
 
 /* ======= UTC時計 ======= */
-function tickUTC(){
-  const d=new Date();
-  const utcText = `${pad2(d.getUTCHours())}:${pad2(d.getUTCMinutes())}:${pad2(d.getUTCSeconds())}`;
-  document.getElementById('utc-now').textContent = utcText;
-  const overlayTime = document.getElementById('utc-overlay-time');
-  if(overlayTime) overlayTime.textContent = utcText;
-  if(utcPipWindow && !utcPipWindow.closed){
-    const pipTime = utcPipWindow.document.getElementById('utc-pip-time');
-    if(pipTime) pipTime.textContent = utcText;
-  }
-}
 const utcClockTrigger = document.getElementById('utc-clock-trigger');
 const utcClockOverlay = document.getElementById('utc-clock-overlay');
 const utcClockOverlayClose = document.getElementById('utc-clock-overlay-close');
+const utcPipCanvas = document.getElementById('utc-pip-canvas');
+const utcPipVideo = document.getElementById('utc-pip-video');
+const utcPipContext = utcPipCanvas?.getContext('2d');
 let utcPipWindow = null;
+let utcVideoPipStream = null;
 
-setInterval(tickUTC,1000); tickUTC();
+function drawUtcVideoFrame(timeText, millisText){
+  if(!utcPipContext || !utcPipCanvas) return;
+  const ctx = utcPipContext;
+  const width = utcPipCanvas.width;
+  const height = utcPipCanvas.height;
+  ctx.fillStyle = '#141416';
+  ctx.fillRect(0, 0, width, height);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#aeb0b5';
+  ctx.font = '700 30px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.fillText('現在時刻 UTC', width / 2, 92);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '800 76px ui-monospace, SFMono-Regular, Menlo, monospace';
+  ctx.fillText(`${timeText}.${millisText}`, width / 2, 202);
+  ctx.fillStyle = '#77777d';
+  ctx.font = '600 22px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.fillText('submarineride.live', width / 2, 292);
+}
+
+function tickUTC(){
+  const d=new Date();
+  const utcText = `${pad2(d.getUTCHours())}:${pad2(d.getUTCMinutes())}:${pad2(d.getUTCSeconds())}`;
+  const millisText = String(d.getUTCMilliseconds()).padStart(3, '0');
+  document.getElementById('utc-now').textContent = utcText;
+  document.getElementById('utc-millis').textContent = `.${millisText}`;
+  const overlayTime = document.getElementById('utc-overlay-time');
+  const overlayMillis = document.getElementById('utc-overlay-millis');
+  if(overlayTime) overlayTime.textContent = utcText;
+  if(overlayMillis) overlayMillis.textContent = `.${millisText}`;
+  if(utcPipWindow && !utcPipWindow.closed){
+    const pipTime = utcPipWindow.document.getElementById('utc-pip-time');
+    const pipMillis = utcPipWindow.document.getElementById('utc-pip-millis');
+    if(pipTime) pipTime.textContent = utcText;
+    if(pipMillis) pipMillis.textContent = `.${millisText}`;
+  }
+  drawUtcVideoFrame(utcText, millisText);
+}
+
+setInterval(tickUTC,40); tickUTC();
+
+function initializeUtcVideoPipSource(){
+  if(utcVideoPipStream) return true;
+  if(!utcPipCanvas?.captureStream || !utcPipVideo) return false;
+  try{
+    utcVideoPipStream = utcPipCanvas.captureStream(30);
+    utcPipVideo.srcObject = utcVideoPipStream;
+    utcPipVideo.muted = true;
+    utcPipVideo.play().catch(()=>{});
+    return true;
+  }catch(error){
+    utcVideoPipStream = null;
+    return false;
+  }
+}
+
+async function openUtcVideoPip(){
+  if(!initializeUtcVideoPipSource()) return false;
+  try{
+    await utcPipVideo.play();
+    if(document.pictureInPictureElement === utcPipVideo) return true;
+    if(typeof utcPipVideo.requestPictureInPicture === 'function' && document.pictureInPictureEnabled !== false){
+      await utcPipVideo.requestPictureInPicture();
+      return true;
+    }
+  }catch(error){
+    // WebKit固有方式を続けて試す
+  }
+  try{
+    if(typeof utcPipVideo.webkitSetPresentationMode === 'function'){
+      const supportsPip = typeof utcPipVideo.webkitSupportsPresentationMode !== 'function'
+        || utcPipVideo.webkitSupportsPresentationMode('picture-in-picture');
+      if(supportsPip){
+        utcPipVideo.webkitSetPresentationMode('picture-in-picture');
+        return true;
+      }
+    }
+  }catch(error){
+    // 呼び出し元で通常オーバーレイへ切り替える
+  }
+  return false;
+}
+
+initializeUtcVideoPipSource();
 
 async function openUtcClockOverlay(){
   if(window.documentPictureInPicture?.requestWindow){
@@ -3583,9 +3714,9 @@ async function openUtcClockOverlay(){
       utcPipWindow.document.head.innerHTML = `<meta charset="UTF-8"><style>
         *{box-sizing:border-box} body{display:flex;align-items:center;justify-content:center;width:100vw;height:100vh;margin:0;background:#141416;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden}
         .pip-clock{text-align:center}.pip-label{margin-bottom:5px;color:#aeb0b5;font-size:12px;font-weight:700}.pip-line{display:flex;align-items:baseline;justify-content:center;gap:8px;white-space:nowrap}
-        #utc-pip-time{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:38px;font-weight:800;letter-spacing:-.06em;font-variant-numeric:tabular-nums}.pip-unit{color:#aeb0b5;font-size:14px;font-weight:700}
+        #utc-pip-time{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:34px;font-weight:800;letter-spacing:-.06em;font-variant-numeric:tabular-nums}#utc-pip-millis{color:#d0d0d4;font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:19px;font-weight:800}.pip-unit{color:#aeb0b5;font-size:14px;font-weight:700}
       </style>`;
-      utcPipWindow.document.body.innerHTML = '<div class="pip-clock"><div class="pip-label">現在時刻</div><div class="pip-line"><span id="utc-pip-time">--:--:--</span><span class="pip-unit">UTC</span></div></div>';
+      utcPipWindow.document.body.innerHTML = '<div class="pip-clock"><div class="pip-label">現在時刻</div><div class="pip-line"><span id="utc-pip-time">--:--:--</span><span id="utc-pip-millis">.000</span><span class="pip-unit">UTC</span></div></div>';
       utcPipWindow.addEventListener('pagehide', () => { utcPipWindow = null; });
       tickUTC();
       return;
@@ -3593,6 +3724,8 @@ async function openUtcClockOverlay(){
       utcPipWindow = null;
     }
   }
+  if(await openUtcVideoPip()) return;
+  showToast('PiPを利用できません。Safariで開いてください');
   utcClockOverlay.classList.add('show');
   utcClockOverlay.setAttribute('aria-hidden', 'false');
   document.body.classList.add('utc-overlay-open');
@@ -4798,7 +4931,7 @@ function buildMemberRowHtml(member = {}){
       <div class="member-identity-row">
         <span class="name-text" contenteditable="true" data-placeholder="名前">${name}</span>
         <span class="member-departure-inline"><span class="member-departure-status">出発時刻未設定</span><span class="dep" hidden>-</span></span>
-        <button type="button" class="member-settings-toggle" aria-expanded="false" aria-label="集結主設定">⚙</button>
+        <button type="button" class="member-settings-toggle" aria-expanded="false" aria-label="集結主設定"></button>
       </div>
       <div class="member-auto-settings" hidden>
         <div class="member-settings-primary"><span class="member-coordinates"><span>座標X：</span><input class="coord-input coord-x" inputmode="numeric" pattern="[0-9]*" placeholder="X" aria-label="X座標" value="${coordX}"><span>Y：</span><input class="coord-input coord-y" inputmode="numeric" pattern="[0-9]*" placeholder="Y" aria-label="Y座標" value="${coordY}"></span><span class="march-control"><select class="march-select"></select><small class="march-auto-badge">手動</small></span></div>
