@@ -2201,7 +2201,7 @@ body.landing-active .clock{
   display:inline-flex;
   flex-direction:column;
   align-items:center;
-  width:min(92%, 360px);
+  width:min(96%, 390px);
   max-width:100%;
   margin:0 auto;
   padding:12px 26px 10px;
@@ -2209,7 +2209,7 @@ body.landing-active .clock{
   background:rgba(255,255,255,.94);
   border:none !important;
   border-radius:18px;
-  box-shadow:0 10px 36px rgba(0,0,0,.13), 0 2px 10px rgba(0,0,0,.08);
+  box-shadow:0 10px 46px rgba(0,0,0,.13), 0 2px 12px rgba(0,0,0,.08);
   font-family:"Roboto Mono",Consolas,Monaco,monospace;
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
@@ -3255,7 +3255,7 @@ body.departure-edit-open{
     <button type="button" id="app-settings-button" class="app-settings-button" aria-label="設定を開く">…</button>
     <div class="clock aligned-box" id="utc-clock-trigger" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="utc-clock-overlay" aria-label="UTC時計を拡大表示">
       <span class="clock-heading">現在時刻</span>
-      <div class="clock-time-line"><span class="clock-time-value"><span id="utc-now">--:--:--</span><span id="utc-millis">.000</span></span><span class="utc-label">UTC</span></div>
+      <div class="clock-time-line"><span class="clock-time-value"><span id="utc-now">--:--:--</span><span id="utc-millis">.00</span></span><span class="utc-label">UTC</span></div>
       <span class="clock-tap-hint">タップでPiP小窓</span>
     </div>
     <div id="device-countdown-card" class="device-countdown-card" hidden><span id="device-countdown-name" class="device-countdown-name"></span><span>出発まで残り</span><span id="device-countdown-time" class="device-countdown-time">--:--:--</span></div>
@@ -3483,7 +3483,7 @@ body.departure-edit-open{
   <div class="utc-clock-overlay-card" role="dialog" aria-modal="true" aria-label="UTC時計">
     <button type="button" id="utc-clock-overlay-close" class="utc-clock-overlay-close" aria-label="閉じる">×</button>
     <div class="utc-clock-overlay-label">現在時刻</div>
-    <div class="utc-clock-overlay-time-line"><span id="utc-overlay-time">--:--:--</span><span id="utc-overlay-millis">.000</span><span class="utc-clock-overlay-unit">UTC</span></div>
+    <div class="utc-clock-overlay-time-line"><span id="utc-overlay-time">--:--:--</span><span id="utc-overlay-millis">.00</span><span class="utc-clock-overlay-unit">UTC</span></div>
   </div>
 </div>
 
@@ -3795,7 +3795,7 @@ function drawUtcVideoFrame(timeText, millisText){
 function tickUTC(){
   const d=new Date();
   const utcText = `${pad2(d.getUTCHours())}:${pad2(d.getUTCMinutes())}:${pad2(d.getUTCSeconds())}`;
-  const millisText = String(d.getUTCMilliseconds()).padStart(3, '0');
+  const millisText = String(Math.floor(d.getUTCMilliseconds() / 10)).padStart(2, '0');
   document.getElementById('utc-now').textContent = utcText;
   document.getElementById('utc-millis').textContent = `.${millisText}`;
   const overlayTime = document.getElementById('utc-overlay-time');
@@ -3870,7 +3870,7 @@ async function openUtcClockOverlay(){
         .pip-clock{text-align:center}.pip-label{margin-bottom:5px;color:#aeb0b5;font-size:12px;font-weight:700}.pip-line{display:flex;align-items:baseline;justify-content:center;gap:8px;white-space:nowrap}
         #utc-pip-time{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:34px;font-weight:800;letter-spacing:-.06em;font-variant-numeric:tabular-nums}#utc-pip-millis{color:#d0d0d4;font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:19px;font-weight:800}.pip-unit{color:#aeb0b5;font-size:14px;font-weight:700}
       </style>`;
-      utcPipWindow.document.body.innerHTML = '<div class="pip-clock"><div class="pip-label">現在時刻</div><div class="pip-line"><span id="utc-pip-time">--:--:--</span><span id="utc-pip-millis">.000</span><span class="pip-unit">UTC</span></div></div>';
+      utcPipWindow.document.body.innerHTML = '<div class="pip-clock"><div class="pip-label">現在時刻</div><div class="pip-line"><span id="utc-pip-time">--:--:--</span><span id="utc-pip-millis">.00</span><span class="pip-unit">UTC</span></div></div>';
       utcPipWindow.addEventListener('pagehide', () => { utcPipWindow = null; });
       tickUTC();
       return;
