@@ -2396,15 +2396,17 @@ body.utc-overlay-open{
   font-variant-numeric:tabular-nums;
 }
 
+.utc-pip-source,
 .utc-pip-media{
   position:fixed;
-  left:0;
-  bottom:0;
+  left:1px;
+  bottom:1px;
   width:2px;
   height:2px;
-  opacity:.01;
+  opacity:.001;
   pointer-events:none;
-  z-index:-1;
+  z-index:0;
+  object-fit:cover;
 }
 
 .utc-clock-overlay-unit{
@@ -4480,8 +4482,8 @@ body .departure-preset-heading{
 </div>
 
 <!-- iPhoneを含むオーバーレイ描画用のソース -->
-<canvas id="utc-pip-canvas" width="640" height="360" hidden></canvas>
-<video id="utc-pip-video" class="utc-pip-media" muted autoplay playsinline webkit-playsinline aria-hidden="true"></video>
+<canvas id="utc-pip-canvas" class="utc-pip-source" width="640" height="360" aria-hidden="true"></canvas>
+<video id="utc-pip-video" class="utc-pip-media" muted autoplay playsinline webkit-playsinline autopictureinpicture aria-hidden="true"></video>
 
 <!-- 端末登録設定 -->
 <div id="device-settings-modal" class="device-settings-modal" aria-hidden="true">
@@ -4920,6 +4922,9 @@ function initializeUtcVideoPipSource(){
     utcVideoPipStream = utcPipCanvas.captureStream(30);
     utcPipVideo.srcObject = utcVideoPipStream;
     utcPipVideo.muted = true;
+    utcPipVideo.autoplay = true;
+    utcPipVideo.playsInline = true;
+    utcPipVideo.disableRemotePlayback = true;
     utcPipVideo.play().catch(()=>{});
     return true;
   }catch(error){
@@ -4948,6 +4953,15 @@ async function openUtcVideoPip(){
 
   try{
     await playPromise;
+    /* 初回タップ時に再生準備が完了した端末向けにWebKit方式を再試行 */
+    if(typeof utcPipVideo.webkitSetPresentationMode === 'function'){
+      const supportsPip = typeof utcPipVideo.webkitSupportsPresentationMode !== 'function'
+        || utcPipVideo.webkitSupportsPresentationMode('picture-in-picture');
+      if(supportsPip){
+        utcPipVideo.webkitSetPresentationMode('picture-in-picture');
+        return true;
+      }
+    }
     if(document.pictureInPictureElement === utcPipVideo) return true;
     if(typeof utcPipVideo.requestPictureInPicture === 'function' && document.pictureInPictureEnabled !== false){
       await utcPipVideo.requestPictureInPicture();
@@ -5003,6 +5017,7 @@ async function openUtcPipWindow(){
 /* タップ：まずPiPを試し、非対応の端末では画面内表示に切り替える */
 async function handleUtcClockTap(){
   if(await openUtcPipWindow()) return;
+  showToast('PiPを開始できません。iPhoneの「設定 → 一般 → ピクチャ・イン・ピクチャ」を確認してください');
   openUtcClockOverlay();
 }
 
