@@ -2376,10 +2376,7 @@ body.landing-active{ background:var(--bg); }
       </div>
       <div class="l-row">
         <span class="l-label">行軍時間</span>
-        <span style="display:flex;align-items:center;gap:4px">
-          <input type="number" id="member-sheet-march" class="inline-select" style="width:70px;text-align:right" placeholder="秒数">
-          <span class="inline-text">秒</span>
-        </span>
+        <select id="member-sheet-march" class="inline-select"></select>
       </div>
 
       <button type="button" id="member-sheet-save-btn" class="btn-primary full-width margin-top">追加</button>
@@ -2900,12 +2897,25 @@ function renderRallyMemberList(){
 /* ======= 集結主 追加/編集シート ======= */
 var memberSheetEditingId = null;
 
+// 1秒刻みのプルダウン(以前の行軍時間選択と同じ形式)
+function populateMemberSheetMarchOptions(defaultValue){
+  var sel = document.getElementById('member-sheet-march');
+  if(!sel) return;
+  var value = defaultValue || 30;
+  var html = '';
+  for(var s = 1; s <= 300; s++){
+    html += '<option value="' + s + '"' + (s === value ? ' selected' : '') + '>' + s + '秒</option>';
+  }
+  sel.innerHTML = html;
+  sel.value = value;
+}
+
 function openMemberSheet(id){
   memberSheetEditingId = id || null;
   var m = id ? findRallyMember(id) : null;
   document.getElementById('member-sheet-title').textContent = m ? '集結主を編集' : '集結主を追加';
   document.getElementById('member-sheet-name').value = m ? m.name : '';
-  document.getElementById('member-sheet-march').value = (m && typeof m.marchTime === 'number') ? m.marchTime : '';
+  populateMemberSheetMarchOptions(m && typeof m.marchTime === 'number' ? m.marchTime : 30);
   document.getElementById('member-sheet-save-btn').textContent = m ? '保存' : '追加';
   document.getElementById('member-sheet-delete-btn').style.display = m ? 'block' : 'none';
   document.body.classList.add('modal-open');
